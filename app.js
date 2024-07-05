@@ -1,6 +1,8 @@
 import { startSession } from "./sessionHandler.js";
 
 // Ensure PlatformClient is available globally
+// Define global variables
+window.am = window.am || {};
 window.am.platformClientModule = require("platformClient");
 window.am.PlatformClient = platformClientModule.ApiClient.instance;
 
