@@ -1,7 +1,7 @@
 import { startSession } from "./sessionHandler.js";
 
 // Ensure PlatformClient is available globally
-let platformClientModule = require("platformClient");
+window.platformClientModule = require("platformClient");
 window.PlatformClient = platformClientModule.ApiClient.instance;
 
 document.addEventListener("DOMContentLoaded", () => {
