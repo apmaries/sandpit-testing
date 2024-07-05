@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!sessionStorage.getItem("gc_access_token")) {
       sessionStorage.setItem("gc_access_token", accessToken);
       console.log("{am} Access token stored in sessionStorage");
-      startSession();
     }
+    startSession();
   } else {
     console.error("{am} Something is really wrong :(");
   }
