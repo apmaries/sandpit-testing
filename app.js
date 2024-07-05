@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     // Define clients object in shared state
-    platformClientModule = require("platformClient");
+    let platformClientModule = require("platformClient");
     let sharedStatePc = appSharedState.clients.PlatformClient;
     sharedStatePc.client = platformClientModule.ApiClient.instance;
 
