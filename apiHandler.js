@@ -2,7 +2,7 @@
 export function handleApiCalls() {
   const accessToken = sessionStorage.getItem("access_token");
   if (!accessToken) {
-    console.error("No access token found in session.");
+    console.error("{am} No access token found in session.");
     return;
   }
 
@@ -20,6 +20,6 @@ export function handleApiCalls() {
       );
     })
     .catch((error) => {
-      console.error("Error fetching API data:", error);
+      console.error("{am} Error fetching API data:", error);
     });
 }

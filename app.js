@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (accessToken) {
       startSession(accessToken);
     } else {
-      console.error("Access token not found in URL hash.");
+      console.error("{am} Access token not found in URL hash.");
     }
   } else {
     initiateLogin(clientId, region);
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function initiateLogin(clientId, region) {
   if (!clientId || !region) {
     console.error(
-      "Client ID and region must be provided in the URL parameters."
+      "{am} Client ID and region must be provided in the URL parameters."
     );
     return;
   }
