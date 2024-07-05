@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (window.location.hash) {
+    console.log("{am} Window location has hash.");
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     const accessToken = hashParams.get("access_token");
 
@@ -27,11 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("{am} Access token not found in URL hash.");
     }
   } else {
+    console.log("{am} Initiating login.");
     initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
   }
 });
 
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
+  console.log("{am} Login initiated.");
   try {
     PlatformClient.setEnvironment(gc_region);
     PlatformClient.setPersistSettings(true, "_am_");
