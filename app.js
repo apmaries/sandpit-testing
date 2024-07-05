@@ -53,13 +53,6 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
       gc_redirectUrl,
       {}
     );
-
-    // GET Current UserId
-    const uapi = new window.PlatformClient.UsersApi();
-    let user = await uapi.getUsersMe({});
-    console.log(user);
-
-    // Enter in starting code.
   } catch (err) {
     console.log("{am} Error: ", err);
   }
