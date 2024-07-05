@@ -3,17 +3,17 @@ import { startSession } from "./sessionHandler.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // ?gc_clientId=f8083a5d-f18a-4b45-93bb-994a88243c23&gc_region=mypurecloud.com.au
-
-  let url = new URL(document.location.href);
-  const gc_region = url.searchParams.get("gc_region");
-  const gc_clientId = url.searchParams.get("gc_clientId");
-  const gc_redirectUrl = url.searchParams.get("gc_redirectUrl");
+  console.log("{am} window.location:", window.location);
+  const urlParams = new URLSearchParams(window.location.search);
+  const gc_region = urlParams.get("gc_region");
+  const gc_clientId = urlParams.get("gc_clientId");
+  const gc_redirectUrl = urlParams.get("gc_redirectUrl");
 
   if (!gc_region || !gc_clientId || !gc_redirectUrl) {
     console.error(
-      "{am} Client ID, region or redirect url not found in URL parameters."
+      "{am} Client ID, region or redirect url not found in URL parameters.",
+      window.location
     );
-    console.log("{am} window.location:", window.location);
     return;
   }
 
