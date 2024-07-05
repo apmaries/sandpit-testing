@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
   console.log("{am} Login initiated.");
   try {
+    console.log("{am} Setting up PlatformClient.", PlatformClient);
     PlatformClient.setEnvironment(gc_region);
     PlatformClient.setPersistSettings(true, "_am_");
     PlatformClient.setReturnExtendedResponses(true);
@@ -44,6 +45,7 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
     await PlatformClient.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
     //GET Current UserId
+    const uapi = new platformClient.UsersApi();
     let user = await uapi.getUsersMe({});
     console.log(user);
 
