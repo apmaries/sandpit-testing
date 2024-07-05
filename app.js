@@ -1,4 +1,6 @@
 import { startSession } from "./sessionHandler.js";
+let platformClientModule = require("platformClient");
+const PlatformClient = platformClientModule.ApiClient.instance;
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("{am} window.location:", window.location);
@@ -28,10 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.log("{am} Initiating login.");
     // Ensure PlatformClient is available before calling initiateLogin
-    if (window.PlatformClient) {
+    if (PlatformClient) {
       initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
     } else {
       console.error("{am} PlatformClient is not defined.");
+      console.error("{am} window", window);
     }
   }
 });
@@ -48,7 +51,7 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
     await PlatformClient.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
     // GET Current UserId
-    const uapi = new platformClient.UsersApi();
+    const uapi = new PlatformClient.UsersApi();
     let user = await uapi.getUsersMe({});
     console.log(user);
 
