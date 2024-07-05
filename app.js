@@ -35,6 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
   console.log("{am} Login initiated.");
+  console.log("{am} PlatformClient:", PlatformClient);
   try {
     console.log("{am} Setting up PlatformClient.", PlatformClient);
     PlatformClient.setEnvironment(gc_region);
