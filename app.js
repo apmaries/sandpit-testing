@@ -1,8 +1,6 @@
-// app.js
 import { startSession } from "./sessionHandler.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ?gc_clientId=f8083a5d-f18a-4b45-93bb-994a88243c23&gc_region=mypurecloud.com.au
   console.log("{am} window.location:", window.location);
   const urlParams = new URLSearchParams(window.location.search);
   const gc_region = urlParams.get("gc_region");
@@ -29,13 +27,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   } else {
     console.log("{am} Initiating login.");
-    initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
+    // Ensure PlatformClient is available before calling initiateLogin
+    if (window.PlatformClient) {
+      initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
+    } else {
+      console.error("{am} PlatformClient is not defined.");
+    }
   }
 });
 
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
   console.log("{am} Login initiated.");
-  console.log("{am} PlatformClient:", PlatformClient);
   try {
     console.log("{am} Setting up PlatformClient.", PlatformClient);
     PlatformClient.setEnvironment(gc_region);
@@ -45,12 +47,12 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
     console.log("%cLogging in to Genesys Cloud", "color: green");
     await PlatformClient.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
-    //GET Current UserId
+    // GET Current UserId
     const uapi = new platformClient.UsersApi();
     let user = await uapi.getUsersMe({});
     console.log(user);
 
-    //Enter in starting code.
+    // Enter in starting code.
   } catch (err) {
     console.log("Error: ", err);
   }
