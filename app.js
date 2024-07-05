@@ -9,12 +9,45 @@ window.am.PlatformClient = window.am.platformClientModule.ApiClient.instance;
 window.am.usersApi = new window.am.platformClientModule.UsersApi();
 */
 
+// Define and export shared state object
+export let appSharedState = {
+  generatedForecast: null,
+  modifiedForecast: null,
+  userInputs: {
+    businessUnit: {
+      name: null,
+      id: null,
+      settings: null,
+    },
+    forecastParameters: {
+      weekStart: null,
+      historicalWeeks: null,
+      description: null,
+    },
+    forecastOptions: {
+      ignoreZeroes: null,
+      resolveContactsAhtMode: null,
+      generateInbound: null,
+      retainInbound: null,
+    },
+    planningGroups: [],
+  },
+  clients: {
+    PlatformClient: {
+      client: null,
+      usersApi: null,
+    },
+    ClientApp: null,
+  },
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   console.log("{am} window.location:", window.location);
   const urlParams = new URLSearchParams(window.location.search);
   const gc_region = urlParams.get("gc_region");
   const gc_clientId = urlParams.get("gc_clientId");
   const gc_redirectUrl = urlParams.get("gc_redirectUrl");
+
   const urlHash = window.location.hash.substr(1);
   const hashParams = new URLSearchParams(urlHash);
   const accessToken = hashParams.get("access_token");
@@ -27,16 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
       gc_redirectUrl
     );
 
-    // Define global variables
-    window.am = window.am || {};
-    window.am.platformClientModule = require("platformClient");
-    window.am.PlatformClient =
-      window.am.platformClientModule.ApiClient.instance;
+    // Define clients object in shared state
+    platformClientModule = require("platformClient");
+    let sharedStatePc = appSharedState.clients.PlatformClient;
+    sharedStatePc.client = platformClientModule.ApiClient.instance;
 
     // Define neccessary API client instances
-    window.am.usersApi = new window.am.platformClientModule.UsersApi();
+    sharedStatePc.usersApi = new platformClientModule.UsersApi();
 
-    if (window.am.PlatformClient) {
+    if (sharedStatePc.client) {
       initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
     } else {
       console.error("{am} PlatformClient is not defined.");
@@ -56,14 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
   console.log("{am} Login initiated.");
+  let sharedStatePc = appSharedState.clients.PlatformClient;
   try {
-    console.log("{am} Setting up PlatformClient.", window.am.PlatformClient);
-    window.am.PlatformClient.setEnvironment(gc_region);
-    window.am.PlatformClient.setPersistSettings(true, "_am_");
-    window.am.PlatformClient.setReturnExtendedResponses(true);
+    console.log("{am} Setting up PlatformClient.", sharedStatePc.client);
+    sharedStatePc.client.setEnvironment(gc_region);
+    sharedStatePc.client.setPersistSettings(true, "_am_");
+    sharedStatePc.client.setReturnExtendedResponses(true);
 
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
-    await window.am.PlatformClient.loginImplicitGrant(
+    await sharedStatePc.client.loginImplicitGrant(
       gc_clientId,
       gc_redirectUrl,
       {}
