@@ -48,11 +48,7 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
     PlatformClient.setReturnExtendedResponses(true);
 
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
-    await PlatformClient.loginImplicitGrant(
-      gc_clientId,
-      "https://apmaries.github.io/sandpit-testing/index.html",
-      {}
-    );
+    await PlatformClient.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
     // GET Current UserId
     const uapi = new PlatformClient.UsersApi();
