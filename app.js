@@ -1,5 +1,5 @@
 import { startSession } from "./sessionHandler.js";
-
+/*
 // Define global variables
 window.am = window.am || {};
 window.am.platformClientModule = require("platformClient");
@@ -7,6 +7,7 @@ window.am.PlatformClient = window.am.platformClientModule.ApiClient.instance;
 
 // Define neccessary API client instances
 window.am.usersApi = new window.am.platformClientModule.UsersApi();
+*/
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("{am} window.location:", window.location);
@@ -25,6 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
       gc_clientId,
       gc_redirectUrl
     );
+
+    // Define global variables
+    window.am = window.am || {};
+    window.am.platformClientModule = require("platformClient");
+    window.am.PlatformClient =
+      window.am.platformClientModule.ApiClient.instance;
+
+    // Define neccessary API client instances
+    window.am.usersApi = new window.am.platformClientModule.UsersApi();
+
     if (window.am.PlatformClient) {
       initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
     } else {
