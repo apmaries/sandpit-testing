@@ -35,7 +35,7 @@ export let appSharedState = {
   clients: {
     PlatformClient: {
       client: null,
-      usersApi: null,
+      module: null,
     },
     ClientApp: null,
   },
@@ -64,11 +64,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Define clients object in shared state
     let platformClientModule = require("platformClient");
     let sharedStatePc = appSharedState.clients.PlatformClient;
+    sharedStatePc.module = platformClientModule;
     sharedStatePc.client = platformClientModule.ApiClient.instance;
 
     // Define neccessary API client instances
-    sharedStatePc.usersApi = new platformClientModule.UsersApi();
-
     if (sharedStatePc.client) {
       initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
     } else {
