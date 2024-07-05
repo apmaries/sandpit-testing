@@ -43,6 +43,7 @@ export let appSharedState = {
 
 document.addEventListener("DOMContentLoaded", () => {
   console.log("{am} window.location:", window.location);
+  console.log("{am} appSharedState at DOMContentLoaded", appSharedState);
   const urlParams = new URLSearchParams(window.location.search);
   const gc_region = urlParams.get("gc_region");
   const gc_clientId = urlParams.get("gc_clientId");
@@ -74,12 +75,14 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("{am} PlatformClient is not defined.");
       console.error("{am} window", window);
     }
+    console.log("{am} appSharedState at end of inital load", appSharedState);
   } else if (accessToken) {
     console.log("{am} Redirect after successful login detected");
     if (!sessionStorage.getItem("gc_access_token")) {
       sessionStorage.setItem("gc_access_token", accessToken);
       console.log("{am} Access token stored in sessionStorage");
     }
+    console.log("{am} appSharedState before sessionStart", appSharedState);
     startSession();
   } else {
     console.error("{am} Something is really wrong :(");
