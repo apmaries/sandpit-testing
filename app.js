@@ -3,7 +3,7 @@ import { startSession } from "./sessionHandler.js";
 // Define global variables
 window.am = window.am || {};
 window.am.platformClientModule = require("platformClient");
-window.am.PlatformClient = platformClientModule.ApiClient.instance;
+window.am.PlatformClient = window.am.platformClientModule.ApiClient.instance;
 
 // Define neccessary API client instances
 window.am.usersApi = new window.am.platformClientModule.UsersApi();
