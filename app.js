@@ -4,9 +4,10 @@ import { startSession } from "./sessionHandler.js";
 document.addEventListener("DOMContentLoaded", () => {
   // ?gc_clientId=f8083a5d-f18a-4b45-93bb-994a88243c23&gc_region=mypurecloud.com.au
   console.log("{am} window.location:", window.location);
-  const urlParams = new URLSearchParams(window.location.search);
-  const clientId = urlParams.get("gc_clientId");
-  const region = urlParams.get("gc_region");
+  let url = new URL(document.location.href);
+  const gc_region = url.searchParams.get("gc_region");
+  const gc_clientId = url.searchParams.get("gc_clientId");
+  const gc_redirectUrl = url.searchParams.get("gc_redirectUrl");
 
   if (window.location.hash) {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
@@ -18,22 +19,27 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("{am} Access token not found in URL hash.");
     }
   } else {
-    initiateLogin(clientId, region);
+    initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
   }
 });
 
-function initiateLogin(clientId, region) {
-  if (!clientId || !region) {
-    console.error(
-      "{am} Client ID and region must be provided in the URL parameters."
-    );
-    return;
-  }
+async function initiateLogin(clientId, gc_region, gc_redirectUrl) {
+  if (!clientId || !gc_region) {
+    try {
+      PlatformClient.setEnvironment(gc_region);
+      PlatformClient.setPersistSettings(true, "_am_");
+      PlatformClient.setReturnExtendedResponses(true);
 
-  PlatformClient.login({
-    clientId: clientId,
-    region: region,
-    redirectUri: window.location.origin,
-    responseType: "token",
-  });
+      console.log("%cLogging in to Genesys Cloud", "color: green");
+      await PlatformClient.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
+
+      //GET Current UserId
+      let user = await uapi.getUsersMe({});
+      console.log(user);
+
+      //Enter in starting code.
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  }
 }
