@@ -2,9 +2,11 @@
 import { startSession } from "./sessionHandler.js";
 
 document.addEventListener("DOMContentLoaded", () => {
+  // ?gc_clientId=f8083a5d-f18a-4b45-93bb-994a88243c23&gc_region=mypurecloud.com.au
+  console.log("{am} window.location:", window.location);
   const urlParams = new URLSearchParams(window.location.search);
-  const clientId = urlParams.get("client_id");
-  const region = urlParams.get("region");
+  const clientId = urlParams.get("gc_clientId");
+  const region = urlParams.get("gc_region");
 
   if (window.location.hash) {
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
