@@ -2,6 +2,7 @@
 
 export async function startSession() {
   const PlatformClient = window.PlatformClient;
+  console.log("{am} Starting session", PlatformClient);
 
   // GET Current UserId
   const uapi = new PlatformClient.UsersApi();
