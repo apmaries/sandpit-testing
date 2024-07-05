@@ -47,7 +47,7 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
     PlatformClient.setPersistSettings(true, "_am_");
     PlatformClient.setReturnExtendedResponses(true);
 
-    console.log("%cLogging in to Genesys Cloud", "color: green");
+    console.log("%c{am} Logging in to Genesys Cloud", "color: green");
     await PlatformClient.loginImplicitGrant(
       gc_clientId,
       "https://apmaries.github.io/sandpit-testing/index.html",
@@ -61,6 +61,6 @@ async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
 
     // Enter in starting code.
   } catch (err) {
-    console.log("Error: ", err);
+    console.log("{am} Error: ", err);
   }
 }
