@@ -1,6 +1,5 @@
 import { startSession } from "./sessionHandler.js";
 
-// Ensure PlatformClient is available globally
 // Define global variables
 window.am = window.am || {};
 window.am.platformClientModule = require("platformClient");
@@ -26,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       gc_clientId,
       gc_redirectUrl
     );
-    if (window.PlatformClient) {
+    if (window.am.PlatformClient) {
       initiateLogin(gc_clientId, gc_region, gc_redirectUrl);
     } else {
       console.error("{am} PlatformClient is not defined.");
@@ -47,13 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
 async function initiateLogin(gc_clientId, gc_region, gc_redirectUrl) {
   console.log("{am} Login initiated.");
   try {
-    console.log("{am} Setting up PlatformClient.", window.PlatformClient);
-    window.PlatformClient.setEnvironment(gc_region);
-    window.PlatformClient.setPersistSettings(true, "_am_");
-    window.PlatformClient.setReturnExtendedResponses(true);
+    console.log("{am} Setting up PlatformClient.", window.am.PlatformClient);
+    window.am.PlatformClient.setEnvironment(gc_region);
+    window.am.PlatformClient.setPersistSettings(true, "_am_");
+    window.am.PlatformClient.setReturnExtendedResponses(true);
 
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
-    await window.PlatformClient.loginImplicitGrant(
+    await window.am.PlatformClient.loginImplicitGrant(
       gc_clientId,
       gc_redirectUrl,
       {}
