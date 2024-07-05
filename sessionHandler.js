@@ -1,5 +1,4 @@
 // sessionHandler.js
-import { handleApiCalls } from "./apiHandler.js";
 
 export async function startSession() {
   const PlatformClient = window.PlatformClient;
