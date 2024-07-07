@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--Removes Google Crawler from indexing page-->
+    <meta name="robots" content="noindex" />
+
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <title>Outbound Forecast Generator</title>
+    <script>
+      console.log("[OFG] Page loaded - head");
+    </script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/outboundForecastGenerator/styles/main.css" />
+
+    <!-- Genesys stuff -->
+    <link
+      href="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.css"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.esm.js"
+    ></script>
+
+    <!-- External -->
+    <script src="https://moment.github.io/luxon/global/luxon.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.0.4/pako.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  </head>
+  <body>
+    <script>
+      console.log("[OFG] Page loaded - body");
+    </script>
+    <div class="widget-container">
+      <h1 id="heading" class="align-left">Outbound Forecast Generator</h1>
+      <div id="user-welcome" class="align-left" hidden></div>
+      <!-- Loading section -->
+      <section id="main-loading-section">
+        <gux-page-loading-spinner
+          screenreader-text="Loading..."
+        ></gux-page-loading-spinner>
+      </section>
+      <!-- Main -->
+      <main id="main">
+        <!-- Page 1 - Set BU, Forecast week start and historical weeks range -->
+        <div id="page-one" class="active-page">
+          <fieldset id="page-one-fieldset">
+            <legend>Parameters</legend>
+
+            <div id="parameters">
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown id="business-unit-dropdown">
+                  <gux-listbox id="business-unit-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Business Unit</label>
+              </gux-form-field-dropdown>
+              <div id="bu-settings-div">
+                <div style="width: 152px">
+                  <gux-form-field-text-like label-position="above">
+                    <label slot="label">Time zone</label>
+                    <input
+                      id="bu-timezone"
+                      slot="input"
+                      type="text"
+                      value=""
+                      disabled
+                    />
+                  </gux-form-field-text-like>
+                </div>
+
+                <div>
+                  <label slot="label" class="slotted" id="week-start-label"
+                    >Week start</label
+                  >
+                  <gux-datepicker
+                    id="week-start"
+                    format="dd/mm/yyyy"
+                  ></gux-datepicker>
+                </div>
+
+                <div>
+                  <gux-form-field-number label-position="above">
+                    <label slot="label">Historical weeks</label>
+                    <input
+                      slot="input"
+                      type="number"
+                      id="historical-weeks"
+                      value="6"
+                      step="1"
+                      min="1"
+                      max="8"
+                    />
+                  </gux-form-field-number>
+                </div>
+              </div>
+
+              <div id="toggle-sch" style="display: none">
+                <!-- temporarily hidden until functionality added -->
+                <label for="inclSchedule">Generate schedule too?</label>
+                <gux-toggle
+                  id="inclSchedule"
+                  checked-label="Yes"
+                  unchecked-label="No"
+                ></gux-toggle>
+              </div>
+              <gux-button id="p1-next-button" accent="secondary"
+                >Next</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 2 - Set description, contacts per PG and other options -->
+        <div id="page-two" class="inactive-page">
+          <fieldset id="page-two-fieldset">
+            <legend>Inputs</legend>
+            <div id="planning-groups">
+              <gux-page-loading-spinner
+                id="planning-groups-loading"
+                screenreader-text="Loading..."
+              ></gux-page-loading-spinner>
+
+              <div id="planning-groups-container" style="display: none">
+                <div id="fc-description-input">
+                  <gux-form-field-text-like>
+                    <input
+                      id="fc-description"
+                      slot="input"
+                      type="text"
+                      placeholder="Enter a description"
+                    />
+                    <label slot="label">Forecast description</label>
+                  </gux-form-field-text-like>
+                </div>
+                <gux-table-beta id="planning-groups-table" compact>
+                  <table slot="data">
+                    <thead>
+                      <tr>
+                        <th data-column-name="p-name" style="width: 90%">
+                          Planning Group<br /><span class="italic-gray"
+                            >[Campaign]</span
+                          >
+                        </th>
+                        <!-- Consolidated to single column
+                        <th data-column-name="c-name">Campaign</th>
+                      -->
+                        <th data-column-name="n-contacts"># Contacts</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody></table
+                ></gux-table-beta>
+              </div>
+              <div>
+                <fieldset>
+                  <!-- Ignores full days of zero contacts (e.g. public holidays) -->
+                  <legend>Outbound options</legend>
+                  <label for="ignore-zeroes"
+                    >Ignore zero days when generating averages?
+                    <gux-icon
+                      icon-name="help"
+                      screenreader-text="help-icon"
+                    ></gux-icon
+                    ><gux-tooltip
+                      >Exclude days of zero values (e.g. closed public holiday)
+                      during forecast generation to prevent distortion of
+                      results.</gux-tooltip
+                    ></label
+                  >
+                  <gux-toggle
+                    id="ignore-zeroes"
+                    checked-label="Yes"
+                    unchecked-label="No"
+                    checked
+                  ></gux-toggle>
+                  <!-- Applies the daily AHT value to any interval with forecast offered but no AHT forecast -->
+                  <!-- Not currently needed
+                  <label for="resolve-contacts-aht"
+                    >Resolve AHT forecast to Contacts?
+                    <gux-icon
+                      icon-name="help"
+                      screenreader-text="help-icon"
+                    ></gux-icon
+                    ><gux-tooltip
+                      >Make sure the forecast being generated always has AHT in
+                      the same intervals as offered. (e.g. no intervals with
+                      forecast offered but no handle time)</gux-tooltip
+                    ></label
+                  >
+                 
+
+                  <gux-toggle
+                    id="resolve-contacts-aht"
+                    checked-label="Yes"
+                    unchecked-label="No"
+                    checked
+                  ></gux-toggle>
+                  -->
+                </fieldset>
+                <div id="inbound-forecast-div" style="display: none">
+                  <!-- Hidden until Planning Groups identified with no matching Campaign -->
+                  <fieldset>
+                    <legend>Inbound options</legend>
+
+                    <label for="generate-inbound-fc"
+                      >Generate forecast for inbound Planning Groups?
+                      <gux-icon
+                        icon-name="help"
+                        screenreader-text="help-icon"
+                      ></gux-icon
+                      ><gux-tooltip
+                        >Generates an ABM forecast for BU Planning Groups and
+                        merges results with Outbound data</gux-tooltip
+                      ></label
+                    >
+                    <gux-toggle
+                      id="generate-inbound-fc"
+                      checked-label="Yes"
+                      unchecked-label="No"
+                      checked
+                    ></gux-toggle>
+
+                    <label for="retain-inbound-fc"
+                      >Retain forecast for inbound Planning Groups?
+                      <gux-icon
+                        icon-name="help"
+                        screenreader-text="help-icon"
+                      ></gux-icon
+                      ><gux-tooltip
+                        >If yes, the automatically generated inbound forecast
+                        will be retained for reference.<br />If no, this inbound
+                        forecast is deleted after forecasts have been
+                        merged.</gux-tooltip
+                      ></label
+                    >
+                    <gux-toggle
+                      id="retain-inbound-fc"
+                      checked-label="Yes"
+                      unchecked-label="No"
+                    ></gux-toggle>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+            <div id="page-two-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="p2-back-button"
+                name="back-button"
+                accent="secondary"
+                class="align-left"
+                >Back</gux-button
+              >
+              <gux-button id="generate-button" accent="primary"
+                >Generate</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 3 - Visualise forecast outputs prior to import -->
+        <div id="page-three" class="inactive-page">
+          <fieldset id="page-three-fieldset">
+            <legend>Outputs</legend>
+            <div id="generate-loading-div">
+              <gux-loading-message>
+                <div slot="primary-message" id="generate-loading-message">
+                  Generating forecast
+                </div>
+
+                <gux-radial-progress
+                  slot="progress"
+                  screenreader-text="loading"
+                ></gux-radial-progress>
+                <div slot="additional-guidance">Thank you for waiting.</div>
+              </gux-loading-message>
+            </div>
+            <div id="forecast-outputs-container" style="display: none">
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown id="planning-group-dropdown" disabled>
+                  <gux-listbox id="planning-group-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Planning Group</label>
+              </gux-form-field-dropdown>
+              <gux-form-field-dropdown class="width">
+                <gux-dropdown
+                  id="week-day-dropdown"
+                  placeholder="Select a Planning Group"
+                  disabled
+                >
+                  <gux-listbox id="week-day-listbox"> </gux-listbox>
+                </gux-dropdown>
+                <label slot="label">Day of Week</label>
+              </gux-form-field-dropdown>
+              <div id="chart"></div>
+              <div id="totals-table" hidden>
+                <gux-table-beta>
+                  <table slot="data">
+                    <thead>
+                      <tr>
+                        <th data-column-name="totals-interval">Total for</th>
+                        <th data-column-name="forecast-offered">
+                          Forecast Offered
+                        </th>
+                        <th data-column-name="forecast-aht">Forecast AHT</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr id="fc-day-tr">
+                        <td id="fc-day-tr-heading">Day</td>
+                        <td id="fc-day-offered">0</td>
+                        <td id="fc-day-aht">0</td>
+                      </tr>
+                      <tr id="fc-week-tr">
+                        <td>Week</td>
+                        <td id="fc-week-offered">0</td>
+                        <td id="fc-week-aht">0</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </gux-table-beta>
+              </div>
+              <div id="controls" hidden>
+                <gux-form-field-dropdown>
+                  <gux-dropdown
+                    id="metric-select"
+                    placeholder="Select a Metric"
+                  >
+                    <gux-listbox>
+                      <gux-option value="offered">Offered</gux-option>
+                      <gux-option value="aver-handle-time"
+                        >Average Handle Time</gux-option
+                      >
+                      <gux-option value="both">Both</gux-option>
+                    </gux-listbox>
+                  </gux-dropdown>
+                  <label slot="label">Metric</label>
+                </gux-form-field-dropdown>
+
+                <gux-button id="smooth-button" accent="tertiary"
+                  >Smooth
+                  <gux-tooltip>
+                    Smooth with 3 point moving average
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="trendline-button" accent="tertiary"
+                  >Trendline
+                  <gux-tooltip>
+                    Create a trendline using linear regression
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="flatten-button" accent="tertiary"
+                  >Flatten<gux-tooltip>
+                    Flatten to single value
+                  </gux-tooltip></gux-button
+                >
+                <gux-button id="reset-button" accent="danger"
+                  >Reset<gux-tooltip>
+                    Reset back to original values
+                  </gux-tooltip></gux-button
+                >
+              </div>
+            </div>
+            <div id="page-three-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="p3-back-button"
+                name="back-button"
+                accent="secondary"
+                class="align-left"
+                >Back</gux-button
+              >
+
+              <gux-button
+                id="import-button"
+                accent="primary"
+                class="align-right"
+                >Import</gux-button
+              >
+            </div>
+          </fieldset>
+        </div>
+
+        <!-- Page 4 - Display import response -->
+        <div id="page-four" class="inactive-page">
+          <fieldset id="page-four-fieldset">
+            <legend>Results</legend>
+            <div id="import-loading-div">
+              <gux-loading-message>
+                <div slot="primary-message" id="import-loading-message">
+                  Generating import URL
+                </div>
+
+                <gux-radial-progress
+                  slot="progress"
+                  screenreader-text="loading"
+                ></gux-radial-progress>
+                <div slot="additional-guidance">Thank you for waiting.</div>
+              </gux-loading-message>
+            </div>
+            <div id="import-results-container" style="display: none"></div>
+          </fieldset>
+        </div>
+        <div id="test-mode" class="align-left" hidden></div>
+      </main>
+      <footer><img src="./img/logo-black.png" /></footer>
+    </div>
+
+    <!-- Error handling -->
+    <script>
+      console.log("[OFG] Setting up error handler");
+      // Define a global error handler function
+      window.onerror = function (message, source, lineno, colno, error) {
+        console.error("[OFG] An error occurred:", message);
+        console.error("[OFG] Source:", source);
+        console.error("[OFG] Line:", lineno);
+        console.error("[OFG] Column:", colno);
+        console.error("[OFG] Error object:", error);
+      };
+    </script>
+
+    <!-- Configuration -->
+    <script>
+      // Define global variables
+      window.ofg = window.ofg || {};
+
+      // Configuration of window.ofg object
+      window.ofg.listeners = [];
+      window.ofg.config = {
+        isTesting: window.location.protocol !== "https:",
+        isisInboundForecastMode: false,
+        testing: {
+          outboundAggregatesDataUrl:
+            "/outboundForecastGenerator/test/source/outboundAggregateData.json",
+          businessUnitsUrl:
+            "/outboundForecastGenerator/test/source/businessUnits.json",
+          businessUnitSettingsUrl:
+            "/outboundForecastGenerator/test/source/bu.json",
+          planningGroupsUrl:
+            "/outboundForecastGenerator/test/source/planningGroups.json",
+          campaignsUrl: "/outboundForecastGenerator/test/source/campaigns.json",
+          inboundFcDataUrl:
+            "/outboundForecastGenerator/test/source/inboundForecastData.json",
+        },
+        production: {
+          redirectUri:
+            "https://apmaries.github.io/outboundForecastGenerator/wfm-outbound.html",
+          platformClientConfig: {
+            environment: "", // This will be set dynamically based on gc_region
+            extendedResponses: true,
+            persistSettings: true,
+            settingsPrefix: "ofg",
+          },
+          clientAppConfig: {
+            pcEnvironment: "", // This will be set dynamically based on gc_region
+          },
+          clientId: "", // This will be set dynamically based on gc_clientId
+        },
+      };
+
+      // Check testing mode by protocol. If https then production, else testing
+      const testMode = window.ofg.config.isTesting;
+
+      // Update the test-mode div with the current mode
+      const testModeDiv = document.getElementById("test-mode");
+      testModeDiv.textContent = `Running in ${
+        testMode ? "test" : "production"
+      } mode`;
+
+      // Remove hidden attribute from testModeDiv if in testing mode
+      if (testMode) {
+        testModeDiv.removeAttribute("hidden");
+      }
+
+      // Set up configuration based on query parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      const gc_region = urlParams.get("gc_region");
+      const gc_clientId = urlParams.get("gc_clientId");
+      const urlHash = window.location.hash.substr(1);
+      const hashParams = new URLSearchParams(urlHash);
+      const accessToken = hashParams.get("access_token");
+
+      if (gc_region && gc_clientId) {
+        console.log("[OFG] Genesys Cloud region and client ID detected");
+        window.ofg.config.production.platformClientConfig.environment =
+          gc_region;
+        window.ofg.config.production.clientAppConfig.pcEnvironment = gc_region;
+        window.ofg.config.production.clientId = gc_clientId;
+        console.log("[OFG] Configuration set", window.ofg.config);
+      } else if (accessToken) {
+        console.log("[OFG] Redirect after successful login detected");
+        if (!sessionStorage.getItem("gc_access_token")) {
+          sessionStorage.setItem("gc_access_token", accessToken);
+          console.log("[OFG] Access token stored in sessionStorage");
+        }
+      } else {
+        console.error("[OFG] Genesys Cloud region and client ID not detected");
+        alert(
+          "Please provide Genesys Cloud region and client ID in the URL query parameters"
+        );
+      }
+    </script>
+    <!-- 
+    <script>
+      console.log("[OFG] Setting up configuration");
+      // Define global variables
+      window.ofg = window.ofg || {};
+
+      // Configuration of window.ofg object
+      window.ofg.config = {
+        isTesting: window.location.protocol !== "https:",
+        isisInboundForecastMode: false,
+        testing: {
+          outboundAggregatesDataUrl:
+            "/outboundForecastGenerator/test/source/outboundAggregateData.json",
+          businessUnitsUrl:
+            "/outboundForecastGenerator/test/source/businessUnits.json",
+          businessUnitSettingsUrl:
+            "/outboundForecastGenerator/test/source/bu.json",
+          planningGroupsUrl:
+            "/outboundForecastGenerator/test/source/planningGroups.json",
+          campaignsUrl: "/outboundForecastGenerator/test/source/campaigns.json",
+          inboundFcDataUrl:
+            "/outboundForecastGenerator/test/source/inboundForecastData.json",
+        },
+        production: {
+          redirectUri:
+            "https://apmaries.github.io/outboundForecastGenerator/wfm-outbound.html",
+          platformClientConfig: {
+            environment: "", // This will be set dynamically based on gc_region
+            extendedResponses: true,
+            persistSettings: true,
+            settingsPrefix: "ofg",
+          },
+          clientAppConfig: {
+            pcEnvironment: "", // This will be set dynamically based on gc_region
+          },
+          clientId: "", // This will be set dynamically based on gc_clientId
+        },
+      };
+
+      // Update the test-mode div with the current mode
+      const testModeDiv = document.getElementById("test-mode");
+      testModeDiv.textContent = `Running in ${
+        window.ofg.config.isTesting ? "test" : "production"
+      } mode`;
+
+      // Remove hidden attribute from testModeDiv if in testing mode
+      if (window.ofg.config.isTesting) {
+        testModeDiv.removeAttribute("hidden");
+      }
+
+      (async () => {
+        // Wrap the code in an IIFE to use async/await
+        try {
+          const urlParams = new URLSearchParams(window.location.search);
+          const gc_region = urlParams.get("gc_region");
+          const gc_clientId = urlParams.get("gc_clientId");
+          const urlHash = window.location.hash.substr(1);
+          const hashParams = new URLSearchParams(urlHash);
+          const accessToken = hashParams.get("access_token");
+
+          if (gc_region && gc_clientId && !accessToken) {
+            console.log("Outbound Forecast Generator [OFG] initiated");
+            if (!sessionStorage.getItem("ofg_initialized")) {
+              window.ofg.config.production.environment = gc_region;
+              window.ofg.config.production.clientAppConfig.pcEnvironment =
+                gc_region;
+              window.ofg.config.production.clientId = gc_clientId;
+            }
+          } else if (accessToken) {
+            console.log("[OFG] Redirect after successful login detected");
+            if (!sessionStorage.getItem("gc_access_token")) {
+              sessionStorage.setItem("gc_access_token", accessToken);
+              console.log("[OFG] Access token stored in sessionStorage");
+            }
+          } else {
+            console.log(
+              "[OFG] Neither initial load nor redirect detected. Checking for testing mode or other conditions."
+            );
+            const isTesting = window.ofg.config.isTesting;
+            if (isTesting) {
+              console.log("[OFG] Testing mode:", isTesting);
+              await initializeTestingMode();
+            }
+          }
+        } catch (error) {
+          console.error("[OFG] Error initializing app", error);
+        }
+      })();
+
+      // Utility function to fetch test data
+      async function fetchData(url) {
+        try {
+          const response = await fetch(url);
+          return await response.json();
+        } catch (error) {
+          console.error(`[OFG] Error fetching data from ${url}`, error);
+          throw error; // Rethrow to handle it in the caller function
+        }
+      }
+
+      // Initialize app in testing mode
+      async function initializeTestingMode() {
+        console.log("[OFG] Initializing in testing mode");
+
+        // Define mock data promises
+        const outboundAggregatesDataPromise = fetchData(
+          window.ofg.config.testing.outboundAggregatesDataUrl
+        );
+        const campaignsPromise = fetchData(
+          window.ofg.config.testing.campaignsUrl
+        );
+        const businessUnitsPromise = fetchData(
+          window.ofg.config.testing.businessUnitsUrl
+        );
+        const businessUnitSettingsPromise = fetchData(
+          window.ofg.config.testing.businessUnitSettingsUrl
+        );
+        const planningGroupsPromise = fetchData(
+          window.ofg.config.testing.planningGroupsUrl
+        );
+        const inboundFcDataPromise = fetchData(
+          window.ofg.config.testing.inboundFcDataUrl
+        );
+
+        // Assign mock data promises to mock API functions
+        window.ofg.PlatformClient = {
+          MockAnalyticsApi: {
+            getOutboundConversationsAggregates: function () {
+              return outboundAggregatesDataPromise;
+            },
+          },
+          MockOutboundApi: {
+            getOutboundCampaigns: function () {
+              return campaignsPromise.then((data) => data.entities);
+            },
+          },
+          MockWfmApi: {
+            getBusinessUnits: function () {
+              return businessUnitsPromise.then((data) => data.entities);
+            },
+            getBusinessUnitData: function () {
+              return businessUnitSettingsPromise;
+            },
+            getPlanningGroups: function () {
+              return planningGroupsPromise.then((data) => data.entities);
+            },
+            getInboundForecastData: function () {
+              return inboundFcDataPromise;
+            },
+          },
+        };
+
+        console.log("[OFG] Mock APIs initialized with testing data");
+      }
+    </script>
+    -->
+
+    <!-- Load the PureCloud platform client library -->
+    <!--<script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
+    -->
+
+    <!-- Load the Client App SDK-->
+    <!--<script src="https://sdk-cdn.mypurecloud.com/client-apps/2.6.6/purecloud-client-app-sdk.js"></script>
+    <script>
+      console.log("[OFG] Page loaded - SDK's loaded");
+    </script>
+    -->
+
+    <!-- Define the clients -->
+    <script type="module">
+      import { startSession } from "/outboundForecastGenerator/src/sessionHandler.js";
+
+      // Function to dynamically load a script
+      function loadScript(url) {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = url;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      // Async function to load SDKs if gc_access_token is not found
+      async function loadSDKsConditionally() {
+        if (!localStorage.getItem("gc_access_token")) {
+          const sdkUrls = [
+            "https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js",
+            "https://sdk-cdn.mypurecloud.com/client-apps/2.6.6/purecloud-client-app-sdk.js",
+          ];
+          try {
+            // Wait for all SDKs to be loaded
+            await Promise.all(sdkUrls.map((url) => loadScript(url)));
+            console.log("All SDKs loaded successfully");
+          } catch (error) {
+            console.error("Error loading SDKs", error);
+          }
+        }
+      }
+
+      // Check if in testing mode
+      if (testMode) {
+        console.log("[OFG] Testing mode");
+        const config = window.ofg.config.testing;
+
+        // Utility function to fetch test data
+        async function fetchData(url) {
+          try {
+            const response = await fetch(url);
+            return await response.json();
+          } catch (error) {
+            console.error(`[OFG] Error fetching data from ${url}`, error);
+            throw error; // Rethrow to handle it in the caller function
+          }
+        }
+
+        // Initialize app in testing mode
+        function initializeTestingMode() {
+          console.log("[OFG] Initializing in testing mode");
+
+          // Define mock data promises
+          const outboundAggregatesDataPromise = fetchData(
+            config.outboundAggregatesDataUrl
+          );
+          const campaignsPromise = fetchData(config.campaignsUrl);
+          const businessUnitsPromise = fetchData(config.businessUnitsUrl);
+          const businessUnitSettingsPromise = fetchData(
+            config.businessUnitSettingsUrl
+          );
+          const planningGroupsPromise = fetchData(config.planningGroupsUrl);
+          const inboundFcDataPromise = fetchData(config.inboundFcDataUrl);
+
+          // Assign mock data promises to mock API functions
+          window.ofg.PlatformClient = {
+            MockAnalyticsApi: {
+              getOutboundConversationsAggregates: function () {
+                return outboundAggregatesDataPromise;
+              },
+            },
+            MockOutboundApi: {
+              getOutboundCampaigns: function () {
+                return campaignsPromise.then((data) => data.entities);
+              },
+            },
+            MockWfmApi: {
+              getBusinessUnits: function () {
+                return businessUnitsPromise.then((data) => data.entities);
+              },
+              getBusinessUnitData: function () {
+                return businessUnitSettingsPromise;
+              },
+              getPlanningGroups: function () {
+                return planningGroupsPromise.then((data) => data.entities);
+              },
+              getInboundForecastData: function () {
+                return inboundFcDataPromise;
+              },
+            },
+          };
+
+          console.log("[OFG] Mock APIs initialized with testing data");
+        }
+        initializeTestingMode();
+      } else {
+        if (!sessionStorage.getItem("gc_access_token")) {
+          console.log("[OFG] Production mode");
+          const config = window.ofg.config.production;
+
+          loadSDKsConditionally().then(async () => {
+            // Code here will execute after all SDKs are loaded
+            console.log("Further code execution can proceed now.");
+
+            // Configure Platform Client
+            let platformClientModule = window.require("platformClient");
+            window.PlatformClient = platformClientModule;
+            window.PlatformClient.ApiClient.instance.setEnvironment(
+              config.platformClientConfig.environment
+            );
+            window.PlatformClient.ApiClient.instance.setReturnExtendedResponses(
+              config.platformClientConfig.extendedResponses
+            );
+            window.PlatformClient.ApiClient.instance.setPersistSettings(
+              config.platformClientConfig.persistSettings,
+              config.platformClientConfig.settingsPrefix
+            );
+
+            // Configure Client App
+            let ClientAppModule = window.purecloud.apps.ClientApp;
+            window.ClientApp = new ClientAppModule({
+              pcEnvironment: config.clientAppConfig.pcEnvironment,
+            });
+
+            console.log(
+              "[OFG] PlatformClient configured",
+              window.PlatformClient
+            );
+            console.log("[OFG] ClientApp configured", window.ClientApp);
+            console.log(
+              "[OFG] Logging in to Genesys Cloud",
+              config.clientId,
+              config.redirectUri
+            );
+
+            try {
+              await window.PlatformClient.ApiClient.instance.loginImplicitGrant(
+                config.clientId,
+                config.redirectUri
+              );
+            } catch (e) {
+              console.error("[OFG] Error logging in", e);
+            }
+          });
+        }
+        console.log("[OFG] PlatformClient", window.PlatformClient);
+
+        await startSession();
+      }
+    </script>
+
+    <!--
+    <script type="module">
+      import { startSession } from "/outboundForecastGenerator/src/sessionHandler.js";
+      const config = window.ofg.config.production;
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        if (!testMode) {
+          console.log(
+            "[OFG] Logging in to Genesys Cloud",
+            config.clientId,
+            config.redirectUri
+          );
+
+          try {
+            await window.PlatformClient.ApiClient.instance.loginImplicitGrant(
+              config.clientId,
+              config.redirectUri
+            );
+          } catch (e) {
+            console.error("[OFG] Error logging in", e);
+          }
+        }
+        await startSession();
+      });
+    </script>
+  -->
+    <!--
+    <script type="module">
+      import { startSession } from "/outboundForecastGenerator/src/sessionHandler.js";
+      import { loadPageOne } from "/outboundForecastGenerator/src/pageHandler.js";
+
+      // Configuration
+      const config = window.ofg.config;
+
+      // Main initialization function
+      window.ofg.initializationPromise = new Promise((resolve, reject) => {
+        async function initializeApp() {
+          try {
+            const urlParams = new URLSearchParams(window.location.search);
+            const gc_region = urlParams.get("gc_region");
+            const gc_clientId = urlParams.get("gc_clientId");
+            const urlHash = window.location.hash.substr(1);
+            const hashParams = new URLSearchParams(urlHash);
+            const accessToken = hashParams.get("access_token");
+
+            if (gc_region && gc_clientId && !accessToken) {
+              console.log("Outbound Forecast Generator [OFG] initiated");
+              if (!sessionStorage.getItem("ofg_initialized")) {
+                await initializeProductionMode();
+              }
+            } else if (accessToken) {
+              console.log("[OFG] Redirect after successful login detected");
+              if (!sessionStorage.getItem("gc_access_token")) {
+                sessionStorage.setItem("gc_access_token", accessToken);
+                console.log("[OFG] Access token stored in sessionStorage");
+              }
+              await startSession();
+              loadPageOne();
+              resolve(); // Resolve the initialization promise
+              return;
+            } else {
+              console.log(
+                "[OFG] Neither initial load nor redirect detected. Checking for testing mode or other conditions."
+              );
+              const isTesting = config.isTesting;
+              if (isTesting) {
+                console.log("[OFG] Testing mode:", isTesting);
+                await initializeTestingMode();
+              }
+            }
+
+            console.log("[OFG] App initialized");
+
+            await startSession();
+            loadPageOne();
+            resolve(); // Resolve the initialization promise
+          } catch (error) {
+            reject(error); // Reject the initialization promise if there's an error
+          }
+        }
+
+        initializeApp();
+      });
+
+      // Initialize app in production mode
+      async function initializeProductionMode() {
+        console.log("[OFG] Initializing in production mode");
+        const urlParams = new URLSearchParams(window.location.search);
+        const gc_region = urlParams.get("gc_region");
+        const gc_clientId = urlParams.get("gc_clientId");
+
+        if (!gc_clientId || !gc_region) {
+          console.error("[OFG] Missing gc_clientId or gc_region");
+          alert(
+            "Please provide gc_clientId and gc_region in the URL query parameters"
+          );
+          return;
+        }
+
+        // Update config with dynamic values
+        let productionConfig = config.production;
+        productionConfig.platformClientConfig.environment = gc_region;
+        productionConfig.clientAppConfig.pcEnvironment = gc_region;
+
+        console.warn("[OFG] Production config", productionConfig);
+
+        // Configure PlatformClient
+        let platformClientModule = window.require("platformClient");
+        window.ofg.PlatformClient = platformClientModule;
+        window.ofg.PlatformClient.ApiClient.instance.setEnvironment(
+          productionConfig.platformClientConfig.environment
+        );
+        window.ofg.PlatformClient.ApiClient.instance.setReturnExtendedResponses(
+          productionConfig.platformClientConfig.extendedResponses
+        );
+        window.ofg.PlatformClient.ApiClient.instance.setPersistSettings(
+          productionConfig.platformClientConfig.persistSettings,
+          productionConfig.platformClientConfig.settingsPrefix
+        );
+
+        console.warn(
+          "[OFG] PlatformClient configured",
+          window.ofg.PlatformClient
+        );
+
+        // Configure ClientApp
+        let ClientAppModule = window.purecloud.apps.ClientApp;
+        window.ofg.ClientApp = new ClientAppModule({
+          pcEnvironment: productionConfig.clientAppConfig.pcEnvironment,
+        });
+
+        console.warn("[OFG] ClientApp configured", window.ofg.ClientApp);
+
+        // Set the ofg_initialized flag before starting the login process
+        sessionStorage.setItem("ofg_initialized", "true");
+
+        // Login with Genesys Cloud
+        console.log("[OFG] Logging in to Genesys Cloud");
+        try {
+          await window.ofg.PlatformClient.ApiClient.instance.loginImplicitGrant(
+            gc_clientId,
+            productionConfig.redirectUri // Use redirectUri from config
+          );
+          console.log("[OFG] Login successful");
+        } catch (error) {
+          console.error("[OFG] Error logging in", error);
+        }
+      }
+
+      // Utility function to fetch test data
+      async function fetchData(url) {
+        try {
+          const response = await fetch(url);
+          return await response.json();
+        } catch (error) {
+          console.error(`[OFG] Error fetching data from ${url}`, error);
+          throw error; // Rethrow to handle it in the caller function
+        }
+      }
+
+      // Initialize app in testing mode
+      async function initializeTestingMode() {
+        console.log("[OFG] Initializing in testing mode");
+
+        // Define mock data promises
+        const outboundAggregatesDataPromise = fetchData(
+          config.testing.outboundAggregatesDataUrl
+        );
+        const campaignsPromise = fetchData(config.testing.campaignsUrl);
+        const businessUnitsPromise = fetchData(config.testing.businessUnitsUrl);
+        const businessUnitSettingsPromise = fetchData(
+          config.testing.businessUnitSettingsUrl
+        );
+        const planningGroupsPromise = fetchData(
+          config.testing.planningGroupsUrl
+        );
+        const inboundFcDataPromise = fetchData(config.testing.inboundFcDataUrl);
+
+        // Assign mock data promises to mock API functions
+        window.ofg.PlatformClient = {
+          MockAnalyticsApi: {
+            getOutboundConversationsAggregates: function () {
+              return outboundAggregatesDataPromise;
+            },
+          },
+          MockOutboundApi: {
+            getOutboundCampaigns: function () {
+              return campaignsPromise.then((data) => data.entities);
+            },
+          },
+          MockWfmApi: {
+            getBusinessUnits: function () {
+              return businessUnitsPromise.then((data) => data.entities);
+            },
+            getBusinessUnitData: function () {
+              return businessUnitSettingsPromise;
+            },
+            getPlanningGroups: function () {
+              return planningGroupsPromise.then((data) => data.entities);
+            },
+            getInboundForecastData: function () {
+              return inboundFcDataPromise;
+            },
+          },
+        };
+
+        console.log("[OFG] Mock APIs initialized with testing data");
+      }
+
+      // Call the main function to initialize the app
+      document.addEventListener("DOMContentLoaded", initializeApp);
+    </script>
+    -->
+
+    <!-- Define the Clients -->
+    <!-- OLD 
+    <script>
+      console.warn("[OFG] Running client script");
+      // TODO: This is running twice - why?
+
+      // TODO: Need to be able to get the environment from the parent window
+      //var environment = "mypurecloud.com.au";
+
+      // Check if in testing mode
+      if (window.ofg.config.isTesting) {
+        console.log("[OFG] Testing mode");
+
+        // Fetch static JSON data
+        let outboundAggregatesDataPromise = fetch(
+          "/outboundForecastGenerator/test/source/outboundAggregateData.json"
+        )
+          .then((response) => response.json())
+          .catch((error) =>
+            console.error(
+              "[OFG] Error fetching outbound aggregates data",
+              error
+            )
+          );
+
+        let businessUnitsPromise = fetch(
+          "/outboundForecastGenerator/test/source/businessUnits.json"
+        )
+          .then((response) => response.json())
+          .then((data) => data.entities)
+          .catch((error) =>
+            console.error("[OFG] Error fetching business units data", error)
+          );
+
+        let businessUnitSettingsPromise = fetch(
+          "/outboundForecastGenerator/test/source/bu.json"
+        )
+          .then((response) => response.json())
+          .catch((error) =>
+            console.error(
+              "[OFG] Error fetching business unit settings data",
+              error
+            )
+          );
+
+        let planningGroupsPromise = fetch(
+          "/outboundForecastGenerator/test/source/planningGroups.json"
+        )
+          .then((response) => response.json())
+          .then((data) => data.entities)
+          .catch((error) =>
+            console.error("[OFG] Error fetching planning groups data", error)
+          );
+
+        let campaignsPromise = fetch(
+          "/outboundForecastGenerator/test/source/campaigns.json"
+        )
+          .then((response) => response.json())
+          .then((data) => data.entities)
+          .catch((error) =>
+            console.error("[OFG] Error fetching campaigns data", error)
+          );
+
+        let inboundFcDataPromise = fetch(
+          "/outboundForecastGenerator/test/source/inboundForecastData.json"
+        )
+          .then((response) => response.json())
+          .then((data) => data)
+          .catch((error) =>
+            console.error("[OFG] Error fetching inbound forecast data", error)
+          );
+
+        // Create mock objects for testing
+        window.ofg.PlatformClient = {
+          MockAnalyticsApi: {
+            getOutboundConversationsAggregates: function () {
+              // Return promise from fetch
+              return outboundAggregatesDataPromise;
+            },
+          },
+
+          MockOutboundApi: {
+            getOutboundCampaigns: function () {
+              // Return promise from fetch
+              return campaignsPromise;
+            },
+          },
+          MockWfmApi: {
+            getBusinessUnits: function () {
+              // Return promise from fetch
+              return businessUnitsPromise;
+            },
+            getBusinessUnitData: function () {
+              // Return promise from fetch
+              return businessUnitSettingsPromise;
+            },
+            getPlanningGroups: function () {
+              // Return promise from fetch
+              return planningGroupsPromise;
+            },
+            getInboundForecastData: function () {
+              // Return promise from fetch
+              return inboundFcDataPromise;
+            },
+          },
+          // ...
+        };
+      } else {
+        console.log("[OFG] Production mode");
+
+        // Extract gc_clientId and gc_region from URL query parameters
+        let url = new URL(document.location.href);
+        console.log("[OFG] URL", url);
+        let gc_region = url.searchParams.get("gc_region");
+        let gc_clientId = url.searchParams.get("gc_clientId");
+        console.log("[OFG] gc_region", gc_region);
+        console.log("[OFG] gc_clientId", gc_clientId);
+
+        if (!gc_clientId || !gc_region) {
+          console.error(
+            "[OFG] Check gc_clientId and gc_region in URL query parameters",
+            window.location
+          );
+          alert(
+            "Please provide gc_clientId and gc_region in the URL query parameters"
+          );
+        }
+
+        sessionStorage.setItem("oauth_client", gc_clientId);
+        sessionStorage.setItem("org_env", gc_region);
+
+        // Define PlatformClient here
+        let platformClientModule = window.require("platformClient");
+
+        // Configure Platform Client
+        window.ofg.PlatformClient = platformClientModule;
+        window.ofg.PlatformClient.ApiClient.instance.setEnvironment(gc_region);
+        window.ofg.PlatformClient.ApiClient.instance.setReturnExtendedResponses(
+          true
+        );
+        window.ofg.PlatformClient.ApiClient.instance.setPersistSettings(
+          true,
+          "ofg"
+        );
+
+        // Configure Client App
+        let ClientAppModule = window.purecloud.apps.ClientApp;
+        window.ofg.ClientApp = new ClientAppModule({
+          pcEnvironment: gc_region,
+        });
+      }
+    </script>
+    -->
+
+    <!-- Script to login with Cloud -->
+    <!-- OLD
+    <script type="module">
+      import { startSession } from "/outboundForecastGenerator/src/sessionHandler.js";
+      import { loadPageOne } from "/outboundForecastGenerator/src/pageHandler.js";
+
+      document.addEventListener("DOMContentLoaded", async function () {
+        if (!window.ofg.config.isTesting) {
+          const clientId = sessionStorage.getItem("oauth_client");
+
+          console.log("[OFG] Logging in to Genesys Cloud");
+
+          try {
+            await window.ofg.PlatformClient.ApiClient.instance.loginImplicitGrant(
+              clientId,
+              "https://apmaries.github.io/outboundForecastGenerator/wfm-outbound.html" // redirect url
+            );
+
+            console.log("[OFG] Logged in to Genesys Cloud");
+          } catch (e) {
+            console.error("[OFG] Error logging in", e);
+          }
+        }
+        await startSession();
+        loadPageOne();
+      });
+    </script>
+    -->
+
+    <!-- Main project module -->
+    <script type="module" src="/outboundForecastGenerator/src/main.js"></script>
+    <script>
+      console.log("[OFG] Page loaded - main.js loaded");
+    </script>
+  </body>
+</html>
