@@ -8,7 +8,7 @@ const testMode = applicationConfig.testMode;
 ("use strict");
 
 export async function startSession() {
-  console.log("[OFG] Starting session");
+  console.log("{am} Starting session");
   let appUser = null;
 
   if (testMode) {
@@ -17,10 +17,10 @@ export async function startSession() {
     try {
       // GET Current UserId
       let user = await uapi.getUsersMe({});
-      console.log("[OFG] User details returned", user);
+      console.log("{am} User details returned", user);
       appUser = user.name;
     } catch (error) {
-      console.error("[OFG] Error getting user details. ", error);
+      console.error("{am} Error getting user details. ", error);
       throw error;
     }
   }

@@ -10,30 +10,30 @@
     <script src="./src/handler-modules/errorHandler.js"></script>
 
     <script>
-      console.log("[OFG] index page loaded");
+      console.log("{am} index page loaded");
     </script>
   </head>
   <body>
     <h1>SPA Login App</h1>
     <div id="content"></div>
     <script>
-      console.log("[OFG] scripts loading...");
+      console.log("{am} scripts loading...");
     </script>
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
     <script type="module">
       import { startApp } from "./src/app.js";
-      console.log("[OFG] app.js loaded");
+      console.log("{am} app.js loaded");
 
       startApp()
         .then(() => {
-          console.log("[OFG] Start function completed");
+          console.log("{am} Start function completed");
         })
         .catch((err) => {
-          console.error("[OFG] Error during start:", err);
+          console.error("{am} Error during start:", err);
         });
     </script>
     <script>
-      console.log("[OFG] scripts loaded!");
+      console.log("{am} scripts loaded!");
     </script>
   </body>
 </html>

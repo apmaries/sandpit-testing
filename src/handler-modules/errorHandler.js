@@ -3,8 +3,8 @@
 
 // Centralized error logging function
 function logError(errorDetails) {
-  console.error("[OFG] An error occurred:", errorDetails.message);
-  console.error("[OFG] Error details:", {
+  console.error("{am} An error occurred:", errorDetails.message);
+  console.error("{am} Error details:", {
     Source: errorDetails.source,
     Line: errorDetails.lineno,
     Column: errorDetails.colno,
@@ -35,5 +35,5 @@ function shouldAttemptRecovery(errorDetails) {
 function attemptRecovery() {
   // Implement recovery logic
   // For example, reload the application or redirect the user
-  console.log("[OFG] Attempting to recover from error...");
+  console.log("{am} Attempting to recover from error...");
 }
