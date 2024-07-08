@@ -24,5 +24,6 @@ export async function startSession() {
       throw error;
     }
   }
-  document.getElementById("content").innerText = "Welcome, " + appUser + "!";
+  document.getElementById("user-welcome").innerText =
+    "Welcome, " + appUser + "!";
 }
