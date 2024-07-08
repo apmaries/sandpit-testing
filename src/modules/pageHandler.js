@@ -6,7 +6,7 @@ import { applicationState } from "../core/stateManager.js";
 import { wapi } from "../app.js";
 import { t_wapi } from "../core/testManager.js";
 import { populateDropdown, hideLoadingSpinner } from "../utils/domUtils.js";
-import { addEventListener, removeEventListeners } from "../utils/eventUtils.js";
+import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
@@ -52,7 +52,11 @@ export async function loadPageOne() {
       applicationState.userInputs.businessUnit.name = businessUnit.name;
       applicationState.userInputs.businessUnit.id = businessUnit.id;
       applicationState.userInputs.businessUnit.settings = businessUnit.settings;
-      console.log(
+
+      // Populate the business unit settings to UI
+      populateBusinessUnitSettings(businessUnit);
+
+      console.debug(
         "[OFG] Application state after business unit selection",
         applicationState
       );
@@ -62,16 +66,31 @@ export async function loadPageOne() {
     }
   }
 
+  function populateBusinessUnitSettings(businessUnit) {
+    console.log("[OFG] Populating business unit settings");
+    const businessUnitSettings = businessUnit.settings;
+
+    const timeZone = businessUnitSettings.timeZone;
+    document.getElementById("bu-timezone").value = timeZone;
+
+    const startDayOfWeek = businessUnitSettings.startDayOfWeek;
+    document.getElementById(
+      "week-start-label"
+    ).textContent = `Week start (${startDayOfWeek})`;
+  }
+
   // Main logic for loading page one
   const businessUnits = await getBusinessUnits();
-  populateDropdown(businessUnitListbox, businessUnits, "name", true);
+  await populateDropdown(businessUnitListbox, businessUnits, "name", true);
 
   // Add event listener for business unit selection
-  addEventListener(
-    businessUnitListbox,
-    "change",
-    getBusinessUnitSettings(businessUnitListbox.value)
-  );
+  addEvent(businessUnitListbox, "change", (event) => {
+    const selectedValue = event.target.value;
+    getBusinessUnitSettings(selectedValue);
+  });
+
+  // Add event listener for next button
+  // Should also remove event listener from business unit listbox when navigating away
 
   // Hide loading spinner and show main
   await hideLoadingSpinner("main", "main-loading-section");
