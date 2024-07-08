@@ -10,17 +10,6 @@ import { populateDropdown, hideLoadingSpinner } from "../utils/domUtils.js";
 const testMode = applicationConfig.testMode;
 ("use strict");
 
-// Function to get user details
-async function getUser() {
-  try {
-    let user = await uapi.getUsersMe({});
-    return user;
-  } catch (error) {
-    console.error("[OFG] Error getting user details. ", error);
-    throw error;
-  }
-}
-
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
   console.debug("[OFG] Application state", applicationState);
@@ -32,7 +21,10 @@ export async function loadPageOne() {
       const businessUnits = testMode
         ? await t_wapi.getBusinessUnits()
         : await wapi.getWorkforcemanagementBusinessunits();
-      console.log("[OFG] Business units", businessUnits.entities);
+      console.log(
+        `[OFG] Loaded ${businessUnits.entities.length} Business units`,
+        businessUnits.entities
+      );
 
       return businessUnits.entities; // Return the list of business units
     } catch (error) {
