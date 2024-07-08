@@ -1,5 +1,5 @@
-// genesysApi.js
-"use strict";
+import { startSession } from "./sessionHandler.js";
+("use strict");
 
 let platformClient = require("platformClient");
 
@@ -36,6 +36,7 @@ export async function start() {
     console.log(user);
 
     //Enter in starting code.
+    startSession();
   } catch (err) {
     console.log("{am} Error: ", err);
   }
