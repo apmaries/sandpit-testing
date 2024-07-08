@@ -4,6 +4,7 @@
 import { applicationConfig } from "./core/configManager.js";
 import { runApp } from "./main.js";
 import { startSession } from "./core/sessionManager.js";
+import { initializeTestMode } from "./core/testManager.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
@@ -29,6 +30,7 @@ gc_redirectUrl
 const client = platformClient.ApiClient.instance;
 const capi = new platformClient.ConversationsApi();
 const napi = new platformClient.NotificationsApi();
+const oapi = new platformClient.OutboundApi();
 const tapi = new platformClient.TokensApi();
 const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
@@ -37,8 +39,12 @@ export async function startApp() {
   console.log("[OFG] Starting application");
 
   if (testMode) {
+    // Initialize test mode
     console.log("%c[OFG] Test mode enabled", "color: red");
+
+    await initializeTestMode();
   } else {
+    // Set environment and login to Genesys Cloud
     try {
       client.setEnvironment(gc_region);
       client.setPersistSettings(true, "_am_");
@@ -66,4 +72,4 @@ export async function startApp() {
   runApp();
 }
 
-export { capi, napi, tapi, uapi, wapi };
+export { capi, napi, oapi, tapi, uapi, wapi };
