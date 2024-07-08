@@ -1,3 +1,6 @@
+// errorHandler.js
+// Description: Centralized error handling module
+
 // Centralized error logging function
 function logError(errorDetails) {
   console.error("{am} An error occurred:", errorDetails.message);

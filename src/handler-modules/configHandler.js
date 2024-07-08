@@ -1,4 +1,5 @@
 // ConfigHandler.js
+// Description: Centralized configuration module
 
 let applicationConfig = {
   testMode: window.location.protocol !== "https:",

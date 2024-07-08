@@ -1,4 +1,6 @@
 // sessionHandler.js
+// Description: Module for handling session-related logic
+
 import { applicationConfig } from "./configHandler.js";
 import { uapi } from "../app.js";
 

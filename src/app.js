@@ -1,4 +1,6 @@
 // app.js
+// Description: The main entry point file that initializes the app and starts the main logic.
+
 import { applicationConfig } from "./handler-modules/configHandler.js";
 import { runApp } from "./main.js";
 import { startSession } from "./handler-modules/sessionHandler.js";

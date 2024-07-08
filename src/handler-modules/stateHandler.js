@@ -1,4 +1,5 @@
 // stateHandler.js
+// Description: Centralized state management module
 
 let applicationState = {
   userInputs: {},
