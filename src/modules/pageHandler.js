@@ -6,6 +6,7 @@ import { applicationState } from "../core/stateManager.js";
 import { wapi } from "../app.js";
 import { t_wapi } from "../core/testManager.js";
 import { populateDropdown, hideLoadingSpinner } from "../utils/domUtils.js";
+import { addEventListener, removeEventListeners } from "../utils/eventUtils.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
@@ -33,9 +34,39 @@ export async function loadPageOne() {
     }
   }
 
+  // Get selected business unit settings
+  async function getBusinessUnitSettings(businessUnitId) {
+    let opts = {
+      "expand": ["settings.timeZone, settings.startDayOfWeek"], // [String] | Include to access additional data on the business unit
+    };
+    try {
+      const businessUnit = testMode
+        ? await t_wapi.getBusinessUnitData()
+        : await wapi.getWorkforcemanagementBusinessunit(businessUnitId, opts);
+      console.log(
+        `[OFG] Loaded settings for ${businessUnit.name} (${businessUnit.id})`,
+        businessUnit
+      );
+
+      applicationState.userInputs.businessUnit.name = businessUnit.name;
+      applicationState.userInputs.businessUnit.id = businessUnit.id;
+      applicationState.userInputs.businessUnit.settings = businessUnit.settings;
+      console.log(
+        "[OFG] Application state after business unit selection",
+        applicationState
+      );
+    } catch (error) {
+      console.error("[OFG] Error getting business unit settings. ", error);
+      throw error;
+    }
+  }
+
   // Main logic for loading page one
   const businessUnits = await getBusinessUnits();
   populateDropdown(businessUnitListbox, businessUnits, "name", true);
+
+  // Add event listener for business unit selection
+  addEventListener(businessUnitListbox, "change", getBusinessUnitSettings);
 
   // Hide loading spinner and show main
   await hideLoadingSpinner("main", "main-loading-section");
