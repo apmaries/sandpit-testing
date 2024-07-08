@@ -23,6 +23,7 @@ const client = platformClient.ApiClient.instance;
 const uapi = new platformClient.UsersApi();
 
 export async function start() {
+  console.log("{am} Starting session");
   try {
     client.setEnvironment(gc_region);
     client.setPersistSettings(true, "_mm_");
