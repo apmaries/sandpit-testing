@@ -9,6 +9,16 @@
     <!-- Error handling -->
     <script src="./src/core/errorManager.js"></script>
 
+    <!-- Genesys stuff -->
+    <link
+      href="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.css"
+      rel="stylesheet"
+    />
+    <script
+      type="module"
+      src="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.esm.js"
+    ></script>
+
     <script>
       console.log("{am} index page loaded");
     </script>
@@ -19,7 +29,11 @@
     <script>
       console.log("{am} scripts loading...");
     </script>
+
+    <!-- Load Genesys Cloud SDK's -->
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
+    <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.6.6/purecloud-client-app-sdk.js"></script>
+
     <script type="module">
       import { startApp } from "./src/app.js";
       console.log("{am} app.js loaded");
