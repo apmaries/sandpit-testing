@@ -28,13 +28,12 @@
     </script>
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
     <script type="module">
-      import { start, uapi } from "./clientHandler.js";
+      import { start } from "./clientHandler.js";
       console.log("{am} clientHandler loaded");
 
       start()
         .then(() => {
-          // You can now use uapi here
-          console.log("{am} uapi is ready to use:", uapi);
+          console.log("{am} Start function completed");
         })
         .catch((err) => {
           console.error("{am} Error during start:", err);

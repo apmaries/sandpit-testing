@@ -23,10 +23,10 @@ const client = platformClient.ApiClient.instance;
 const uapi = new platformClient.UsersApi();
 
 export async function start() {
-  console.log("{am} Starting session");
+  console.log("{am} Starting application");
   try {
     client.setEnvironment(gc_region);
-    client.setPersistSettings(true, "_mm_");
+    client.setPersistSettings(true, "_am_");
 
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
     await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});

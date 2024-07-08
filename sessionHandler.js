@@ -1,15 +1,16 @@
 // sessionHandler.js
-import { appSharedState } from "./app.js";
+import { uapi } from "./clientHandler.js";
 
 export async function startSession() {
   console.log("{am} Starting session");
-  let sharedStatePc = appSharedState.clients.PlatformClient;
-  console.log("{am} appSharedState.clients = ", appSharedState.clients);
+
+  // You can now use uapi here
+  console.log("{am} uapi is ready to use:", uapi);
 
   try {
     // GET Current UserId
     //const uapi = new window.platformClientModule.UsersApi();
-    let user = await sharedStatePc.usersApi.getUsersMe({});
+    let user = await uapi.getUsersMe({});
     console.log("{am} User details returned", user);
     document.getElementById("content").innerText =
       "Welcome, " + user.name + "!";
