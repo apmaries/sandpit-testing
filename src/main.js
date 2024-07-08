@@ -1,4 +1,9 @@
 // main.js
+import { applicationConfig } from "./handler-modules/configHandler.js";
+
+const testMode = applicationConfig.testMode;
+("use strict");
+
 export function runApp() {
   console.log("{am} Initializing main app");
 

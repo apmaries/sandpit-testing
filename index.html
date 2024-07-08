@@ -7,16 +7,7 @@
     <title>SPA Login App</title>
 
     <!-- Error handling -->
-    <script>
-      // Define a global error handler function
-      window.onerror = function (message, source, lineno, colno, error) {
-        console.error("{am} An error occurred:", message);
-        console.error("{am} Source:", source);
-        console.error("{am} Line:", lineno);
-        console.error("{am} Column:", colno);
-        console.error("{am} Error object:", error);
-      };
-    </script>
+    <script src="./src/handler-modules/errorHandler.js"></script>
 
     <script>
       console.log("{am} index page loaded");
