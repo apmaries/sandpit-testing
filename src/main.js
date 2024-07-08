@@ -1,4 +1,11 @@
 // main.js
+// Description: Main application module
+
+import { applicationConfig } from "./handler-modules/configHandler.js";
+
+const testMode = applicationConfig.testMode;
+("use strict");
+
 export function runApp() {
   console.log("[OFG] Initializing main app");
 

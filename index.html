@@ -7,16 +7,7 @@
     <title>Outbound Forecast Generator</title>
 
     <!-- Error handling -->
-    <script>
-      // Define a global error handler function
-      window.onerror = function (message, source, lineno, colno, error) {
-        console.error("[OFG] An error occurred:", message);
-        console.error("[OFG] Source:", source);
-        console.error("[OFG] Line:", lineno);
-        console.error("[OFG] Column:", colno);
-        console.error("[OFG] Error object:", error);
-      };
-    </script>
+    <script src="./src/handler-modules/errorHandler.js"></script>
 
     <script>
       console.log("[OFG] index page loaded");
@@ -30,8 +21,8 @@
     </script>
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
     <script type="module">
-      import { startApp } from "./app.js";
-      console.log("[OFG] app.js loaded");
+      import { startApp } from "./src/app.js";
+      console.log("{am} app.js loaded");
 
       startApp()
         .then(() => {

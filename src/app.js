@@ -1,6 +1,11 @@
 // app.js
+// Description: The main entry point file that initializes the app and starts the main logic.
+
+import { applicationConfig } from "./handler-modules/configHandler.js";
 import { runApp } from "./main.js";
-import { startSession } from "./sessionHandler.js";
+import { startSession } from "./handler-modules/sessionHandler.js";
+
+const testMode = applicationConfig.testMode;
 ("use strict");
 
 let platformClient = require("platformClient");
@@ -29,13 +34,17 @@ const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
-  console.log("[OFG] Starting application");
-  try {
-    client.setEnvironment(gc_region);
-    client.setPersistSettings(true, "_am_");
+  console.log("{am} Starting application");
 
-    // Set client logging
-    /*
+  if (testMode) {
+    console.log("%c{am} Test mode enabled", "color: red");
+  } else {
+    try {
+      client.setEnvironment(gc_region);
+      client.setPersistSettings(true, "_am_");
+
+      // Set client logging
+      /*
     client.config.logger.log_level =
       client.config.logger.logLevelEnum.level.LTrace;
     client.config.logger.log_format =
@@ -46,15 +55,15 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-    console.log("%c[OFG] Logging in to Genesys Cloud", "color: green");
-    await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
-
-    //Enter in starting code.
-    await startSession();
-    runApp();
-  } catch (err) {
-    console.log("[OFG] Error: ", err);
+      console.log("%c{am} Logging in to Genesys Cloud", "color: green");
+      await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
+    } catch (err) {
+      console.log("{am} Error: ", err);
+    }
   }
+  //Enter in starting code.
+  await startSession();
+  runApp();
 }
 
 export { capi, napi, tapi, uapi, wapi };
