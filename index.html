@@ -27,7 +27,18 @@
       console.log("{am} scripts loading...");
     </script>
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
-    <script type="module" src="app.js" defer></script>
+    <script type="module">
+      import { start, uapi } from "./genesysApi.js";
+
+      start()
+        .then(() => {
+          // You can now use uapi here
+          console.log("uapi is ready to use:", uapi);
+        })
+        .catch((err) => {
+          console.error("Error during start:", err);
+        });
+    </script>
     <script>
       console.log("{am} scripts loaded!");
     </script>
