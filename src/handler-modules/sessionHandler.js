@@ -1,5 +1,5 @@
 // sessionHandler.js
-import { uapi } from "./app.js";
+import { uapi } from "../app.js";
 
 export async function startSession() {
   console.log("{am} Starting session");

@@ -1,6 +1,6 @@
 // app.js
 import { runApp } from "./main.js";
-import { startSession } from "./sessionHandler.js";
+import { startSession } from "./handler-modules/sessionHandler.js";
 ("use strict");
 
 let platformClient = require("platformClient");
@@ -30,6 +30,7 @@ const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
   console.log("{am} Starting application");
+
   try {
     client.setEnvironment(gc_region);
     client.setPersistSettings(true, "_am_");
