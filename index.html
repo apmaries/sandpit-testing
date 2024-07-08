@@ -4,45 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>SPA Login App</title>
+    <title>Outbound Forecast Generator</title>
 
     <!-- Error handling -->
     <script>
       // Define a global error handler function
       window.onerror = function (message, source, lineno, colno, error) {
-        console.error("{am} An error occurred:", message);
-        console.error("{am} Source:", source);
-        console.error("{am} Line:", lineno);
-        console.error("{am} Column:", colno);
-        console.error("{am} Error object:", error);
+        console.error("[OFG] An error occurred:", message);
+        console.error("[OFG] Source:", source);
+        console.error("[OFG] Line:", lineno);
+        console.error("[OFG] Column:", colno);
+        console.error("[OFG] Error object:", error);
       };
     </script>
 
     <script>
-      console.log("{am} index page loaded");
+      console.log("[OFG] index page loaded");
     </script>
   </head>
   <body>
     <h1>SPA Login App</h1>
     <div id="content"></div>
     <script>
-      console.log("{am} scripts loading...");
+      console.log("[OFG] scripts loading...");
     </script>
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
     <script type="module">
       import { startApp } from "./app.js";
-      console.log("{am} app.js loaded");
+      console.log("[OFG] app.js loaded");
 
       startApp()
         .then(() => {
-          console.log("{am} Start function completed");
+          console.log("[OFG] Start function completed");
         })
         .catch((err) => {
-          console.error("{am} Error during start:", err);
+          console.error("[OFG] Error during start:", err);
         });
     </script>
     <script>
-      console.log("{am} scripts loaded!");
+      console.log("[OFG] scripts loaded!");
     </script>
   </body>
 </html>

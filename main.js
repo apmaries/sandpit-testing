@@ -1,6 +1,6 @@
 // main.js
 export function runApp() {
-  console.log("{am} Initializing main app");
+  console.log("[OFG] Initializing main app");
 
   // Add the logic for the rest of your app here.
   // You can use the user details passed from the startSession function.
@@ -13,12 +13,12 @@ export function runApp() {
 
 function loadDashboard() {
   // Example function to load the dashboard
-  console.log("{am} Loading dashboard");
+  console.log("[OFG] Loading dashboard");
   // Add your dashboard loading logic here
 }
 
 function setupEventListeners() {
   // Example function to set up event listeners
-  console.log("{am} Setting up event listeners");
+  console.log("[OFG] Setting up event listeners");
   // Add your event listener setup logic here
 }

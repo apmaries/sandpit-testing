@@ -29,7 +29,7 @@ const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
-  console.log("{am} Starting application");
+  console.log("[OFG] Starting application");
   try {
     client.setEnvironment(gc_region);
     client.setPersistSettings(true, "_am_");
@@ -46,14 +46,14 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-    console.log("%c{am} Logging in to Genesys Cloud", "color: green");
+    console.log("%c[OFG] Logging in to Genesys Cloud", "color: green");
     await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
     //Enter in starting code.
     await startSession();
     runApp();
   } catch (err) {
-    console.log("{am} Error: ", err);
+    console.log("[OFG] Error: ", err);
   }
 }
 
