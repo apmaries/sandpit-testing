@@ -1,3 +1,4 @@
+// app.js
 import { startSession } from "./sessionHandler.js";
 ("use strict");
 
@@ -26,7 +27,7 @@ const tapi = new platformClient.TokensApi();
 const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
-export async function start() {
+export async function startApp() {
   console.log("{am} Starting application");
   try {
     client.setEnvironment(gc_region);
