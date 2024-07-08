@@ -28,6 +28,16 @@ export async function start() {
     client.setEnvironment(gc_region);
     client.setPersistSettings(true, "_am_");
 
+    // Set client logging
+    client.config.logger.log_level =
+      client.config.logger.logLevelEnum.level.LTrace;
+    client.config.logger.log_format =
+      client.config.logger.logFormatEnum.formats.JSON;
+    client.config.logger.log_request_body = true;
+    client.config.logger.log_response_body = true;
+    client.config.logger.log_to_console = true;
+    client.config.logger.setLogger(); // To apply above changes
+
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
     await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
