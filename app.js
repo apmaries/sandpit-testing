@@ -1,4 +1,5 @@
 // app.js
+import { runApp } from "./main.js";
 import { startSession } from "./sessionHandler.js";
 ("use strict");
 
@@ -49,7 +50,8 @@ export async function startApp() {
     await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
     //Enter in starting code.
-    startSession();
+    await startSession();
+    runApp();
   } catch (err) {
     console.log("{am} Error: ", err);
   }
