@@ -1,7 +1,7 @@
 // sessionHandler.js
 // Description: Module for handling session-related logic
 
-import { applicationConfig } from "./configHandler.js";
+import { applicationConfig } from "./configManager.js";
 import { uapi } from "../app.js";
 
 const testMode = applicationConfig.testMode;

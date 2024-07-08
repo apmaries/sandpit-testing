@@ -1,7 +1,7 @@
 // main.js
 // Description: Main application module
 
-import { applicationConfig } from "./handler-modules/configHandler.js";
+import { applicationConfig } from "./core/configManager.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
