@@ -1,6 +1,11 @@
 // eventUtils.js
 // Description: Utility functions for managing event listeners.
 
+/* Example usage in a module:
+  addEventListener(button, 'click', handleButtonClick);
+  addEventListener(input, 'input', handleInputChange);
+*/
+
 // Store all the event listeners
 const eventListeners = new Map();
 
