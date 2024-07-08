@@ -34,10 +34,10 @@ const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
-  console.log("{am} Starting application");
+  console.log("[OFG] Starting application");
 
   if (testMode) {
-    console.log("%c{am} Test mode enabled", "color: red");
+    console.log("%c[OFG] Test mode enabled", "color: red");
   } else {
     try {
       client.setEnvironment(gc_region);
@@ -55,10 +55,10 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-      console.log("%c{am} Logging in to Genesys Cloud", "color: green");
+      console.log("%c[OFG] Logging in to Genesys Cloud", "color: green");
       await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
     } catch (err) {
-      console.log("{am} Error: ", err);
+      console.log("[OFG] Error: ", err);
     }
   }
   //Enter in starting code.
