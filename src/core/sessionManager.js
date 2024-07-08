@@ -1,4 +1,4 @@
-// sessionHandler.js
+// sessionManager.js
 // Description: Module for handling session-related logic
 
 import { applicationConfig } from "./configManager.js";
@@ -23,14 +23,11 @@ async function openNotificationsChannel() {
   let channel = null;
   try {
     channel = await napi.postNotificationsChannels();
+    return channel;
   } catch (error) {
     console.error("[OFG] Error opening notifications channel. ", error);
     throw error;
   }
-
-  console.log("[OFG] Notifications channel opened");
-  applicationConfig.notifications.uri = channel.connectUri;
-  applicationConfig.notifications.id = channel.id;
 }
 
 // Primary function to start the session
@@ -41,9 +38,18 @@ export async function startSession() {
   if (testMode) {
     appUser = "Test User";
   } else {
-    user = await getUser();
-    openNotificationsChannel();
+    const [user, channel] = await Promise.all([
+      getUser(),
+      openNotificationsChannel(),
+    ]);
+
+    // Set the user and notification channel details
+    appUser = user.name;
+    applicationConfig.notifications.uri = channel.connectUri;
+    applicationConfig.notifications.id = channel.id;
   }
+
+  // Update the UI to welcome the user
   document.getElementById("user-welcome").innerText =
     "Welcome, " + appUser + "!";
 }
