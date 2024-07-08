@@ -1,4 +1,4 @@
-import { startSession } from "./sessionHandler.js";
+import { startSession } from "../sessionHandler.js";
 /*
 // Define global variables
 window.am = window.am || {};
