@@ -20,14 +20,14 @@
     ></script>
 
     <script>
-      console.log("{am} index page loaded");
+      console.log("[OFG] index page loaded");
     </script>
   </head>
   <body>
     <h1>SPA Login App</h1>
     <div id="content"></div>
     <script>
-      console.log("{am} scripts loading...");
+      console.log("[OFG] scripts loading...");
     </script>
 
     <!-- Load Genesys Cloud SDK's -->
@@ -36,18 +36,18 @@
 
     <script type="module">
       import { startApp } from "./src/app.js";
-      console.log("{am} app.js loaded");
+      console.log("[OFG] app.js loaded");
 
       startApp()
         .then(() => {
-          console.log("{am} Start function completed");
+          console.log("[OFG] Start function completed");
         })
         .catch((err) => {
-          console.error("{am} Error during start:", err);
+          console.error("[OFG] Error during start:", err);
         });
     </script>
     <script>
-      console.log("{am} scripts loaded!");
+      console.log("[OFG] scripts loaded!");
     </script>
   </body>
 </html>
