@@ -2,21 +2,21 @@
 // Description: Utility functions for managing event listeners.
 
 /* Example usage in a module:
-  addEventListener(button, 'click', handleButtonClick);
-  addEventListener(input, 'input', handleInputChange);
+  addEvent(button, 'click', handleButtonClick);
+  addEvent(input, 'input', handleInputChange);
 */
 
 // Store all the event listeners
 const eventListeners = new Map();
 
 /**
- * Add an event listener to an element
+ * Add an event listener to an element and store its reference for later removal
  * @param {HTMLElement} element - The DOM element to attach the event listener to.
  * @param {string} event - The event type (e.g., 'click').
  * @param {Function} handler - The event handler function.
  * @param {Object} [options] - Optional parameters for addEventListener.
  */
-export function addEventListener(element, event, handler, options = {}) {
+export function addEvent(element, event, handler, options = {}) {
   element.addEventListener(event, handler, options);
 
   // Store the event listener for later removal
