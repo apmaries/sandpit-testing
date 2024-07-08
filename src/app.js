@@ -1,6 +1,9 @@
 // app.js
+import { applicationConfig } from "./handler-modules/configHandler.js";
 import { runApp } from "./main.js";
 import { startSession } from "./handler-modules/sessionHandler.js";
+
+const testMode = applicationConfig.testMode;
 ("use strict");
 
 let platformClient = require("platformClient");
@@ -31,12 +34,15 @@ const wapi = new platformClient.WorkforceManagementApi();
 export async function startApp() {
   console.log("{am} Starting application");
 
-  try {
-    client.setEnvironment(gc_region);
-    client.setPersistSettings(true, "_am_");
+  if (testMode) {
+    console.log("%c{am} Test mode enabled", "color: red");
+  } else {
+    try {
+      client.setEnvironment(gc_region);
+      client.setPersistSettings(true, "_am_");
 
-    // Set client logging
-    /*
+      // Set client logging
+      /*
     client.config.logger.log_level =
       client.config.logger.logLevelEnum.level.LTrace;
     client.config.logger.log_format =
@@ -47,15 +53,15 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-    console.log("%c{am} Logging in to Genesys Cloud", "color: green");
-    await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
-
-    //Enter in starting code.
-    await startSession();
-    runApp();
-  } catch (err) {
-    console.log("{am} Error: ", err);
+      console.log("%c{am} Logging in to Genesys Cloud", "color: green");
+      await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
+    } catch (err) {
+      console.log("{am} Error: ", err);
+    }
   }
+  //Enter in starting code.
+  await startSession();
+  runApp();
 }
 
 export { capi, napi, tapi, uapi, wapi };

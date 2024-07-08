@@ -1,6 +1,5 @@
 // stateHandler.js
 
-// Example shared state object
 let applicationState = {
   userInputs: {},
   appOutputs: {},
