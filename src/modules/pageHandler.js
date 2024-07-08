@@ -31,7 +31,7 @@ export async function loadPageOne() {
     try {
       const businessUnits = testMode
         ? await t_wapi.getBusinessUnits()
-        : await wapi.getBusinessUnits();
+        : await wapi.getWorkforcemanagementBusinessunits();
       console.log("[OFG] Business units", businessUnits.entities);
 
       return businessUnits.entities; // Return the list of business units
