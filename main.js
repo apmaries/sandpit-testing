@@ -6,14 +6,14 @@ export function runApp() {
   // You can use the user details passed from the startSession function.
 
   // Example: Load additional modules or components
-  loadDashboard(user);
+  loadDashboard();
   setupEventListeners();
   // more app initialization code...
 }
 
-function loadDashboard(user) {
+function loadDashboard() {
   // Example function to load the dashboard
-  console.log("{am} Loading dashboard for user:", user);
+  console.log("{am} Loading dashboard");
   // Add your dashboard loading logic here
 }
 
