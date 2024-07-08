@@ -1,7 +1,7 @@
 // genesysApi.js
 "use strict";
 
-import platformClient from "platformClient";
+let platformClient = require("platformClient");
 
 let url = new URL(document.location.href);
 let gc_region = url.searchParams.get("gc_region");
