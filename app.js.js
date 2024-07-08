@@ -20,7 +20,11 @@ gc_redirectUrl
   : (gc_redirectUrl = sessionStorage.getItem("gc_redirectUrl"));
 
 const client = platformClient.ApiClient.instance;
+const capi = new platformClient.ConversationsApi();
+const napi = new platformClient.NotificationsApi();
+const tapi = new platformClient.TokensApi();
 const uapi = new platformClient.UsersApi();
+const wapi = new platformClient.WorkforceManagementApi();
 
 export async function start() {
   console.log("{am} Starting application");
@@ -41,10 +45,6 @@ export async function start() {
     console.log("%c{am} Logging in to Genesys Cloud", "color: green");
     await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
 
-    //GET Current UserId
-    let user = await uapi.getUsersMe({});
-    console.log(user);
-
     //Enter in starting code.
     startSession();
   } catch (err) {
@@ -52,4 +52,4 @@ export async function start() {
   }
 }
 
-export { uapi };
+export { capi, napi, tapi, uapi, wapi };
