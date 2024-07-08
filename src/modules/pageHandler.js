@@ -66,7 +66,11 @@ export async function loadPageOne() {
   populateDropdown(businessUnitListbox, businessUnits, "name", true);
 
   // Add event listener for business unit selection
-  addEventListener(businessUnitListbox, "change", getBusinessUnitSettings);
+  addEventListener(
+    businessUnitListbox,
+    "change",
+    getBusinessUnitSettings(businessUnitListbox.value)
+  );
 
   // Hide loading spinner and show main
   await hideLoadingSpinner("main", "main-loading-section");
