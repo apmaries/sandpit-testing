@@ -36,8 +36,9 @@ export async function loadPageOne() {
 
   // Get selected business unit settings
   async function getBusinessUnitSettings(businessUnitId) {
+    console.log("[OFG] Getting settings for business unit", businessUnitId);
     let opts = {
-      "expand": ["settings.timeZone, settings.startDayOfWeek"], // [String] | Include to access additional data on the business unit
+      "expand": ["settings.timeZone", "settings.startDayOfWeek"], // [String] | Include to access additional data on the business unit
     };
     try {
       const businessUnit = testMode
