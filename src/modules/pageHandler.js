@@ -5,7 +5,7 @@ import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
 import { wapi } from "../app.js";
 import { t_wapi } from "../core/testManager.js";
-import { populateDropdown } from "../utils/domUtils.js";
+import { populateDropdown, hideLoadingSpinner } from "../utils/domUtils.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
@@ -44,4 +44,7 @@ export async function loadPageOne() {
   // Main logic for loading page one
   const businessUnits = await getBusinessUnits();
   populateDropdown(businessUnitListbox, businessUnits, "name", true);
+
+  // Hide loading spinner and show main
+  await hideLoadingSpinner("main", "main-loading-section");
 }

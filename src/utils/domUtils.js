@@ -31,6 +31,8 @@ export function populateDropdown(
   sortAttribute = "name",
   applySort = true
 ) {
+  console.log("[OFG] Populating dropdown with data: ", data);
+
   // Remove existing listbox items
   while (listbox.firstChild) {
     listbox.removeChild(listbox.firstChild);
