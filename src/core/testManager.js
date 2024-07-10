@@ -59,7 +59,7 @@ export async function initializeTestMode() {
     getPlanningGroups: function () {
       return planningGroupsPromise;
     },
-    getInboundForecastData: function () {
+    getInboundShorttermforecastData: function () {
       return inboundFcDataPromise;
     },
   };

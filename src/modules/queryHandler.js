@@ -161,20 +161,32 @@ export async function executeQueries(body, intervals) {
   console.log(`[OFG] Executing queries`);
   let results = [];
 
+  // Function to run query
+  async function runQuery(body) {
+    try {
+      const queryResult = await capi.postAnalyticsConversationsAggregatesQuery(
+        body
+      );
+      return queryResult.results; // Return the results
+    } catch (error) {
+      console.error("[OFG] Error getting query results!", error);
+      throw error;
+    }
+  }
+
   if (testMode) {
     console.log(
       "[OFG] Test mode enabled. Static data will be used for forecast generation"
     );
 
     try {
-      results =
-        await window.ofg.PlatformClient.MockAnalyticsApi.getOutboundConversationsAggregates();
+      results = await t_capi.getOutboundConversationsAggregates();
     } catch (error) {
-      console.error("[OFG] Test data retrieval failed: ", error);
+      console.error("[OFG] Test data retrieval failed!", error);
       throw error;
     }
 
-    return results;
+    return results.results;
   } else {
     console.log("[OFG] Query execution initiated");
 
@@ -182,50 +194,22 @@ export async function executeQueries(body, intervals) {
     for (let i = 0; i < intervals.length; i++) {
       console.debug(`[OFG] Executing query for interval ${i + 1}`);
       body.interval = intervals[i];
-
-      try {
-        /*
-        let response = await handleApiCalls(
-          "ConversationsApi.postAnalyticsConversationsAggregatesQuery",
-          body
-        ); // LIVE DATA
-
-        // Check if the response is not an empty object before pushing it to results
-        if (Object.keys(response).length !== 0) {
-          results.push(...response);
-        }
-          */
-      } catch (error) {
-        handleError(error, "executeQueries");
-        throw error;
+      let queryResults = runQuery(body);
+      if (queryResults.length > 0) {
+        results.push(...queryResults);
       }
     }
-
-    // TEST DATA
-    try {
-      let response = await fetch(
-        "/outboundForecastGenerator/test/source/outboundAggregateData_prod.json"
-      );
-      results = await response.json();
-      console.log("[OFG] Test data used in production mode");
-    } catch (error) {
-      console.error(
-        "[OFG] Test data retrieval in production mode failed: ",
-        error
-      );
-      throw error;
-    }
-    // TEST DATA
   }
 
   // Special handling for when results is empty
   if (results.length === 0) {
     console.warn("[OFG] No results found.");
   } else {
-    // Get variables from applicationState
-    const forcastPlanningGroups = applicationState.generatedForecast;
+    // Get forecast planning groups from applicationState
+    const forcastPlanningGroups =
+      applicationState.forecastOutputs.generatedForecast;
 
-    // Return only the data for the campaigns in the forcastPlanningGroups where pg.isForecast is true
+    // Return only data for campaigns in forcastPlanningGroups where isForecast is true
     results = results.filter((result) => {
       return forcastPlanningGroups.some((pg) => {
         return (

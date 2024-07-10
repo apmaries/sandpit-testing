@@ -12,6 +12,15 @@ import {
   intervalBuilder,
   executeQueries,
 } from "./modules/queryHandler.js";
+import {
+  prepFcMetrics,
+  generateAverages,
+  applyContacts,
+} from "./modules/numberHandler.js";
+import {
+  generateInboundForecast,
+  deleteInboundForecast,
+} from "./modules/inboundHandler.js";
 
 // Utility modules
 import { updateLoadingMessage } from "./utils/domUtils.js";

@@ -37,7 +37,7 @@ export async function loadPageOne() {
   applicationState.userInputs.planningGroups = [];
   resetLoadingSpinner("planning-groups-container", "planning-groups-loading");
   document.getElementById("inbound-forecast-div").style.display = "none";
-  applicationConfig.inboundMode = false;
+  applicationConfig.inbound.inboundMode = false;
 
   console.debug("[OFG] Application state", applicationState);
   const businessUnitListbox = document.getElementById("business-unit-listbox");
@@ -55,7 +55,7 @@ export async function loadPageOne() {
 
       return businessUnits.entities; // Return the list of business units
     } catch (error) {
-      console.error("[OFG] Error getting business units. ", error);
+      console.error("[OFG] Error getting business units!", error);
       throw error;
     }
   }
@@ -87,7 +87,7 @@ export async function loadPageOne() {
         applicationState
       );
     } catch (error) {
-      console.error("[OFG] Error getting business unit settings. ", error);
+      console.error("[OFG] Error getting business unit settings!", error);
       throw error;
     }
   }
@@ -229,7 +229,7 @@ export async function loadPageTwo() {
 
       return planningGroups.entities; // Return the list of planning groups
     } catch (error) {
-      console.error("[OFG] Error getting planning groups. ", error);
+      console.error("[OFG] Error getting planning groups!", error);
       throw error;
     }
   }
@@ -246,7 +246,7 @@ export async function loadPageTwo() {
       );
       return campaigns.entities; // Return the list of campaigns
     } catch (error) {
-      console.error("[OFG] Error getting campaigns. ", error);
+      console.error("[OFG] Error getting campaigns!", error);
       throw error;
     }
   }
@@ -304,7 +304,7 @@ export async function loadPageTwo() {
 
     // Enable inboundMode if any planning group are not matched
     if (unmatchedGroups.length > 0) {
-      applicationConfig.inboundMode = true;
+      applicationConfig.inbound.inboundMode = true;
       document.getElementById("inbound-forecast-div").style.display = "block";
       console.log("[OFG] Inbound mode enabled");
     }

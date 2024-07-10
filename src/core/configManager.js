@@ -2,7 +2,7 @@
 // Description: Centralized configuration module
 
 let applicationConfig = {
-  inboundMode: false,
+  inbound: { inboundMode: false, inboundFcId: null },
   notifications: {
     uri: "",
     id: "",
@@ -10,15 +10,12 @@ let applicationConfig = {
   testMode: window.location.protocol !== "https:",
   testing: {
     outboundAggregatesDataUrl:
-      "/outboundForecastGenerator/test/source/outboundAggregateData.json",
-    businessUnitsUrl:
-      "/outboundForecastGenerator/test/source/businessUnits.json",
-    businessUnitSettingsUrl: "/outboundForecastGenerator/test/source/bu.json",
-    planningGroupsUrl:
-      "/outboundForecastGenerator/test/source/planningGroups.json",
-    campaignsUrl: "/outboundForecastGenerator/test/source/campaigns.json",
-    inboundFcDataUrl:
-      "/outboundForecastGenerator/test/source/inboundForecastData.json",
+      "/sandpit-testing/test/outboundAggregateData.json",
+    businessUnitsUrl: "/sandpit-testing/test/businessUnits.json",
+    businessUnitSettingsUrl: "/sandpit-testing/test/bu.json",
+    planningGroupsUrl: "/sandpit-testing/test/planningGroups.json",
+    campaignsUrl: "/sandpit-testing/test/campaigns.json",
+    inboundFcDataUrl: "/sandpit-testing/test/inboundForecastData.json",
   },
   // Add more configuration options as needed
 };
