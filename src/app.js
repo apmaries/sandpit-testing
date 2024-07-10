@@ -1,8 +1,13 @@
 // app.js
 // Description: The main entry point file that initializes the app and starts the main logic.
 
-import { applicationConfig } from "./core/configManager.js";
+// Main module
 import { runApp } from "./main.js";
+
+// Shared state modules
+import { applicationConfig } from "./core/configManager.js";
+
+// Core modules
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 

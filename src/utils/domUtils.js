@@ -11,11 +11,20 @@ export function getRadioValue(ele) {
 
 // Function to hide loading spinner and show content
 export async function hideLoadingSpinner(elem, spinner) {
-  const spinnerElem = document.getElementById(spinner);
   const elemElem = document.getElementById(elem);
+  const spinnerElem = document.getElementById(spinner);
 
-  spinnerElem.style.display = "none";
   elemElem.style.display = "block";
+  spinnerElem.style.display = "none";
+}
+
+// Function to hide loading spinner and show content
+export async function resetLoadingSpinner(elem, spinner) {
+  const elemElem = document.getElementById(elem);
+  const spinnerElem = document.getElementById(spinner);
+
+  elemElem.style.display = "none";
+  spinnerElem.style.display = "block";
 }
 
 // Function to replace the text in loading message
@@ -129,4 +138,12 @@ export async function validatePlanningGroupDropdown() {
     }
   });
   planningGroupsDropdown.removeAttribute("disabled");
+}
+
+// Function to delete table rows from a given table	body element
+export async function cleanTable(tableBody) {
+  // Remove existing table rows
+  while (tableBody.firstChild) {
+    tableBody.removeChild(tableBody.firstChild);
+  }
 }

@@ -2,6 +2,7 @@
 // Description: Centralized configuration module
 
 let applicationConfig = {
+  inboundMode: false,
   notifications: {
     uri: "",
     id: "",

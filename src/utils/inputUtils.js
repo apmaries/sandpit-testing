@@ -1,10 +1,12 @@
 // userInputs.js
 // Description: Module for getting user inputs
 
+import { applicationState } from "../core/stateManager.js";
+
 // Function to get the number of contacts for each planning group
 export async function getPlanningGroupContacts() {
   // Define shared state planning groups
-  let planningGroups = sharedState.userInputs.planningGroups;
+  let planningGroups = applicationState.userInputs.planningGroups;
 
   // Get and validate user planning group values
   const tableBody = document.querySelector("#planning-groups-table tbody");
@@ -17,7 +19,7 @@ export async function getPlanningGroupContacts() {
     const pgName = pgNameCell.textContent;
     const pgId = pgNameCell.dataset.pgId;
 
-    // Find the planning group in the sharedState.planningGroups array
+    // Find the planning group in the applicationState.planningGroups array
     let pgData = planningGroups.find(
       (pgData) => pgData.planningGroup.id === pgId
     );
@@ -37,6 +39,11 @@ export async function getPlanningGroupContacts() {
 
     // Add numContacts to matched planning group
     pgData.numContacts = numContacts;
+  }
+
+  if (totalContacts === 0) {
+    alert("Please enter the number of contacts for at least one campaign");
+    return;
   }
 
   return totalContacts;
