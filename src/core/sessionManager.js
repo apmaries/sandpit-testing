@@ -1,11 +1,15 @@
 // sessionManager.js
 // Description: Module for handling session-related logic
 
+// Shared state modules
 import { applicationConfig } from "./configManager.js";
+
+// API instances
 import { napi, uapi } from "../app.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
 // Function to get user details
 async function getUser() {

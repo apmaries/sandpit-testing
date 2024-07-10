@@ -6,6 +6,9 @@
   addEvent(input, 'input', handleInputChange);
 */
 
+// Global variables
+("use strict");
+
 // Store all the event listeners
 const eventListeners = new Map();
 

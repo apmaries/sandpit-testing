@@ -9,8 +9,9 @@ import { t_capi } from "../core/testManager.js";
 import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
 // Function to build query body
 export async function queryBuilder() {

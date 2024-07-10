@@ -12,10 +12,11 @@ import { applicationState } from "../core/stateManager.js";
 // App modules
 import { NotificationHandler } from "./notificationHandler.js";
 
-// Declare global variables
-const testMode = applicationConfig.testMode;
-let generateOperationId;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
+
+let generateOperationId;
 
 // Generate the forecast
 async function generateAbmForecast(buId, weekStart, description) {

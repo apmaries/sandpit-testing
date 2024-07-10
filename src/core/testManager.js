@@ -1,9 +1,10 @@
 // testManager.js
 // Description: Module for managing test execution
 
-// Core modules
+// Shared state modules
 import { applicationConfig } from "./configManager.js";
 
+// Global variables
 ("use strict");
 
 let t_capi = null;

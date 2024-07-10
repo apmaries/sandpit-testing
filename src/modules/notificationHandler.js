@@ -7,13 +7,14 @@ import { applicationConfig } from "../core/configManager.js";
 // App modules
 //import { loadPageFour } from "../modules/pageHandler.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
-// Define the notification uri & channel id
 let notificationsUri = applicationConfig.notifications.uri;
 let notificationsId = applicationConfig.notifications.id;
 
+// Class to handle WebSocket notifications
 export class NotificationHandler {
   constructor(topics, buId, onSubscribed, onMessage) {
     this.uri = notificationsUri;

@@ -2,7 +2,7 @@
 // Description: The main entry point file that initializes the app and starts the main logic.
 
 // Main module
-import { runApp } from "./main.js";
+import { runApp } from "./modules/forecastHandler.js";
 
 // Shared state modules
 import { applicationConfig } from "./core/configManager.js";
@@ -11,11 +11,11 @@ import { applicationConfig } from "./core/configManager.js";
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
 let platformClient = require("platformClient");
-
 let url = new URL(document.location.href);
 let gc_region = url.searchParams.get("gc_region");
 let gc_clientId = url.searchParams.get("gc_clientId");

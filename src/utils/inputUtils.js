@@ -1,7 +1,11 @@
 // userInputs.js
 // Description: Module for getting user inputs
 
+// Shared state modules
 import { applicationState } from "../core/stateManager.js";
+
+// Global variables
+("use strict");
 
 // Function to get the number of contacts for each planning group
 export async function getPlanningGroupContacts() {

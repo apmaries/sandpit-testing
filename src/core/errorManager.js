@@ -1,6 +1,9 @@
 // errorHandler.js
 // Description: Centralized error handling module
 
+// Global variables
+("use strict");
+
 // Centralized error logging function
 function logError(errorDetails) {
   console.error("[OFG] An error occurred:", errorDetails.message);

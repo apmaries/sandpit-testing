@@ -1,6 +1,9 @@
 // numberHandler.js
 // Description: Utility functions for handling and calculating number data
 
+// Global variables
+("use strict");
+
 // Function to calculate totals
 export function calculateTotals(data) {
   let dailyTotals = [];
@@ -324,6 +327,7 @@ export async function applyContacts(group) {
   return group;
 }
 
+// Function to resolve AHT values to contacts
 export async function resolveContactsAht(campaignData, resolveContactsAht) {
   // TODO: This needs attention... it's not currently being used - do I need it?
 

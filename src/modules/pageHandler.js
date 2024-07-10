@@ -1,9 +1,6 @@
 // pageHandler.js
 // Description: Module for handling page navigation and populating page content
 
-// Main module
-import { generateForecast } from "../main.js";
-
 // API instances
 import { oapi, tapi, wapi } from "../app.js";
 import { t_oapi, t_wapi } from "../core/testManager.js";
@@ -11,6 +8,9 @@ import { t_oapi, t_wapi } from "../core/testManager.js";
 // Shared state modules
 import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
+
+// App modules
+import { generateForecast } from "./forecastHandler.js";
 
 // Utility modules
 import {
@@ -26,8 +26,20 @@ import {
   getPlanningGroupContacts,
 } from "../utils/inputUtils.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
+
+const daysOfWeek = [
+  { id: "99", name: "All" },
+  { id: "1", name: "Monday" },
+  { id: "2", name: "Tuesday" },
+  { id: "3", name: "Wednesday" },
+  { id: "4", name: "Thursday" },
+  { id: "5", name: "Friday" },
+  { id: "6", name: "Saturday" },
+  { id: "0", name: "Sunday" },
+];
 
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
@@ -39,7 +51,7 @@ export async function loadPageOne() {
   document.getElementById("inbound-forecast-div").style.display = "none";
   applicationConfig.inbound.inboundMode = false;
 
-  console.debug("[OFG] Application state", applicationState);
+  console.debug("[OFG] Application state at page one load", applicationState);
   const businessUnitListbox = document.getElementById("business-unit-listbox");
 
   // Get list of business units
@@ -130,7 +142,7 @@ export async function loadPageOne() {
 export async function loadPageTwo() {
   console.log("[OFG] Loading page two");
 
-  console.debug("[OFG] Application state", applicationState);
+  console.debug("[OFG] Application state at page two load", applicationState);
   const planningGroupsTableBody = document.querySelector(
     "#planning-groups-table tbody"
   );
@@ -332,9 +344,9 @@ export async function loadPageTwo() {
   appendRowsToTable(matchedGroups, true);
   appendRowsToTable(unmatchedGroups, false);
 
-  // Add event listeners
-  addEvent(document.getElementById("generate-button"), "click", () => {
-    getPlanningGroupContacts();
+  // Add event listener to generate button
+  addEvent(document.getElementById("generate-button"), "click", async () => {
+    await getPlanningGroupContacts();
 
     // Assign applicationState.userInputs variables
     Object.assign(
@@ -342,16 +354,52 @@ export async function loadPageTwo() {
       getForecastParameters()
     );
     Object.assign(applicationState.userInputs.forecastOptions, getOptions());
-    generateForecast();
+    await generateForecast();
+    await loadPageThree();
+
+    removeEventListeners(document.getElementById("generate-button"), "click");
+    removeEventListeners(document.getElementById("p2-back-button"), "click");
   });
 
-  addEvent(document.getElementById("p2-back-button"), "click", () => {
-    loadPageOne();
+  // Add event listener for back button
+  addEvent(document.getElementById("p2-back-button"), "click", async () => {
+    await loadPageOne();
+
+    removeEventListeners(document.getElementById("generate-button"), "click");
+    removeEventListeners(document.getElementById("p2-back-button"), "click");
   });
 
   // Hide loading spinner and show planning groups table
   await hideLoadingSpinner(
     "planning-groups-container",
     "planning-groups-loading"
+  );
+}
+
+export async function loadPageThree() {
+  console.log("[OFG] Loading page three");
+
+  console.debug("[OFG] Application state at page three load", applicationState);
+
+  // Initialize the forecast outputs
+  const forecastData = applicationState.forecastOutputs.generatedForecast;
+  applicationState.forecastOutputs.modifiedForecast = JSON.parse(
+    JSON.stringify(forecastData)
+  );
+
+  // Add event listener for import button
+  addEvent(document.getElementById("import-button"), "click", async () => {
+    await importForecast();
+  });
+
+  // Add event listener for back button
+  addEvent(document.getElementById("p3-back-button"), "click", () => {
+    loadPageTwo();
+  });
+
+  // Hide loading spinner and show page three
+  await hideLoadingSpinner(
+    "forecast-outputs-container",
+    "generate-loading-div"
   );
 }

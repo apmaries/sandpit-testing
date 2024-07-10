@@ -2,31 +2,32 @@
 // Description: Main application module
 
 // Shared state modules
-import { applicationConfig } from "./core/configManager.js";
-import { applicationState } from "./core/stateManager.js";
+import { applicationConfig } from "../core/configManager.js";
+import { applicationState } from "../core/stateManager.js";
 
 // App modules
-import { loadPageOne } from "./modules/pageHandler.js";
+import { loadPageOne } from "./pageHandler.js";
 import {
   queryBuilder,
   intervalBuilder,
   executeQueries,
-} from "./modules/queryHandler.js";
+} from "./queryHandler.js";
 import {
   prepFcMetrics,
   generateAverages,
   applyContacts,
-} from "./modules/numberHandler.js";
+} from "./numberHandler.js";
 import {
   generateInboundForecast,
   deleteInboundForecast,
-} from "./modules/inboundHandler.js";
+} from "./inboundHandler.js";
 
 // Utility modules
-import { updateLoadingMessage } from "./utils/domUtils.js";
+import { updateLoadingMessage } from "../utils/domUtils.js";
 
-const testMode = applicationConfig.testMode;
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
 export function runApp() {
   console.log("[OFG] Initializing main app");
@@ -414,5 +415,5 @@ export async function generateForecast() {
       )
     );
   }
-  loadPageThree();
+  return;
 }

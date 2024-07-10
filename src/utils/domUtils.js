@@ -1,6 +1,10 @@
 // domUtils.js
 // Description: Utility functions for DOM manipulation
 
+// Global variables
+("use strict");
+
+// Function to get the value of a radio button group
 export function getRadioValue(ele) {
   for (let i = 0; i < ele.length; i++) {
     if (ele[i].checked) {
