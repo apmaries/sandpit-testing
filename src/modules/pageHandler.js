@@ -2,7 +2,7 @@
 // Description: Module for handling page navigation and populating page content
 
 // API instances
-import { oapi, tapi, wapi } from "../app.js";
+import { oapi, wapi } from "../app.js";
 import { t_oapi, t_wapi } from "../core/testManager.js";
 
 // Shared state modules
@@ -30,17 +30,7 @@ import {
 ("use strict");
 const testMode = applicationConfig.testMode;
 
-const daysOfWeek = [
-  { id: "99", name: "All" },
-  { id: "1", name: "Monday" },
-  { id: "2", name: "Tuesday" },
-  { id: "3", name: "Wednesday" },
-  { id: "4", name: "Thursday" },
-  { id: "5", name: "Friday" },
-  { id: "6", name: "Saturday" },
-  { id: "0", name: "Sunday" },
-];
-
+// Function to load page one
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
 
@@ -139,6 +129,7 @@ export async function loadPageOne() {
   await hideLoadingSpinner("main", "main-loading-section");
 }
 
+// Function to load page two
 export async function loadPageTwo() {
   console.log("[OFG] Loading page two");
 
@@ -376,6 +367,7 @@ export async function loadPageTwo() {
   );
 }
 
+// Function to load page three
 export async function loadPageThree() {
   console.log("[OFG] Loading page three");
 
@@ -387,17 +379,60 @@ export async function loadPageThree() {
     JSON.stringify(forecastData)
   );
 
+  // Get the planning groups from sharedState
+  console.log("[OFG] Getting planning groups from sharedState");
+  const planningGroupsSummary = forecastData.map((pg) => {
+    return {
+      id: pg.planningGroup.id,
+      name: pg.planningGroup.name,
+    };
+  });
+
+  // Populate page three listboxes
+  console.log(
+    "[OFG] Populating page three listboxes",
+    planningGroupsSummary,
+    applicationConfig.daysOfWeek
+  );
+  populateDropdown(
+    document.getElementById("business-unit-listbox"),
+    planningGroupsSummary,
+    "name",
+    true
+  );
+  populateDropdown(
+    document.getElementById("week-day-listbox"),
+    applicationConfig.daysOfWeek,
+    "name",
+    false
+  );
+
+  // Add event listener for Planning Group dropdown
+  const planningGroupDropdown = document.getElementById(
+    "planning-group-dropdown"
+  );
+  planningGroupDropdown.removeAttribute("disabled");
+  addEvent(planningGroupDropdown, "change", async () => {});
+
+  // Add event listener for weekday dropdown
+  const weekDayDropdown = document.getElementById("week-day-dropdown");
+  weekDayDropdown.removeAttribute("disabled");
+  addEvent(weekDayDropdown, "change", async () => {});
+
   // Add event listener for import button
+  console.log("[OFG] Adding event listener for Import button");
   addEvent(document.getElementById("import-button"), "click", async () => {
     await importForecast();
   });
 
   // Add event listener for back button
+  console.log("[OFG] Adding event listener for Back button");
   addEvent(document.getElementById("p3-back-button"), "click", () => {
     loadPageTwo();
   });
 
   // Hide loading spinner and show page three
+  console.log("[OFG] Hiding loading spinner and showing page three");
   await hideLoadingSpinner(
     "forecast-outputs-container",
     "generate-loading-div"

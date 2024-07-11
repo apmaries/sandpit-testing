@@ -18,7 +18,7 @@ async function fetchData(url) {
     return await response.json();
   } catch (error) {
     console.error(`[OFG] Error fetching data from ${url}`, error);
-    throw error; // Rethrow to handle it in the caller function
+    throw error;
   }
 }
 
