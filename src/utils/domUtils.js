@@ -1,6 +1,10 @@
 // domUtils.js
 // Description: Utility functions for DOM manipulation
 
+// Shared state modules
+import { applicationConfig } from "../core/configManager.js";
+import { applicationState } from "../core/stateManager.js";
+
 // Global variables
 ("use strict");
 
@@ -83,6 +87,7 @@ export function populateDropdown(
       });
       resolve();
     } catch (error) {
+      console.error("[OFG] Error populating dropdown: ", error);
       reject(error);
     }
   });
@@ -150,4 +155,69 @@ export async function cleanTable(tableBody) {
   while (tableBody.firstChild) {
     tableBody.removeChild(tableBody.firstChild);
   }
+}
+
+// Function to rotate arrays based on the week start day
+export function rotateArrays(array) {
+  let weekStart = new Date(
+    applicationState.userInputs.forecastParameters.weekStart
+  );
+  let dayOfWeek = weekStart.getDay();
+  let rotateBy = dayOfWeek;
+
+  return [...array.slice(rotateBy), ...array.slice(0, rotateBy)];
+}
+
+// Rotate daysOfWeek to BU start day of week array while keeping "All" at the top
+export function rotateDaysOfWeek() {
+  let startDayString = "Monday";
+  let daysOfWeek = applicationConfig.daysOfWeek;
+  // Extract the "All" entry and the rest of the days
+  const allEntry = daysOfWeek.find((day) => day.name === "All");
+  let restOfDays = daysOfWeek.filter((day) => day.name !== "All");
+
+  // Find the index of the start day in the restOfDays array
+  const startDayIndex = restOfDays.findIndex(
+    (day) => day.name === startDayString
+  );
+  if (startDayIndex === -1) {
+    console.error(`Start day "${startDayString}" not found in daysOfWeek.`);
+    return;
+  }
+
+  // Rotate the restOfDays array to start from the startDayIndex
+  const rotatedDays = [
+    ...restOfDays.slice(startDayIndex),
+    ...restOfDays.slice(0, startDayIndex),
+  ];
+
+  // Prepend the "All" entry back to the start of the array, if it exists
+  if (allEntry) {
+    rotatedDays.unshift(allEntry);
+  }
+
+  applicationConfig.daysOfWeek = rotatedDays;
+}
+
+export function populateMessage(className, innerHTML, reason) {
+  console.log("[OFG] Populating message");
+  const resultsContainer = document.getElementById("import-results-container");
+
+  let message = document.createElement("div");
+  message.className = className;
+  message.innerHTML = innerHTML;
+  resultsContainer.appendChild(message);
+
+  if (reason) {
+    const errorReason = document.createElement("div");
+    errorReason.innerHTML = reason;
+    resultsContainer.appendChild(errorReason);
+  }
+
+  if (className === "alert-success") {
+    console.log("[OFG] Import successful");
+    document.getElementById("open-forecast-button").removeAttribute("disabled");
+  }
+
+  // TODO: Find a way to allow user to navigate main GC browser window to new forecast
 }

@@ -35,6 +35,7 @@ export async function getPlanningGroupContacts() {
     // Validate the number of contacts
     if (numContacts === "" || isNaN(numContacts)) {
       alert(`Please enter a valid number of contacts for ${pgName}`);
+      console.warn(`[OFG] [${pgName}] Invalid number of contacts`, numContacts);
       return;
     }
 

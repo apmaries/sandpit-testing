@@ -2,104 +2,75 @@
 // Description: Module to handle forecast data modifications
 
 // Shared state modules
-import { applicationState } from "./stateManager.js";
+import { applicationState } from "../core/stateManager.js";
+import { applicationConfig } from "../core/configManager.js";
 
 // App modules
 import { calculateTotals, calculateWeightedAverages } from "./numberHandler.js";
+
+// Utility modules
+import { rotateArrays } from "../utils/domUtils.js";
 
 // Global variables
 ("use strict");
 const testMode = applicationConfig.testMode;
 
 /* MAIN FUNCTIONS START */
-// Function to initialize modification handler
-export function initializeModificationHandler() {
-  // Event listener for planning group dropdown
-  const planningGroupDropdown = document.getElementById(
-    "planning-group-dropdown"
-  );
-  const weekDayDropdown = document.getElementById("week-day-dropdown");
-
-  if (planningGroupDropdown && weekDayDropdown) {
-    planningGroupDropdown.addEventListener("change", async () => {
-      // Remove disabled attribute from "week-day-dropdown"
-      weekDayDropdown.removeAttribute("disabled");
-
-      // set weekDayDropdown placeholder
-      weekDayDropdown.placeholder = "Select a week day";
-
-      // Check if weekDayDropdown has a value
-      if (weekDayDropdown.value) {
-        // Get Planning Group forecast data for week day
-        const pgData = await getSelectedPgForecastData();
-        populateGraphAndTable(pgData);
-      }
-    });
-
-    // Add event listener to "week-day-dropdown"
-    weekDayDropdown.addEventListener("change", async () => {
-      // Check if planningGroupDropdown has a value
-      if (planningGroupDropdown.value) {
-        // Get Planning Group forecast data for week day
-        const pgData = await getSelectedPgForecastData();
-        populateGraphAndTable(pgData);
-      }
-    });
-  } else {
-    console.error("[OFG] Dropdowns not found");
-  }
-}
-
 // Function to get selected planning group data
 export async function getSelectedPgForecastData(
   forecastType = "modifiedForecast"
 ) {
-  // Get the listbox
-  const listBox = document.getElementById("planning-group-listbox");
-
-  // Find the selected option within the list box
-  const selectedOption = listBox.querySelector(".gux-selected");
-
-  const selectedPgName = selectedOption.dataset.name;
-  const selectedPgId = selectedOption.dataset.id;
-
+  const planningGroupListBox = document.getElementById(
+    "planning-group-listbox"
+  );
   const weekDayDropdown = document.getElementById("week-day-dropdown");
-  const selectedWeekDay = weekDayDropdown.value;
 
-  // Define weekly mode
-  let weeklyMode = selectedWeekDay === "99";
+  try {
+    const selectedOption = planningGroupListBox.querySelector(".gux-selected");
+    if (!selectedOption) {
+      throw new Error("No planning group selected.");
+    }
 
-  // Log to console
-  if (weeklyMode) {
-    console.log(`[OFG] [${selectedPgName}] Getting weekly forecast data`);
-  } else {
-    const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const selectedPgName = selectedOption.dataset.name;
+    const selectedPgId = selectedOption.dataset.id;
+    const selectedWeekDay = weekDayDropdown.value;
+
+    if (!selectedWeekDay) {
+      throw new Error("No week day selected.");
+    }
+
+    let weeklyMode = selectedWeekDay === "99";
+    const dayName = applicationConfig.daysOfWeek.find(
+      (day) => day.id === selectedWeekDay
+    )?.name;
+
+    const selectedPlanningGroup = applicationState.forecastOutputs[
+      forecastType
+    ].find((group) => group.planningGroup.id === selectedPgId);
+
+    if (!selectedPlanningGroup) {
+      throw new Error("Selected planning group not found in forecast data.");
+    }
+
+    let nContacts = selectedPlanningGroup.forecastData.nContacts;
+    let nHandled = selectedPlanningGroup.forecastData.nHandled;
+    let tHandle = selectedPlanningGroup.forecastData.tHandle;
+
     console.log(
-      `[OFG] [${selectedPgName}] Getting ${daysOfWeek[selectedWeekDay]} forecast data`
+      `[OFG] [${selectedPgName}] Getting ${
+        weeklyMode ? "weekly" : dayName
+      } forecast data`
     );
+
+    return {
+      selectedPgId,
+      selectedWeekDay,
+      fcValues: { nContacts, nHandled, tHandle },
+    };
+  } catch (error) {
+    console.error("[OFG] Error getting forecast data:", error.message);
+    return undefined; // Explicitly return undefined
   }
-
-  const selectedPlanningGroup = applicationState.forecastOutputs[
-    forecastType
-  ].find((group) => group.planningGroup.id === selectedPgId);
-
-  let nContacts = selectedPlanningGroup.forecastData.nContacts;
-  let nHandled = selectedPlanningGroup.forecastData.nHandled;
-  let tHandle = selectedPlanningGroup.forecastData.tHandle;
-
-  return {
-    selectedPgId,
-    selectedWeekDay,
-    fcValues: { nContacts, nHandled, tHandle },
-  };
 }
 
 // Function to populate the UI data
@@ -312,15 +283,29 @@ export async function populateGraphAndTable(data) {
 /* MAIN FUNCTIONS END */
 
 /* HELPER FUNCTIONS START */
-// Function to rotate arrays based on the week start day
-function rotateArrays(array) {
-  let weekStart = new Date(
-    applicationState.userInputs.forecastParameters.weekStart
-  );
-  let dayOfWeek = weekStart.getDay();
-  let rotateBy = dayOfWeek;
+// Function to generate intervals and xAxisLabels
+function generateIntervalsAndLabels(weeklyMode) {
+  let intervals, xAxisLabels;
 
-  return [...array.slice(rotateBy), ...array.slice(0, rotateBy)];
+  if (weeklyMode) {
+    // Generate intervals and labels for the week, ignoring "All"
+    intervals = Array.from({ length: 7 }, (_, i) => i);
+    xAxisLabels = applicationConfig.daysOfWeek
+      .filter((day) => day.id !== "99")
+      .map((day) => day.name.slice(0, 3)); // Get first 3 characters for short names
+  } else {
+    // Generate intervals and labels for the day
+    intervals = Array.from({ length: 96 }, (_, i) => {
+      let hours = Math.floor(i / 4);
+      let minutes = (i % 4) * 15;
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`;
+    });
+    xAxisLabels = intervals;
+  }
+
+  return { intervals, xAxisLabels };
 }
 
 // Function to set forecast data totals in UI
@@ -341,7 +326,7 @@ function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
           minimumFractionDigits: 1,
         })
       )
-      .join(",<br>");
+      .join("<br>");
   } else if (offeredDay) {
     document.getElementById("fc-day-offered").textContent = parseFloat(
       offeredDay.toFixed(1)
@@ -357,47 +342,12 @@ function updateTotalsTableDiv(offeredWeek, ahtWeek, offeredDay, ahtDay) {
           minimumFractionDigits: 1,
         })
       )
-      .join(",<br>");
+      .join("<br>");
   } else if (ahtDay) {
     document.getElementById("fc-day-aht").textContent = parseFloat(
       ahtDay.toFixed(1)
     ).toLocaleString("en", { minimumFractionDigits: 1 });
   }
-}
-
-// Function to generate intervals and xAxisLabels
-function generateIntervalsAndLabels(weeklyMode) {
-  let weekStart = new Date(
-    applicationState.userInputs.forecastParameters.weekStart
-  );
-  let intervals, xAxisLabels;
-  if (weeklyMode) {
-    intervals = Array.from({ length: 7 }, (_, i) => i);
-    xAxisLabels = Array.from({ length: 7 }, (_, i) => {
-      let date = new Date(weekStart);
-      date.setDate(date.getDate() + ((i + 6) % 7)); // Adjust for JavaScript's week start
-      let weekday = date.toLocaleDateString("en-GB", { weekday: "short" });
-      return weekday;
-    });
-
-    // Rotate xAxisLabels array based on the weekStart day
-    let startDayOfWeek = weekStart.getDay();
-    xAxisLabels = [
-      ...xAxisLabels.slice(startDayOfWeek),
-      ...xAxisLabels.slice(0, startDayOfWeek),
-    ];
-  } else {
-    intervals = Array.from({ length: 96 }, (_, i) => {
-      let hours = Math.floor(i / 4);
-      let minutes = (i % 4) * 15;
-      return `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}`;
-    });
-    xAxisLabels = intervals;
-  }
-
-  return { intervals, xAxisLabels };
 }
 
 // Function to extract the non-zero subrange
@@ -576,7 +526,7 @@ async function applyModification(data, modToRun) {
 
       // Maintain the original sum
       // Not currently being used for AHT mods - totals should be impacted... allow user to specify?
-      //modifiedTotals = maintainOriginalSum(modifiedTotals, nHandledWeeklyTotal);
+      // modifiedTotals = maintainOriginalSum(modifiedTotals, nHandledWeeklyTotal);
 
       // Scale the values for each day based on the modified totals
       let modifiedValues = scale2DArrayByDay(nHandled, modifiedTotals);

@@ -10,7 +10,11 @@ import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
 
 // App modules
-import { generateForecast } from "./forecastHandler.js";
+import { generateForecast, importForecast } from "./forecastHandler.js";
+import {
+  getSelectedPgForecastData,
+  populateGraphAndTable,
+} from "./modificationHandler.js";
 
 // Utility modules
 import {
@@ -18,6 +22,8 @@ import {
   hideLoadingSpinner,
   resetLoadingSpinner,
   cleanTable,
+  rotateDaysOfWeek,
+  updateLoadingMessage,
 } from "../utils/domUtils.js";
 import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 import {
@@ -34,11 +40,8 @@ const testMode = applicationConfig.testMode;
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
 
-  // Clean up any existing data
-  cleanTable(document.querySelector("#planning-groups-table tbody"));
+  // Clean applicationState.userInputs
   applicationState.userInputs.planningGroups = [];
-  resetLoadingSpinner("planning-groups-container", "planning-groups-loading");
-  document.getElementById("inbound-forecast-div").style.display = "none";
   applicationConfig.inbound.inboundMode = false;
 
   console.debug("[OFG] Application state at page one load", applicationState);
@@ -119,6 +122,10 @@ export async function loadPageOne() {
 
   // Add event listener for next button
   addEvent(document.getElementById("p1-next-button"), "click", async () => {
+    if (!applicationState.userInputs.businessUnit.id) {
+      alert("Please select a Business Unit");
+      return;
+    }
     await loadPageTwo();
 
     removeEventListeners(businessUnitListbox, "change");
@@ -130,8 +137,16 @@ export async function loadPageOne() {
 }
 
 // Function to load page two
-export async function loadPageTwo() {
+async function loadPageTwo() {
   console.log("[OFG] Loading page two");
+
+  // Clean applicationState.userInputs
+  applicationState.userInputs.planningGroups = [];
+  applicationConfig.inbound.inboundMode = false;
+
+  // Clean forecast outputs
+  applicationState.forecastOutputs.generatedForecast = null;
+  applicationState.forecastOutputs.modifiedForecast = null;
 
   console.debug("[OFG] Application state at page two load", applicationState);
   const planningGroupsTableBody = document.querySelector(
@@ -261,7 +276,6 @@ export async function loadPageTwo() {
     // Array to hold groups
     const matchedGroups = [];
     const unmatchedGroups = [];
-    console.log("matchedGroups", matchedGroups);
 
     // Loop through planning groups and campaigns to match them
     planningGroups.forEach((pg) => {
@@ -337,7 +351,11 @@ export async function loadPageTwo() {
 
   // Add event listener to generate button
   addEvent(document.getElementById("generate-button"), "click", async () => {
-    await getPlanningGroupContacts();
+    const totalContacts = await getPlanningGroupContacts();
+
+    if (!totalContacts) {
+      return;
+    }
 
     // Assign applicationState.userInputs variables
     Object.assign(
@@ -345,9 +363,16 @@ export async function loadPageTwo() {
       getForecastParameters()
     );
     Object.assign(applicationState.userInputs.forecastOptions, getOptions());
+
+    // Rotate the days of week based on the start day of week
+    rotateDaysOfWeek();
+
+    // Generate the forecast & load page three
     await generateForecast();
     await loadPageThree();
+    resetPageTwo();
 
+    // Remove event listeners
     removeEventListeners(document.getElementById("generate-button"), "click");
     removeEventListeners(document.getElementById("p2-back-button"), "click");
   });
@@ -355,7 +380,9 @@ export async function loadPageTwo() {
   // Add event listener for back button
   addEvent(document.getElementById("p2-back-button"), "click", async () => {
     await loadPageOne();
+    resetPageTwo();
 
+    // Remove event listeners
     removeEventListeners(document.getElementById("generate-button"), "click");
     removeEventListeners(document.getElementById("p2-back-button"), "click");
   });
@@ -368,34 +395,29 @@ export async function loadPageTwo() {
 }
 
 // Function to load page three
-export async function loadPageThree() {
+async function loadPageThree() {
   console.log("[OFG] Loading page three");
 
   console.debug("[OFG] Application state at page three load", applicationState);
 
   // Initialize the forecast outputs
-  const forecastData = applicationState.forecastOutputs.generatedForecast;
+  const generatedForecast = applicationState.forecastOutputs.generatedForecast;
   applicationState.forecastOutputs.modifiedForecast = JSON.parse(
-    JSON.stringify(forecastData)
+    JSON.stringify(generatedForecast)
   );
 
   // Get the planning groups from sharedState
   console.log("[OFG] Getting planning groups from sharedState");
-  const planningGroupsSummary = forecastData.map((pg) => {
-    return {
+  const planningGroupsSummary = generatedForecast
+    .filter((pg) => pg.metadata.forecastStatus.isForecast === true)
+    .map((pg) => ({
       id: pg.planningGroup.id,
       name: pg.planningGroup.name,
-    };
-  });
+    }));
 
   // Populate page three listboxes
-  console.log(
-    "[OFG] Populating page three listboxes",
-    planningGroupsSummary,
-    applicationConfig.daysOfWeek
-  );
   populateDropdown(
-    document.getElementById("business-unit-listbox"),
+    document.getElementById("planning-group-listbox"),
     planningGroupsSummary,
     "name",
     true
@@ -412,23 +434,43 @@ export async function loadPageThree() {
     "planning-group-dropdown"
   );
   planningGroupDropdown.removeAttribute("disabled");
-  addEvent(planningGroupDropdown, "change", async () => {});
+  addEvent(planningGroupDropdown, "change", async () => {
+    await new Promise((resolve) => setTimeout(resolve, 50)); // Delay to ensure selection is updated
+    let selectedPgFc = await getSelectedPgForecastData();
+
+    if (selectedPgFc) {
+      await populateGraphAndTable(selectedPgFc);
+    }
+  });
 
   // Add event listener for weekday dropdown
   const weekDayDropdown = document.getElementById("week-day-dropdown");
   weekDayDropdown.removeAttribute("disabled");
-  addEvent(weekDayDropdown, "change", async () => {});
+  addEvent(weekDayDropdown, "change", async () => {
+    let selectedPgFc = await getSelectedPgForecastData();
 
+    if (selectedPgFc) {
+      await populateGraphAndTable(selectedPgFc);
+    }
+  });
   // Add event listener for import button
   console.log("[OFG] Adding event listener for Import button");
   addEvent(document.getElementById("import-button"), "click", async () => {
-    await importForecast();
+    await loadPageFour();
+    resetPageThree();
+
+    removeEventListeners(planningGroupDropdown, "change");
+    removeEventListeners(weekDayDropdown, "change");
   });
 
   // Add event listener for back button
   console.log("[OFG] Adding event listener for Back button");
-  addEvent(document.getElementById("p3-back-button"), "click", () => {
-    loadPageTwo();
+  addEvent(document.getElementById("p3-back-button"), "click", async () => {
+    await loadPageTwo();
+    resetPageThree();
+
+    removeEventListeners(planningGroupDropdown, "change");
+    removeEventListeners(weekDayDropdown, "change");
   });
 
   // Hide loading spinner and show page three
@@ -437,4 +479,55 @@ export async function loadPageThree() {
     "forecast-outputs-container",
     "generate-loading-div"
   );
+}
+
+// Function to load page four
+async function loadPageFour() {
+  console.log("[OFG] Loading page four");
+
+  console.debug("[OFG] Application state at page four load", applicationState);
+
+  // Hide loading spinner and show page four
+  hideLoadingSpinner("import-results-container", "import-loading-div");
+
+  // Add event listener for open forecast button
+  addEvent(document.getElementById("open-forecast-button"), "click", () => {
+    window.open(applicationState.forecastOutputs.forecastImportUrl, "_blank");
+  });
+
+  // Add event listener for reset button
+  addEvent(document.getElementById("restart-button"), "click", async () => {
+    console.debug("[OFG] Restart button clicked");
+    await loadPageOne();
+    resetPageFour();
+
+    removeEventListeners(document.getElementById("import-button"), "click");
+    removeEventListeners(
+      document.getElementById("open-forecast-button"),
+      "click"
+    );
+  });
+
+  await importForecast();
+}
+
+function resetPageTwo() {
+  // Clean planning groups table
+  cleanTable(document.querySelector("#planning-groups-table tbody"));
+
+  // Reset the loading spinner and hide inbound forecast div
+  resetLoadingSpinner("planning-groups-container", "planning-groups-loading");
+  document.getElementById("inbound-forecast-div").style.display = "none";
+}
+
+function resetPageThree() {
+  updateLoadingMessage("generate-loading-message", "Generating forecast");
+  resetLoadingSpinner("forecast-outputs-container", "generate-loading-div");
+}
+
+function resetPageFour() {
+  console.debug("[OFG] Resetting page four");
+  document.getElementById("import-results-container").innerHTML = "";
+  //updateLoadingMessage("import-loading-message", "Generating import URL");
+  //resetLoadingSpinner("import-results-container", "import-loading-div");
 }

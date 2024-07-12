@@ -21,9 +21,15 @@ import {
   generateInboundForecast,
   deleteInboundForecast,
 } from "./inboundHandler.js";
+import {
+  prepFcImportBody,
+  generateUrl,
+  invokeGCF,
+  importFc,
+} from "./importHandler.js";
 
 // Utility modules
-import { updateLoadingMessage } from "../utils/domUtils.js";
+import { updateLoadingMessage, populateMessage } from "../utils/domUtils.js";
 
 // Global variables
 ("use strict");
@@ -308,7 +314,6 @@ export async function generateForecast() {
       return completedPgForecast;
     });
   }
-
   // Functions end here
 
   // Main generate forecast code starts here
@@ -416,4 +421,134 @@ export async function generateForecast() {
     );
   }
   return;
+}
+
+// Import forecast to GC
+export async function importForecast() {
+  console.info("[OFG] Forecast import initiated");
+
+  const buId = applicationState.userInputs.businessUnit.id;
+  const weekStart = applicationState.userInputs.forecastParameters.weekStart;
+  const startDayOfWeek =
+    applicationState.userInputs.businessUnit.settings.startDayOfWeek;
+  const description =
+    applicationState.userInputs.forecastParameters.description;
+
+  console.debug(
+    "[OFG] Application state at forecast generation start",
+    applicationState
+  );
+
+  // Prepare forecast
+  updateLoadingMessage("import-loading-message", "Preparing forecast");
+  let [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
+    applicationState.forecastOutputs.modifiedForecast,
+    startDayOfWeek,
+    description
+  );
+
+  // Log the forecast import body
+  console.log("[OFG] Forecast import body:", fcImportBody);
+
+  if (testMode) {
+    console.log("[OFG] Test mode enabled. Skipping import.");
+    populateMessage("alert-success", "Forecast tested successfully!", null);
+  } else {
+    // Declare variables
+    let importOperationId = null;
+
+    let topics = ["shorttermforecasts.import"];
+
+    let importNotifications = new NotificationHandler(
+      topics,
+      buId,
+      runImport,
+      handleImportNotification
+    );
+    importNotifications.connect();
+    importNotifications.subscribeToNotifications();
+
+    // Main import function
+    async function runImport() {
+      // Generate URL for upload
+      updateLoadingMessage(
+        "import-loading-message",
+        "Generating URL for upload"
+      );
+      let uploadAttributes = await generateUrl(buId, weekStart, contentLength);
+
+      // Upload forecast
+      updateLoadingMessage("import-loading-message", "Uploading forecast");
+      /* GCF function being used until CORS blocking removed */
+      // importFc(buId, globalWeekStart, importGzip, uploadAttributes);
+      const uploadResponse = await invokeGCF(uploadAttributes, fcImportBody);
+
+      // Check if upload was successful
+      if (uploadResponse === 200) {
+        const uploadKey = uploadAttributes.uploadKey;
+        console.log(
+          "[OFG] Forecast uploaded successfully! Calling import method."
+        );
+
+        // Import forecast
+        updateLoadingMessage("import-loading-message", "Importing forecast");
+        const importResponse = await importFc(buId, weekStart, uploadKey);
+
+        // Check if operation id is in response
+        if (importResponse) {
+          importOperationId = importResponse.operationId;
+          console.log(
+            `[OFG] Forecast import initiated. Operation ID: ${importOperationId}`
+          );
+
+          // Assign operationId to global importOperationId variable
+          importOperationId = importResponse.operationId;
+        } else {
+          console.error("[OFG] Forecast import failed.");
+        }
+      }
+    }
+
+    // Handle notification messages
+    async function handleImportNotification(notification) {
+      console.debug("[OFG] Message from server: ", notification);
+      if (
+        notification.eventBody &&
+        notification.eventBody.operationId === importOperationId
+      ) {
+        const status = notification.eventBody.status;
+        console.log(`[OFG] Forecast import status updated <${status}>`);
+
+        if (status === "Complete") {
+          const forecastId = notification.eventBody.result.id;
+          applicationConfig.forecastId = forecastId;
+
+          console.log(
+            `[OFG] Forecast import completed successfully! ID: ${forecastId}`
+          );
+          // toastUser(`Forecast imported successfully! ID: ${forecastId}`);
+
+          // Insert div to id="results-container" with success message
+          populateMessage(
+            "alert-success",
+            "Forecast imported successfully!",
+            null
+          );
+        } else if (status === "Error" || status === "Canceled") {
+          console.error("[OFG] Forecast import failed.", notification);
+          // toastUser("Forecast import failed!");
+          const userMessage = notification.metadata.errorInfo.userMessage;
+
+          // Insert div to id="results-container" with error message
+          populateMessage(
+            "alert-danger",
+            "Forecast import failed!",
+            userMessage
+          );
+        }
+      } else {
+        console.log("[OFG] Message from server: ", notification);
+      }
+    }
+  }
 }

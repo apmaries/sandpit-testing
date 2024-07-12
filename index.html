@@ -145,16 +145,12 @@
                             >[Campaign]</span
                           >
                         </th>
-                        <!-- Consolidated to single column
-                        <th data-column-name="c-name">Campaign</th>
-                      -->
                         <th data-column-name="n-contacts"># Contacts</th>
                       </tr>
                     </thead>
                     <tbody></tbody></table
                 ></gux-table-beta>
-              </div>
-              <div>
+
                 <fieldset>
                   <!-- Ignores full days of zero contacts (e.g. public holidays) -->
                   <legend>Outbound options</legend>
@@ -396,6 +392,22 @@
               </gux-loading-message>
             </div>
             <div id="import-results-container" style="display: none"></div>
+            <div id="page-four-buttons" class="row" style="padding-top: 20px">
+              <gux-button
+                id="restart-button"
+                accent="secondary"
+                class="align-left"
+                >Restart</gux-button
+              >
+
+              <gux-button
+                id="open-forecast-button"
+                accent="primary"
+                class="align-right"
+                disabled
+                >Open forecast</gux-button
+              >
+            </div>
           </fieldset>
         </div>
         <div id="test-mode" class="align-left" hidden></div>
