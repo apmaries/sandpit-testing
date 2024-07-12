@@ -528,6 +528,6 @@ function resetPageThree() {
 function resetPageFour() {
   console.debug("[OFG] Resetting page four");
   document.getElementById("import-results-container").innerHTML = "";
-  //updateLoadingMessage("import-loading-message", "Generating import URL");
-  //resetLoadingSpinner("import-results-container", "import-loading-div");
+  updateLoadingMessage("import-loading-message", "Generating import URL");
+  resetLoadingSpinner("import-results-container", "import-loading-div");
 }
