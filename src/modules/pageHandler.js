@@ -373,7 +373,9 @@ async function loadPageTwo() {
 
   // Append matched and unmatched groups to the table
   appendRowsToTable(matchedGroups, true);
-  appendRowsToTable(unmatchedGroups, false);
+  if (unmatchedGroups.length > 0) {
+    appendRowsToTable(unmatchedGroups, false);
+  }
 
   // Add event listener to generate button
   addEvent(document.getElementById("generate-button"), "click", async () => {
