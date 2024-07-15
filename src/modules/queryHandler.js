@@ -197,13 +197,15 @@ export async function executeQueries(body, intervals) {
       let queryResults = runQuery(body);
       if (queryResults.length > 0) {
         results.push(...queryResults);
+      } else {
+        console.warn(`[OFG] No results found for interval ${i + 1}`);
       }
     }
   }
 
   // Special handling for when results is empty
   if (results.length === 0) {
-    console.warn("[OFG] No results found.");
+    console.warn("[OFG] No results found");
 
     // Get test results for testing in prod
     results = await fetch("./test/outboundAggregatesData_prod.json")
