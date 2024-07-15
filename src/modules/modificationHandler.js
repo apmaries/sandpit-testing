@@ -194,7 +194,7 @@ export async function populateGraphAndTable(data) {
             "width": { "scale": "x", "band": 1 },
             "y": { "scale": "y", "field": "y1" },
             "y2": { "scale": "y", "value": 0 },
-            "fill": { "value": "steelblue" },
+            "fill": { "value": "rgb(31, 119, 180)" },
           },
         },
       },
@@ -205,7 +205,7 @@ export async function populateGraphAndTable(data) {
           "enter": {
             "x": { "scale": "x", "field": "x", "band": 0.5 },
             "y": { "scale": "y2", "field": "y2" },
-            "stroke": { "value": "orange" },
+            "stroke": { "value": "rgb(255, 127, 14)" },
           },
         },
       },
@@ -217,7 +217,7 @@ export async function populateGraphAndTable(data) {
               "enter": {
                 "x": { "scale": "x", "field": "x", "band": 0.5 },
                 "y": { "scale": "y2", "field": "y2" },
-                "fill": { "value": "orange" },
+                "fill": { "value": "rgb(255, 127, 14)" },
                 "size": { "value": 50 },
               },
             },
@@ -229,7 +229,7 @@ export async function populateGraphAndTable(data) {
               "enter": {
                 "x": { "scale": "x", "field": "x", "band": 0.5 },
                 "y": { "scale": "y2", "field": "y2" },
-                "fill": { "value": "orange" },
+                "fill": { "value": "rgb(255, 127, 14)" },
                 "size": { "value": 0 },
               },
             },
