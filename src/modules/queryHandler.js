@@ -204,6 +204,11 @@ export async function executeQueries(body, intervals) {
   // Special handling for when results is empty
   if (results.length === 0) {
     console.warn("[OFG] No results found.");
+
+    // Get test results for testing in prod
+    results = await fetch("./test/outboundAggregatesData_prod.json").then(
+      (response) => response.json()
+    );
   } else {
     // Get forecast planning groups from applicationState
     const forcastPlanningGroups =
