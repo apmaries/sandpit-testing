@@ -17,6 +17,7 @@ const testMode = applicationConfig.testMode;
 
 let platformClient = require("platformClient");
 let url = new URL(document.location.href);
+console.debug("[OFG] URL: ", url);
 let gc_region = url.searchParams.get("gc_region");
 let gc_clientId = url.searchParams.get("gc_clientId");
 let gc_redirectUrl = url.searchParams.get("gc_redirectUrl");
