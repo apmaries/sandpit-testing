@@ -29,10 +29,6 @@
     <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-
-    <script>
-      console.log("[OFG] index page loaded");
-    </script>
   </head>
   <body>
     <div class="widget-container">
@@ -414,10 +410,6 @@
       </main>
       <footer><img src="./img/logo-black.png" /></footer>
     </div>
-    <script>
-      console.log("[OFG] scripts loading...");
-    </script>
-
     <!-- Load Genesys Cloud SDK's -->
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
     <script src="https://sdk-cdn.mypurecloud.com/client-apps/2.6.6/purecloud-client-app-sdk.js"></script>
@@ -428,14 +420,11 @@
 
       startApp()
         .then(() => {
-          console.log("[OFG] Start function completed");
+          console.log("[OFG] App started successfully.");
         })
         .catch((err) => {
           console.error("[OFG] Error during start:", err);
         });
-    </script>
-    <script>
-      console.log("[OFG] scripts loaded!");
     </script>
   </body>
 </html>
