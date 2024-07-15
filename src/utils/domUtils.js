@@ -170,7 +170,8 @@ export function rotateArrays(array) {
 
 // Rotate daysOfWeek to BU start day of week array while keeping "All" at the top
 export function rotateDaysOfWeek() {
-  let startDayString = "Monday";
+  let startDayString =
+    applicationState.userInputs.businessUnit.settings.startDayOfWeek;
   let daysOfWeek = applicationConfig.daysOfWeek;
   // Extract the "All" entry and the rest of the days
   const allEntry = daysOfWeek.find((day) => day.name === "All");
@@ -220,4 +221,41 @@ export function populateMessage(className, innerHTML, reason) {
   }
 
   // TODO: Find a way to allow user to navigate main GC browser window to new forecast
+}
+
+export function getNextWeekdayDate(startDate, weekday) {
+  // Convert the startDate string to a Date object
+  const date = new Date(startDate);
+
+  // Days of the week array
+  const daysOfWeek = applicationConfig.daysOfWeek;
+
+  // Find the target day object in the daysOfWeek array
+  const targetDayObj = daysOfWeek.find((day) => day.name === weekday);
+
+  if (!targetDayObj) {
+    throw new Error("Invalid weekday provided.");
+  }
+
+  // Convert the id to a number
+  const targetDay = parseInt(targetDayObj.id, 10);
+
+  // Get the current day number from the date
+  const currentDay = date.getDay();
+
+  // Calculate the difference in days to the target day
+  let dayDifference = (targetDay - currentDay + 7) % 7;
+
+  // If the target day is the same as the current day, move to the next week
+  if (dayDifference === 0) {
+    dayDifference = 7;
+  }
+
+  // Add the difference in days to the current date
+  date.setDate(date.getDate() + dayDifference);
+
+  // Format the date to "YYYY-MM-DD"
+  const nextDate = date.toISOString().split("T")[0];
+
+  return nextDate;
 }

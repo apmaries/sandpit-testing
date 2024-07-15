@@ -24,6 +24,8 @@ import {
   cleanTable,
   rotateDaysOfWeek,
   updateLoadingMessage,
+  switchPages,
+  getNextWeekdayDate,
 } from "../utils/domUtils.js";
 import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 import {
@@ -39,6 +41,9 @@ const testMode = applicationConfig.testMode;
 // Function to load page one
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
+
+  // TODO: Limit users ability to select wrong start date
+  // Process records in datepicker - set background colour for each matching day of week, set grey colour for non-matching days
 
   // Clean applicationState.userInputs
   applicationState.userInputs.planningGroups = [];
@@ -105,9 +110,13 @@ export async function loadPageOne() {
     document.getElementById("bu-timezone").value = timeZone;
 
     const startDayOfWeek = businessUnitSettings.startDayOfWeek;
+
     document.getElementById(
       "week-start-label"
     ).textContent = `Week start (${startDayOfWeek})`;
+
+    const datepicker = document.getElementById("week-start");
+    datepicker.value = getNextWeekdayDate(datepicker.value, startDayOfWeek);
   }
 
   // Main logic for loading page one
@@ -122,10 +131,39 @@ export async function loadPageOne() {
 
   // Add event listener for next button
   addEvent(document.getElementById("p1-next-button"), "click", async () => {
+    // Validate user has selected a Business Unit
     if (!applicationState.userInputs.businessUnit.id) {
       alert("Please select a Business Unit");
       return;
     }
+
+    // Validate user has selected correct start day of week
+    const selectedDate = document.getElementById("week-start").value;
+    const selectedDayIndex = new Date(selectedDate).getDay();
+
+    const buWeekStart =
+      applicationState.userInputs.businessUnit.settings.startDayOfWeek;
+    const daysOfWeek = applicationConfig.daysOfWeek;
+    const buWeekStartIndex = daysOfWeek.find(
+      (day) => day.name === buWeekStart
+    ).id;
+
+    if (selectedDayIndex !== Number(buWeekStartIndex)) {
+      alert(`Please select a ${buWeekStart} as the start day of the week`);
+
+      // Add a red asterisk to start of label
+      const label = document.getElementById("week-start-label");
+      const span = document.createElement("span");
+      span.textContent = " * ";
+      span.style.color = "red";
+      label.append(span);
+
+      document.getElementById("week-start").click();
+
+      return;
+    }
+
+    switchPages("page-one", "page-two");
     await loadPageTwo();
 
     removeEventListeners(businessUnitListbox, "change");
@@ -368,6 +406,7 @@ async function loadPageTwo() {
     rotateDaysOfWeek();
 
     // Generate the forecast & load page three
+    switchPages("page-two", "page-three");
     await generateForecast();
     await loadPageThree();
     resetPageTwo();
@@ -379,6 +418,7 @@ async function loadPageTwo() {
 
   // Add event listener for back button
   addEvent(document.getElementById("p2-back-button"), "click", async () => {
+    switchPages("page-two", "page-one");
     await loadPageOne();
     resetPageTwo();
 
@@ -456,6 +496,7 @@ async function loadPageThree() {
   // Add event listener for import button
   console.log("[OFG] Adding event listener for Import button");
   addEvent(document.getElementById("import-button"), "click", async () => {
+    switchPages("page-three", "page-four");
     await loadPageFour();
     resetPageThree();
 
@@ -466,6 +507,7 @@ async function loadPageThree() {
   // Add event listener for back button
   console.log("[OFG] Adding event listener for Back button");
   addEvent(document.getElementById("p3-back-button"), "click", async () => {
+    switchPages("page-three", "page-two");
     await loadPageTwo();
     resetPageThree();
 
@@ -498,6 +540,7 @@ async function loadPageFour() {
   // Add event listener for reset button
   addEvent(document.getElementById("restart-button"), "click", async () => {
     console.debug("[OFG] Restart button clicked");
+    switchPages("page-four", "page-one");
     await loadPageOne();
     resetPageFour();
 
