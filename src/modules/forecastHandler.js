@@ -36,7 +36,7 @@ import { updateLoadingMessage, populateMessage } from "../utils/domUtils.js";
 const testMode = applicationConfig.testMode;
 
 export function runApp() {
-  console.log("[OFG] Initializing main app");
+  console.log("[OFG] Initializing app");
 
   // Add the logic for the rest of your app here.
   loadPageOne();
@@ -45,11 +45,6 @@ export function runApp() {
 // Generate outbound forecast data
 export async function generateForecast() {
   console.info("[OFG] Forecast generation initiated");
-
-  console.debug(
-    "[OFG] Application state at forecast generation start",
-    applicationState
-  );
 
   // Create each planning group in the applicationState.forecastOutputs.generatedForecast object
   applicationState.forecastOutputs.generatedForecast =
@@ -114,7 +109,6 @@ export async function generateForecast() {
     // Loop through results and crunch numbers
     for (let i = 0; i < results.length; i++) {
       var resultsGrouping = results[i];
-      console.debug(`[OFG] Processing query group ${i + 1}`);
       var group = resultsGrouping.group;
       var data = resultsGrouping.data;
       var campaignId = group.outboundCampaignId;
@@ -141,9 +135,6 @@ export async function generateForecast() {
       };
 
       // For each interval in the data, get the week number and add to the campaign object
-      console.debug(
-        `[OFG] Extracting data from campaign id ${campaignId} query results`
-      );
       for (let j = 0; j < data.length; j++) {
         var interval = data[j].interval;
         var metrics = data[j].metrics;
@@ -225,10 +216,7 @@ export async function generateForecast() {
 
     validateHistoricalData();
 
-    console.log(
-      "[OFG] Query results processed",
-      JSON.parse(JSON.stringify(generatedForecast))
-    );
+    console.log("[OFG] Query results processed");
   }
 
   // Validate and update PG's if no historical data is found
@@ -261,7 +249,7 @@ export async function generateForecast() {
   // Run forecast prep function on group
   async function runFunctionOnGroup(group, func, funcName, ...args) {
     const pgName = group.planningGroup.name;
-    console.log(`[OFG] [${pgName}] Running ${funcName}`);
+    console.debug(`[OFG] [${pgName}] Running ${funcName}`);
     try {
       group = await func(group, ...args);
     } catch (error) {
@@ -307,10 +295,7 @@ export async function generateForecast() {
       });
 
     return Promise.all(fcPrepPromises).then(async (completedPgForecast) => {
-      console.log(
-        "[OFG] Outbound Planning Groups have been processed.",
-        JSON.parse(JSON.stringify(completedPgForecast))
-      );
+      console.log("[OFG] Outbound Planning Groups have been processed.");
       return completedPgForecast;
     });
   }
@@ -331,57 +316,14 @@ export async function generateForecast() {
   // Execute historical data queries
   updateLoadingMessage("generate-loading-message", "Executing queries");
   queryResults = await executeQueries(queryBody, intervals);
+
+  // Check if query results are empty
   if (queryResults.length === 0) {
     console.error("[OFG] Query results are empty");
+    const reason = "No historical data found :(";
+    populateMessage("alert-danger", "Forecast generation failed!", reason);
 
-    // Hide loading spinner div
-    hideLoadingSpinner("import-results-container", "import-loading-div");
-    await loadPageFour();
-
-    // TODO: This is repeated code from importForecast function - refactor to a function
-    // Insert div to id="results-container" with error message
-    const resultsContainer = document.getElementById(
-      "import-results-container"
-    );
-    let message = document.createElement("div");
-    message.className = "alert-danger";
-    message.innerHTML = "Data query failed!";
-    resultsContainer.appendChild(message);
-
-    const errorReason = document.createElement("div");
-
-    errorReason.innerHTML = "No historical data returned from queries!";
-    resultsContainer.appendChild(errorReason);
-
-    // Create a button to restart the process
-    const restartButton = document.createElement("gux-button");
-    restartButton.id = "restart-button";
-    restartButton.setAttribute("accent", "secondary");
-    restartButton.className = "align-left";
-    restartButton.textContent = "Restart";
-
-    // Add event listener to restart button
-    restartButton.addEventListener("click", (event) => {
-      console.log("[OFG] Restarting...");
-      loadPageOne();
-    });
-
-    // Create a new div
-    const buttonsContainer = document.createElement("div");
-
-    // Set the id, class, and style attributes
-    buttonsContainer.id = "page-three-buttons";
-    buttonsContainer.className = "row";
-    buttonsContainer.style.paddingTop = "20px";
-
-    // Append buttons to the results container
-    buttonsContainer.appendChild(restartButton);
-    //buttonsContainer.appendChild(openForecastButton);
-
-    // Append the buttonsContainer
-    resultsContainer.appendChild(buttonsContainer);
-
-    return;
+    throw new Error(reason);
   }
 
   // Process query results
@@ -413,12 +355,7 @@ export async function generateForecast() {
       deleteInboundForecast();
     }
 
-    console.log(
-      "[OFG] Inbound Planning Groups have been processed.",
-      JSON.parse(
-        JSON.stringify(applicationState.forecastOutputs.generatedForecast)
-      )
-    );
+    console.log("[OFG] Inbound Planning Groups have been processed.");
   }
   return;
 }
@@ -434,11 +371,6 @@ export async function importForecast() {
   const description =
     applicationState.userInputs.forecastParameters.description;
 
-  console.debug(
-    "[OFG] Application state at forecast generation start",
-    applicationState
-  );
-
   // Prepare forecast
   updateLoadingMessage("import-loading-message", "Preparing forecast");
   let [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
@@ -448,7 +380,7 @@ export async function importForecast() {
   );
 
   // Log the forecast import body
-  console.log("[OFG] Forecast import body:", fcImportBody);
+  console.debug("[OFG] Forecast import body:", fcImportBody);
 
   if (testMode) {
     console.log("[OFG] Test mode enabled. Skipping import.");
@@ -511,7 +443,6 @@ export async function importForecast() {
 
     // Handle notification messages
     async function handleImportNotification(notification) {
-      console.debug("[OFG] Message from server: ", notification);
       if (
         notification.eventBody &&
         notification.eventBody.operationId === importOperationId
@@ -526,7 +457,6 @@ export async function importForecast() {
           console.log(
             `[OFG] Forecast import completed successfully! ID: ${forecastId}`
           );
-          // toastUser(`Forecast imported successfully! ID: ${forecastId}`);
 
           // Insert div to id="results-container" with success message
           populateMessage(
@@ -546,8 +476,6 @@ export async function importForecast() {
             userMessage
           );
         }
-      } else {
-        console.log("[OFG] Message from server: ", notification);
       }
     }
   }

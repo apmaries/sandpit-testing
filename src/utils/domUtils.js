@@ -111,7 +111,6 @@ export async function switchPages(hidePageId, showPageId) {
 
 // Function to validate planning group dropdown entries
 export async function validatePlanningGroupDropdown() {
-  console.log("[OFG] Validating Planning Group dropdown entries");
   const planningGroupsDropdown = document.getElementById(
     "planning-group-dropdown"
   );
@@ -132,7 +131,7 @@ export async function validatePlanningGroupDropdown() {
     if (completedFcPg.metadata.forecastStatus.isForecast === false) {
       const reason = completedFcPg.metadata.forecastStatus.reason;
       console.warn(
-        `[OFG] [${pgName}] Disabling dropdown option with reason: `,
+        `[OFG] [${pgName}] Disabling Planning Group with reason: `,
         reason
       );
 
@@ -201,7 +200,6 @@ export function rotateDaysOfWeek() {
 }
 
 export function populateMessage(className, innerHTML, reason) {
-  console.log("[OFG] Populating message");
   const resultsContainer = document.getElementById("import-results-container");
 
   let message = document.createElement("div");

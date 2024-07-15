@@ -3,6 +3,7 @@
 
 // API instances
 import { wapi } from "../app.js";
+import { applicationConfig } from "../core/configManager.js";
 import { t_wapi } from "../core/testManager.js";
 
 // App modules
@@ -36,16 +37,9 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
       console.warn(`[OFG] [${planningGroup.name}] No forecast data found`);
       continue;
     }
-
-    console.debug(
-      `[OFG] [${planningGroup.name}] Processing forecast data`,
-      JSON.parse(JSON.stringify(forecastData))
-    );
+    console.debug(`[OFG] [${planningGroup.name}] Processing forecast data`);
 
     // Reorder arrays to align to BU start day of week
-    console.debug(
-      `[OFG] [${planningGroup.name}] Reordering forecast data to ${buStartDayOfWeek} week start`
-    );
     const nContacts = forecastData.nContacts;
     const tHandle = forecastData.tHandle;
     const nHandled = forecastData.nHandled;
@@ -53,17 +47,12 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     const weightedAverages = calculateWeightedAverages(tHandle, nHandled);
     const aHandleTime = weightedAverages.intervalAverages;
 
-    const dayOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const daysOfWeek = applicationConfig.daysOfWeek;
 
-    const buStartDayIndex = dayOfWeek.indexOf(buStartDayOfWeek);
+    const dayOfWeekFiltered = daysOfWeek.filter((day) => day.id !== "99");
+    const buStartDayIndex = dayOfWeekFiltered.findIndex(
+      (day) => day.name === buStartDayOfWeek
+    );
 
     const nContactsReordered = [];
     const aHandleTimeReordered = [];
@@ -75,23 +64,14 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     }
 
     // Replicate the new 0 index at the end of the arrays
-    console.debug(
-      `[OFG] [${planningGroup.name}] Adding required 8th day to reordered forecast data`
-    );
     nContactsReordered.push(nContactsReordered[0]);
     aHandleTimeReordered.push(aHandleTimeReordered[0]);
 
     // Flatten the arrays
-    console.debug(
-      `[OFG] [${planningGroup.name}] Flattening reordered forecast data`
-    );
     const offeredPerInterval = nContactsReordered.flat();
     const averageHandleTimeSecondsPerInterval = aHandleTimeReordered.flat();
 
     // Round data per interval to 2 decimal places
-    console.debug(
-      `[OFG] [${planningGroup.name}] Rounding forecast data to 2 decimal places`
-    );
     // offered
     for (let i = 0; i < offeredPerInterval.length; i++) {
       offeredPerInterval[i] = roundToTwo(offeredPerInterval[i]);
@@ -104,9 +84,6 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     }
 
     // Create the object for the planning group
-    console.debug(
-      `[OFG] [${planningGroup.name}] Creating Planning Group object for import body`
-    );
     let pgObj = {
       "planningGroupId": planningGroup.id,
       "offeredPerInterval": offeredPerInterval,
@@ -117,7 +94,6 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
   }
 
   // Create the forecast import body
-  console.debug("[OFG] Creating Forecast Import Body");
   let fcImportBody = {
     "description": description,
     "weekCount": 1,
@@ -141,7 +117,6 @@ export async function generateUrl(
   contentLengthBytes
 ) {
   console.log("[OFG] Generating URL for import");
-  console.debug("[OFG] Content Length Bytes: " + contentLengthBytes);
 
   let importUrl = null;
   try {
@@ -218,7 +193,7 @@ export async function importFc(businessUnitId, weekDateId, uploadKey) {
     throw error;
   }
 
-  console.log("[OFG] Import response: ", importResponse);
+  console.debug("[OFG] Import response: ", importResponse);
   console.log("[OFG] Forecast import complete");
   return importResponse;
 }

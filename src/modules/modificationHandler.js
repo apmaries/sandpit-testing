@@ -367,7 +367,6 @@ function extractSubrange(data) {
 
 // Function to maintain the original sum
 function maintainOriginalSum(modifiedData, originalSum) {
-  console.debug("[OFG] Maintaining original sum", modifiedData, originalSum);
   // Check if modifiedData is a 2D array
   if (Array.isArray(modifiedData[0])) {
     // Calculate the sum of the modified data
@@ -429,11 +428,6 @@ async function initializeModificationListeners(pgFcData) {
   let flattenButton = document.getElementById("flatten-button");
   let resetButton = document.getElementById("reset-button");
 
-  console.debug(
-    "[OFG] Initializing modification listeners with data:",
-    JSON.parse(JSON.stringify(pgFcData))
-  );
-
   // Clone and replace buttons to remove existing event listeners
   smoothButton = replaceButton(smoothButton);
   normalizeButton = replaceButton(normalizeButton);
@@ -442,10 +436,6 @@ async function initializeModificationListeners(pgFcData) {
 
   smoothButton.addEventListener("click", async () => {
     let modifiedData = await applyModification(pgFcData, smoothData);
-    console.log(
-      "[OFG] Modified data after smoothing:",
-      JSON.parse(JSON.stringify(modifiedData))
-    );
     updateModifiedForecast(modifiedData);
     populateGraphAndTable(modifiedData);
   });
@@ -499,8 +489,8 @@ async function applyModification(data, modToRun) {
     let modifiedTotals;
 
     if (metricSelect === "offered" || metricSelect === "both") {
-      console.log(
-        `[OFG] Modifying nContacts with ${modToRun.name}`,
+      console.debug(
+        `[OFG] Modifying Offered with ${modToRun.name}`,
         nContactsDailyTotals
       );
 
@@ -521,6 +511,11 @@ async function applyModification(data, modToRun) {
     }
 
     if (metricSelect === "aver-handle-time" || metricSelect === "both") {
+      console.debug(
+        `[OFG] Modifying AHT with ${modToRun.name}`,
+        nContactsDailyTotals
+      );
+
       // Run modification function on nHandled
       modifiedTotals = modToRun(nHandledDailyTotals);
 
@@ -739,8 +734,6 @@ async function reset(data) {
     ...modifiedData,
     fcValues: { ...modifiedData.fcValues, ...resetData.fcValues },
   };
-
-  console.debug("[OFG] Reset data:", resetData);
   return resetData;
 }
 

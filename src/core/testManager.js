@@ -25,7 +25,6 @@ async function fetchData(url) {
 // Prrimary function to initialize test mode
 export async function initializeTestMode() {
   console.log("[OFG] Initializing test mode");
-  console.log("[OFG] App config", applicationConfig);
 
   const config = applicationConfig.testing;
 
@@ -64,8 +63,6 @@ export async function initializeTestMode() {
       return inboundFcDataPromise;
     },
   };
-
-  console.log("[OFG] Mock APIs initialized with testing data");
 }
 
 export { t_capi, t_oapi, t_wapi };

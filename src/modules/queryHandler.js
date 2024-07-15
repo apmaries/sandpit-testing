@@ -22,7 +22,6 @@ export async function queryBuilder() {
 
   // Log to console
   console.log(`[OFG] Query body builder initiated`);
-  console.debug("[OFG] Planning Groups: ", forecastPlanningGroups);
 
   // Define predicates array
   let clausePredicates = [];
@@ -220,7 +219,6 @@ export async function executeQueries(body, intervals) {
       });
     });
   }
-
   // Return results
   console.debug("[OFG] Query results: ", results);
   return results;

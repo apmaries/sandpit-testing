@@ -42,14 +42,9 @@ const testMode = applicationConfig.testMode;
 export async function loadPageOne() {
   console.log("[OFG] Loading page one");
 
-  // TODO: Limit users ability to select wrong start date
-  // Process records in datepicker - set background colour for each matching day of week, set grey colour for non-matching days
-
   // Clean applicationState.userInputs
-  applicationState.userInputs.planningGroups = [];
-  applicationConfig.inbound.inboundMode = false;
+  cleanUserInputs();
 
-  console.debug("[OFG] Application state at page one load", applicationState);
   const businessUnitListbox = document.getElementById("business-unit-listbox");
 
   // Get list of business units
@@ -179,14 +174,12 @@ async function loadPageTwo() {
   console.log("[OFG] Loading page two");
 
   // Clean applicationState.userInputs
-  applicationState.userInputs.planningGroups = [];
-  applicationConfig.inbound.inboundMode = false;
+  cleanUserInputs();
 
   // Clean forecast outputs
   applicationState.forecastOutputs.generatedForecast = null;
   applicationState.forecastOutputs.modifiedForecast = null;
 
-  console.debug("[OFG] Application state at page two load", applicationState);
   const planningGroupsTableBody = document.querySelector(
     "#planning-groups-table tbody"
   );
@@ -231,11 +224,11 @@ async function loadPageTwo() {
 
   // Function to append rows to the table body
   function appendRowsToTable(groups, isMatched) {
-    console.log(
-      `[OFG] Appending ${isMatched ? "matched" : "unmatched"} rows to table`
-    );
     groups.forEach((group) => {
-      console.debug(`[OFG] Appending row for ${group.planningGroup.name}`);
+      console.debug(
+        `[OFG] Appending ${isMatched ? "matched" : "unmatched"} rows to table`,
+        group
+      );
       const row = document.createElement("tr");
 
       // Planning Group column: Display planningGroup.name and optionally campaign.name
@@ -364,11 +357,6 @@ async function loadPageTwo() {
       console.log("[OFG] Inbound mode enabled");
     }
 
-    console.debug(
-      "[OFG] Application state after matching campaigns to planning groups",
-      applicationState
-    );
-
     return [matchedGroups, unmatchedGroups];
   }
 
@@ -407,9 +395,16 @@ async function loadPageTwo() {
 
     // Generate the forecast & load page three
     switchPages("page-two", "page-three");
-    await generateForecast();
-    await loadPageThree();
-    resetPageTwo();
+    try {
+      await generateForecast();
+      await loadPageThree();
+      resetPageTwo();
+    } catch (error) {
+      console.error("[OFG] Error generating forecast.", error);
+      switchPages("page-three", "page-four");
+      await loadPageFour();
+      resetPageTwo();
+    }
 
     // Remove event listeners
     removeEventListeners(document.getElementById("generate-button"), "click");
@@ -438,8 +433,6 @@ async function loadPageTwo() {
 async function loadPageThree() {
   console.log("[OFG] Loading page three");
 
-  console.debug("[OFG] Application state at page three load", applicationState);
-
   // Initialize the forecast outputs
   const generatedForecast = applicationState.forecastOutputs.generatedForecast;
   applicationState.forecastOutputs.modifiedForecast = JSON.parse(
@@ -447,7 +440,6 @@ async function loadPageThree() {
   );
 
   // Get the planning groups from sharedState
-  console.log("[OFG] Getting planning groups from sharedState");
   const planningGroupsSummary = generatedForecast
     .filter((pg) => pg.metadata.forecastStatus.isForecast === true)
     .map((pg) => ({
@@ -493,10 +485,11 @@ async function loadPageThree() {
       await populateGraphAndTable(selectedPgFc);
     }
   });
+
   // Add event listener for import button
-  console.log("[OFG] Adding event listener for Import button");
   addEvent(document.getElementById("import-button"), "click", async () => {
     switchPages("page-three", "page-four");
+    await importForecast();
     await loadPageFour();
     resetPageThree();
 
@@ -505,7 +498,6 @@ async function loadPageThree() {
   });
 
   // Add event listener for back button
-  console.log("[OFG] Adding event listener for Back button");
   addEvent(document.getElementById("p3-back-button"), "click", async () => {
     switchPages("page-three", "page-two");
     await loadPageTwo();
@@ -516,7 +508,6 @@ async function loadPageThree() {
   });
 
   // Hide loading spinner and show page three
-  console.log("[OFG] Hiding loading spinner and showing page three");
   await hideLoadingSpinner(
     "forecast-outputs-container",
     "generate-loading-div"
@@ -526,8 +517,6 @@ async function loadPageThree() {
 // Function to load page four
 async function loadPageFour() {
   console.log("[OFG] Loading page four");
-
-  console.debug("[OFG] Application state at page four load", applicationState);
 
   // Hide loading spinner and show page four
   hideLoadingSpinner("import-results-container", "import-loading-div");
@@ -550,8 +539,6 @@ async function loadPageFour() {
       "click"
     );
   });
-
-  await importForecast();
 }
 
 function resetPageTwo() {
@@ -569,8 +556,12 @@ function resetPageThree() {
 }
 
 function resetPageFour() {
-  console.debug("[OFG] Resetting page four");
   document.getElementById("import-results-container").innerHTML = "";
   updateLoadingMessage("import-loading-message", "Generating import URL");
   resetLoadingSpinner("import-results-container", "import-loading-div");
+}
+
+function cleanUserInputs() {
+  applicationState.userInputs.planningGroups = [];
+  applicationConfig.inbound.inboundMode = false;
 }
