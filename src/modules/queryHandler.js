@@ -208,12 +208,16 @@ export async function executeQueries(body, intervals) {
     console.warn("[OFG] No results found");
 
     // Get test results for testing in prod
-    results = await fetch("./test/outboundAggregatesData_prod.json")
+    results = await fetch(
+      "/sandpit-testing/test/outboundAggregateData_prod.json"
+    )
       .then((response) => response.json())
       .then((data) => data.results)
       .catch((error) =>
         console.error("[OFG] Error fetching test data: ", error)
       );
+
+    console.log("[OFG] Test data retrieval successful", results);
   } else {
     // Get forecast planning groups from applicationState
     const forcastPlanningGroups =
