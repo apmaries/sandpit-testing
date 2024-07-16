@@ -354,6 +354,7 @@ async function loadPageTwo() {
     if (unmatchedGroups.length > 0) {
       applicationConfig.inbound.inboundMode = true;
       document.getElementById("inbound-forecast-div").style.display = "block";
+      document.getElementById("generate-inbound-fc").checked = true;
       console.log("[OFG] Inbound mode enabled");
     }
 

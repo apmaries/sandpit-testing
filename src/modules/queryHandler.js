@@ -217,7 +217,7 @@ export async function executeQueries(body, intervals) {
         console.error("[OFG] Error fetching test data: ", error)
       );
 
-    console.log("[OFG] Test data retrieval successful", results);
+    console.log("[OFG] Test data in prod retrieval successful");
   } else {
     // Get forecast planning groups from applicationState
     const forcastPlanningGroups =
