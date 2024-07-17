@@ -170,6 +170,10 @@ export async function executeQueries(body, intervals) {
       const queryResult = await capi.postAnalyticsConversationsAggregatesQuery(
         body
       );
+      // Check if the response is an empty object
+      if (Object.keys(queryResult).length === 0) {
+        return []; // Return an empty array to avoid undefined results
+      }
       return queryResult.results; // Return the results
     } catch (error) {
       console.error("[OFG.QUERY] Error getting query results!", error);
@@ -187,6 +191,11 @@ export async function executeQueries(body, intervals) {
     } catch (error) {
       console.error("[OFG.QUERY] Test data retrieval failed!", error);
       throw error;
+    }
+
+    // Check if the response is an empty object
+    if (Object.keys(results).length === 0) {
+      return []; // Return an empty array to avoid undefined results
     }
 
     return results.results;
