@@ -415,8 +415,9 @@ async function loadPageTwo() {
       await generateForecast();
       await loadPageThree();
     } catch (error) {
-      console.error("[OFG.UI] Error generating forecast.", error);
-      populateMessage("alert-danger", "Forecast generation failed!", error);
+      console.error("[OFG.UI] Error generating forecast:", error);
+      const [genericMessage, specificMessage] = error.message.split("|");
+      populateMessage("alert-danger", genericMessage, specificMessage);
       switchPages("page-three", "page-four");
       await loadPageFour();
     }
