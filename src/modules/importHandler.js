@@ -121,9 +121,13 @@ export async function generateUrl(
   weekDateId,
   contentLengthBytes
 ) {
-  console.info("[OFG.IMPORT] Generating import URL");
+  console.info(
+    "[OFG.IMPORT] Generating import URL",
+    businessUnitId,
+    weekDateId,
+    contentLengthBytes
+  );
 
-  let importUrl = null;
   try {
     importUrl =
       await wapi.postWorkforcemanagementBusinessunitWeekShorttermforecastsImportUploadurl(
@@ -133,19 +137,20 @@ export async function generateUrl(
           "contentLengthBytes": contentLengthBytes,
         }
       );
+    return importUrl;
   } catch (error) {
     console.error("[OFG.IMPORT] Error generating import URL: ", error);
     throw error;
   }
-
-  return importUrl;
 }
 
 // Function to invoke server-side GCF to upload the forecast data
 export async function invokeGCF(uploadAttributes, forecastData) {
-  console.log("[OFG.IMPORT] Invoking GCF");
+  console.info("[OFG.IMPORT] Invoking GCF");
   // Get client id from session storage
-  const clientId = sessionStorage.getItem("oauth_client");
+  const clientId = sessionStorage.getItem("gc_clientId");
+
+  // TODO: Check this API key bizzo and document in the README
 
   // Define the URL for the GCF
   const url =
@@ -181,7 +186,7 @@ export async function invokeGCF(uploadAttributes, forecastData) {
 
 // Function to import the forecast data
 export async function importFc(businessUnitId, weekDateId, uploadKey) {
-  console.log("[OFG.IMPORT] Importing forecast");
+  console.info("[OFG.IMPORT] Importing forecast");
 
   let importResponse = null;
   try {
