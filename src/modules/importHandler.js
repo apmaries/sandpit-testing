@@ -10,16 +10,24 @@ import { wapi } from "../app.js";
 // App modules
 import { calculateWeightedAverages } from "./numberHandler.js";
 
-// Utility modules
-import { roundToTwo } from "../utils/numberUtils.js";
-import { gzipEncode } from "../utils/compressionUtils.js";
-
 // Function to prepare the forecast import body
 export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
   console.info("[OFG.IMPORT] Preparing forecast import body");
 
-  let planningGroupsArray = [];
+  // Function to gzip encode the body
+  function gzipEncode(body) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(body));
+    return pako.gzip(data);
+  }
 
+  // Function to round the values to 2 decimal places
+  function roundToTwo(num) {
+    return +(Math.round(num + "e+2") + "e-2");
+  }
+
+  // Build the body for the forecast import
+  let planningGroupsArray = [];
   for (let i = 0; i < groups.length; i++) {
     const group = groups[i];
     const planningGroup = group.planningGroup;
