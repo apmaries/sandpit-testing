@@ -16,7 +16,7 @@ import { gzipEncode } from "../utils/compressionUtils.js";
 
 // Function to prepare the forecast import body
 export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
-  console.log("[OFG.IMPORT] Preparing forecast import body");
+  console.info("[OFG.IMPORT] Preparing forecast import body");
 
   let planningGroupsArray = [];
 
@@ -113,7 +113,7 @@ export async function generateUrl(
   weekDateId,
   contentLengthBytes
 ) {
-  console.log("[OFG.IMPORT] Generating import URL");
+  console.info("[OFG.IMPORT] Generating import URL");
 
   let importUrl = null;
   try {
