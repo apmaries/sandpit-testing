@@ -29,7 +29,7 @@ import {
 import { NotificationHandler } from "./notificationHandler.js";
 
 // Utility modules
-import { updateLoadingMessage, populateMessage } from "../utils/domUtils.js";
+import { updateLoadingMessage } from "../utils/domUtils.js";
 
 // Global variables
 ("use strict");
@@ -228,7 +228,6 @@ export async function generateForecast() {
   if (queryResults.length === 0) {
     const reason = "No historical data found";
     console.error("[OFG.GENERATE] " + reason);
-    populateMessage("alert-danger", "Forecast generation failed!", reason);
     throw new Error(reason);
   }
 
@@ -324,7 +323,6 @@ export async function importForecast() {
     } else {
       const reason = importResponse.data.reason;
       console.error("[OFG.IMPORT] Forecast import failed:", reason);
-      populateMessage("alert-danger", "Forecast import failed!", reason);
     }
   } catch (error) {
     console.error("[OFG.IMPORT] Forecast import error:", error);
