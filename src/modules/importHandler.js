@@ -97,17 +97,29 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     planningGroupsArray.push(pgObj);
   }
 
-  // Create the forecast import body
-  let fcImportBody = {
-    "description": description,
-    "weekCount": 1,
-    "planningGroups": planningGroupsArray,
-  };
+  let fcImportBody;
+  try {
+    // Create the forecast import body
+    fcImportBody = {
+      "description": description,
+      "weekCount": 1,
+      "planningGroups": planningGroupsArray,
+    };
+  } catch (error) {
+    console.error("[OFG.IMPORT] Error creating forecast import body: ", error);
+    throw error.message || error;
+  }
 
-  // Gzip encode the body
-  let fcImportGzip = gzipEncode(fcImportBody);
-  let contentLengthBytes = fcImportGzip.length;
-
+  let fcImportGzip;
+  let contentLengthBytes;
+  try {
+    // Gzip encode the body
+    fcImportGzip = gzipEncode(fcImportBody);
+    contentLengthBytes = fcImportGzip.length;
+  } catch (error) {
+    console.error("[OFG.IMPORT] Error encoding body to gzip: ", error);
+    throw error.message || error;
+  }
   console.log(
     `[OFG.IMPORT] Body encoded to gzip with length: ${contentLengthBytes}`
   );
@@ -140,7 +152,7 @@ export async function generateUrl(
     return importUrl;
   } catch (error) {
     console.error("[OFG.IMPORT] Error generating import URL: ", error);
-    throw error;
+    throw error.message || error;
   }
 }
 
@@ -176,8 +188,7 @@ export async function invokeGCF(uploadAttributes, forecastData) {
   });
 
   if (!response.ok) {
-    console.error(`[OFG.IMPORT] GCF HTTP error! status: ${response.status}`);
-    return null;
+    throw new Error(`Upload response status: ${response.status}`);
   }
 
   console.log(`[OFG.IMPORT] GCF response status: `, response.status);
@@ -200,7 +211,7 @@ export async function importFc(businessUnitId, weekDateId, uploadKey) {
       );
   } catch (error) {
     console.error("[OFG.IMPORT] Error importing forecast: ", error);
-    throw error;
+    throw error.message || error;
   }
 
   console.debug("[OFG.IMPORT] Import response: ", importResponse);

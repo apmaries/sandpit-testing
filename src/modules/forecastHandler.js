@@ -285,17 +285,22 @@ export async function importForecast() {
         description
       );
     } catch (prepError) {
-      throw new Error(`Forecast preparation failed: ${prepError.message}`);
+      throw new Error(`Import preparation failed!|${prepError.message}`);
     }
 
-    const fcImportUrl = generateUrl(buId, weekStart);
-    updateLoadingMessage("import-loading-message", "Invoking GCF");
+    let fcImportUrl;
+    try {
+      fcImportUrl = generateUrl(buId, weekStart);
+      updateLoadingMessage("import-loading-message", "Invoking GCF");
+    } catch (urlError) {
+      throw new Error(`Error generating upload URL!|${urlError.message}`);
+    }
 
     let importResponse;
     try {
       importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
     } catch (invokeError) {
-      throw new Error(`GCF invocation failed: ${invokeError.message}`);
+      throw new Error(`Import file upload failed!|${invokeError.message}`);
     }
 
     if (importResponse.status === 200) {
@@ -326,7 +331,7 @@ export async function importForecast() {
         importNotifications.subscribeToNotifications();
       } catch (notificationError) {
         throw new Error(
-          `Subscribing to notifications failed: ${notificationError.message}`
+          `Subscribing to notifications failed|${notificationError.message}`
         );
       }
     } else {
