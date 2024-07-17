@@ -267,36 +267,47 @@ export async function generateForecast() {
 
 // Import forecast to GC
 export async function importForecast() {
-  console.info("[OFG.IMPORT] Forecast import started");
-
-  const { id: buId } = applicationState.userInputs.businessUnit;
-  const { weekStart, description } =
-    applicationState.userInputs.forecastParameters;
-  const startDayOfWeek =
-    applicationState.userInputs.businessUnit.settings.startDayOfWeek;
-
-  updateLoadingMessage("import-loading-message", "Preparing forecast");
-  const [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
-    applicationState.forecastOutputs.modifiedForecast,
-    startDayOfWeek,
-    description
-  );
-
-  const fcImportUrl = generateUrl(buId, weekStart);
-  updateLoadingMessage("import-loading-message", "Invoking GCF");
-
   try {
-    const importResponse = await invokeGCF(
-      fcImportUrl,
-      importGzip,
-      contentLength
-    );
+    console.info("[OFG.IMPORT] Forecast import started");
+
+    const { id: buId } = applicationState.userInputs.businessUnit;
+    const { weekStart, description } =
+      applicationState.userInputs.forecastParameters;
+    const startDayOfWeek =
+      applicationState.userInputs.businessUnit.settings.startDayOfWeek;
+
+    updateLoadingMessage("import-loading-message", "Preparing forecast");
+    let fcImportBody, importGzip, contentLength;
+    try {
+      [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
+        applicationState.forecastOutputs.modifiedForecast,
+        startDayOfWeek,
+        description
+      );
+    } catch (prepError) {
+      throw new Error(`Forecast preparation failed: ${prepError.message}`);
+    }
+
+    const fcImportUrl = generateUrl(buId, weekStart);
+    updateLoadingMessage("import-loading-message", "Invoking GCF");
+
+    let importResponse;
+    try {
+      importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
+    } catch (invokeError) {
+      throw new Error(`GCF invocation failed: ${invokeError.message}`);
+    }
+
     if (importResponse.status === 200) {
       console.info("[OFG.IMPORT] Forecast import successful");
 
       const runImport = async () => {
         updateLoadingMessage("import-loading-message", "Running import");
-        await importFc(importResponse, fcImportBody);
+        try {
+          await importFc(importResponse, fcImportBody);
+        } catch (runImportError) {
+          throw new Error(`Running import failed: ${runImportError.message}`);
+        }
       };
 
       const handleImportNotification = (message) => {
@@ -313,20 +324,18 @@ export async function importForecast() {
         );
         importNotifications.connect();
         importNotifications.subscribeToNotifications();
-      } catch (error) {
-        console.error(
-          "[OFG.IMPORT] Error subscribing to notifications:",
-          error
+      } catch (notificationError) {
+        throw new Error(
+          `Subscribing to notifications failed: ${notificationError.message}`
         );
-        throw new Error("Subscription error: " + error.message);
       }
     } else {
       const reason = importResponse.data.reason;
-      console.error("[OFG.IMPORT] Forecast import failed:", reason);
+      throw new Error(`Forecast import failed: ${reason}`);
     }
   } catch (error) {
     console.error("[OFG.IMPORT] Forecast import error:", error);
-    throw new Error("Forecast import error: " + error.message);
+    throw error; // Rethrow the error to be handled by the caller
   }
 }
 
