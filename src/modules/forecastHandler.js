@@ -285,7 +285,9 @@ export async function importForecast() {
         description
       );
     } catch (prepError) {
-      throw new Error(`Import preparation failed!|${prepError.message}`);
+      throw new Error(
+        `Import preparation failed!|${prepError.message || prepError}`
+      );
     }
 
     let fcImportUrl;
@@ -293,14 +295,18 @@ export async function importForecast() {
       fcImportUrl = generateUrl(buId, weekStart);
       updateLoadingMessage("import-loading-message", "Invoking GCF");
     } catch (urlError) {
-      throw new Error(`Error generating upload URL!|${urlError.message}`);
+      throw new Error(
+        `Error generating upload URL!|${urlError.message || urlError}`
+      );
     }
 
     let importResponse;
     try {
       importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
     } catch (invokeError) {
-      throw new Error(`Import file upload failed!|${invokeError.message}`);
+      throw new Error(
+        `Import file upload failed!|${invokeError.message || invokeError}`
+      );
     }
 
     if (importResponse.status === 200) {
@@ -311,7 +317,9 @@ export async function importForecast() {
         try {
           await importFc(importResponse, fcImportBody);
         } catch (runImportError) {
-          throw new Error(`Running import failed: ${runImportError.message}`);
+          throw new Error(
+            `Running import failed: ${runImportError.message || runImportError}`
+          );
         }
       };
 
@@ -331,7 +339,9 @@ export async function importForecast() {
         importNotifications.subscribeToNotifications();
       } catch (notificationError) {
         throw new Error(
-          `Subscribing to notifications failed|${notificationError.message}`
+          `Subscribing to notifications failed|${
+            notificationError.message || notificationError
+          }`
         );
       }
     } else {
