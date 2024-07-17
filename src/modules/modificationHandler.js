@@ -50,11 +50,13 @@ export async function getSelectedPgForecastData(
     let nHandled = selectedPlanningGroup.forecastData.nHandled;
     let tHandle = selectedPlanningGroup.forecastData.tHandle;
 
-    console.log(
-      `[OFG.MODIFICATIONS] [${selectedPgName}] Getting ${
-        weeklyMode ? "weekly" : dayName
-      } forecast data`
-    );
+    if (selectedPgName && dayName) {
+      console.log(
+        `[OFG.MODIFICATIONS] [${selectedPgName}] Getting ${
+          weeklyMode ? "weekly" : dayName
+        } forecast data`
+      );
+    }
 
     return {
       selectedPgId,
