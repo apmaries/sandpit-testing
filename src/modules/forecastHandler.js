@@ -336,11 +336,10 @@ export async function importForecast() {
       }
     } else {
       const reason = importResponse.data.reason;
-      throw new Error(`Forecast import failed: ${reason}`);
+      throw new Error(`Forecast import failed!|${reason}`);
     }
   } catch (error) {
-    console.error("[OFG.IMPORT] Forecast import error:", error);
-    throw error; // Rethrow the error to be handled by the caller
+    throw new Error(`[OFG.IMPORT] Forecast import error|${error}`);
   }
 }
 
