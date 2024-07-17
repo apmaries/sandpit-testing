@@ -26,6 +26,7 @@ import {
   updateLoadingMessage,
   switchPages,
   getNextWeekdayDate,
+  populateMessage,
 } from "../utils/domUtils.js";
 import { addEvent, removeEventListeners } from "../utils/eventUtils.js";
 import {
@@ -40,7 +41,7 @@ const testMode = applicationConfig.testMode;
 
 // Function to load page one
 export async function loadPageOne() {
-  console.log("[OFG] Loading page one");
+  console.info("[OFG.UI] Loading page one");
 
   // Clean applicationState.userInputs
   cleanUserInputs();
@@ -53,31 +54,31 @@ export async function loadPageOne() {
       const businessUnits = testMode
         ? await t_wapi.getBusinessUnits()
         : await wapi.getWorkforcemanagementBusinessunits();
-      console.log(
-        `[OFG] Loaded ${businessUnits.entities.length} Business units`,
-        businessUnits.entities
+      console.info(
+        `[OFG.UI] Loaded ${businessUnits.entities.length} business units`
       );
 
       return businessUnits.entities; // Return the list of business units
     } catch (error) {
-      console.error("[OFG] Error getting business units!", error);
+      console.error("[OFG.UI] Error getting business units!", error);
       throw error;
     }
   }
 
   // Get selected business unit settings
   async function getBusinessUnitSettings(businessUnitId) {
-    console.log("[OFG] Getting settings for business unit", businessUnitId);
+    console.info(
+      `[OFG.UI] Getting settings for business unit ${businessUnitId}`
+    );
     let opts = {
-      "expand": ["settings.timeZone", "settings.startDayOfWeek"], // [String] | Include to access additional data on the business unit
+      "expand": ["settings.timeZone", "settings.startDayOfWeek"], // Include to access additional data on the business unit
     };
     try {
       const businessUnit = testMode
         ? await t_wapi.getBusinessUnitData()
         : await wapi.getWorkforcemanagementBusinessunit(businessUnitId, opts);
-      console.log(
-        `[OFG] Loaded settings for ${businessUnit.name} (${businessUnit.id})`,
-        businessUnit
+      console.info(
+        `[OFG.UI] Loaded settings for ${businessUnit.name} (${businessUnit.id})`
       );
 
       applicationState.userInputs.businessUnit.name = businessUnit.name;
@@ -88,17 +89,17 @@ export async function loadPageOne() {
       populateBusinessUnitSettings(businessUnit);
 
       console.debug(
-        "[OFG] Application state after business unit selection",
+        "[OFG.UI] Application state after business unit selection",
         applicationState
       );
     } catch (error) {
-      console.error("[OFG] Error getting business unit settings!", error);
+      console.error("[OFG.UI] Error getting business unit settings!", error);
       throw error;
     }
   }
 
   function populateBusinessUnitSettings(businessUnit) {
-    console.log("[OFG] Populating business unit settings");
+    console.info("[OFG.UI] Populating business unit settings");
     const businessUnitSettings = businessUnit.settings;
 
     const timeZone = businessUnitSettings.timeZone;
@@ -115,8 +116,16 @@ export async function loadPageOne() {
   }
 
   // Main logic for loading page one
-  const businessUnits = await getBusinessUnits();
-  await populateDropdown(businessUnitListbox, businessUnits, "name", true);
+  try {
+    const businessUnits = await getBusinessUnits();
+    await populateDropdown(businessUnitListbox, businessUnits, "name", true);
+  } catch (error) {
+    console.error(
+      "[OFG.UI] Error populating dropdown with business units",
+      error
+    );
+    return; // Exit function if there's an error loading business units
+  }
 
   // Add event listener for business unit selection
   addEvent(businessUnitListbox, "change", (event) => {
@@ -158,6 +167,7 @@ export async function loadPageOne() {
       return;
     }
 
+    console.info("[OFG.UI] Switching to page two");
     switchPages("page-one", "page-two");
     await loadPageTwo();
 
@@ -167,11 +177,12 @@ export async function loadPageOne() {
 
   // Hide loading spinner and show main
   await hideLoadingSpinner("main", "main-loading-section");
+  console.info("[OFG.UI] Page one loaded");
 }
 
 // Function to load page two
 async function loadPageTwo() {
-  console.log("[OFG] Loading page two");
+  console.info("[OFG.UI] Loading page two");
 
   // Clean applicationState.userInputs
   cleanUserInputs();
@@ -226,7 +237,9 @@ async function loadPageTwo() {
   function appendRowsToTable(groups, isMatched) {
     groups.forEach((group) => {
       console.debug(
-        `[OFG] Appending ${isMatched ? "matched" : "unmatched"} rows to table`,
+        `[OFG.UI] Appending ${
+          isMatched ? "matched" : "unmatched"
+        } rows to table`,
         group
       );
       const row = document.createElement("tr");
@@ -271,14 +284,13 @@ async function loadPageTwo() {
         : await wapi.getWorkforcemanagementBusinessunitPlanninggroups(
             applicationState.userInputs.businessUnit.id
           );
-      console.log(
-        `[OFG] Loaded ${planningGroups.entities.length} Planning groups`,
-        planningGroups.entities
+      console.info(
+        `[OFG.UI] Loaded ${planningGroups.entities.length} planning groups`
       );
 
       return planningGroups.entities; // Return the list of planning groups
     } catch (error) {
-      console.error("[OFG] Error getting planning groups!", error);
+      console.error("[OFG.UI] Error getting planning groups!", error);
       throw error;
     }
   }
@@ -289,20 +301,17 @@ async function loadPageTwo() {
       const campaigns = testMode
         ? await t_oapi.getOutboundCampaigns()
         : await oapi.getOutboundCampaigns();
-      console.log(
-        `[OFG] Loaded ${campaigns.entities.length} campaigns`,
-        campaigns.entities
-      );
+      console.info(`[OFG.UI] Loaded ${campaigns.entities.length} campaigns`);
       return campaigns.entities; // Return the list of campaigns
     } catch (error) {
-      console.error("[OFG] Error getting campaigns!", error);
+      console.error("[OFG.UI] Error getting campaigns!", error);
       throw error;
     }
   }
 
   // Function to match campaigns to planning groups by associated queue id
   async function queueCampaignMatcher(planningGroups, campaigns) {
-    console.log("[OFG] Matching campaigns to planning groups");
+    console.info("[OFG.UI] Matching campaigns to planning groups");
 
     // Array to hold groups
     const matchedGroups = [];
@@ -333,8 +342,8 @@ async function loadPageTwo() {
 
       if (matchedCampaign) {
         pg.campaign = matchedCampaign;
-        console.log(
-          `[OFG] [${pgName}] Matched campaign ${matchedCampaign.name} (${matchedCampaign.id})`
+        console.info(
+          `[OFG.UI] [${pgName}] Matched campaign ${matchedCampaign.name} (${matchedCampaign.id})`
         );
         group.campaign.name = matchedCampaign.name;
         group.campaign.id = matchedCampaign.id;
@@ -342,7 +351,7 @@ async function loadPageTwo() {
         group.queue.id = matchedCampaign.queue.id;
         matchedGroups.push(group);
       } else {
-        console.warn(`[OFG] [${pgName}] No matching campaign found`);
+        console.warn(`[OFG.UI] [${pgName}] No matching campaign found`);
         unmatchedGroups.push(group);
       }
 
@@ -355,27 +364,31 @@ async function loadPageTwo() {
       applicationConfig.inbound.inboundMode = true;
       document.getElementById("inbound-forecast-div").style.display = "block";
       document.getElementById("generate-inbound-fc").checked = true;
-      console.log("[OFG] Inbound mode enabled");
+      console.info("[OFG.UI] Inbound mode enabled");
     }
 
     return [matchedGroups, unmatchedGroups];
   }
 
   // Main logic for loading page two
-  const [planningGroups, campaigns] = await Promise.all([
-    getPlanningGroups(),
-    getCampaigns(),
-  ]);
+  try {
+    const [planningGroups, campaigns] = await Promise.all([
+      getPlanningGroups(),
+      getCampaigns(),
+    ]);
+    const [matchedGroups, unmatchedGroups] = await queueCampaignMatcher(
+      planningGroups,
+      campaigns
+    );
 
-  const [matchedGroups, unmatchedGroups] = await queueCampaignMatcher(
-    planningGroups,
-    campaigns
-  );
-
-  // Append matched and unmatched groups to the table
-  appendRowsToTable(matchedGroups, true);
-  if (unmatchedGroups.length > 0) {
-    appendRowsToTable(unmatchedGroups, false);
+    // Append matched and unmatched groups to the table
+    appendRowsToTable(matchedGroups, true);
+    if (unmatchedGroups.length > 0) {
+      appendRowsToTable(unmatchedGroups, false);
+    }
+  } catch (error) {
+    console.error("[OFG.UI] Error loading page two", error);
+    return; // Exit function if there's an error loading planning groups or campaigns
   }
 
   // Add event listener to generate button
@@ -401,13 +414,13 @@ async function loadPageTwo() {
     try {
       await generateForecast();
       await loadPageThree();
-      resetPageTwo();
     } catch (error) {
-      console.error("[OFG] Error generating forecast.", error);
+      console.error("[OFG.UI] Error generating forecast.", error);
+      populateMessage("alert-danger", "Forecast import failed!", error);
       switchPages("page-three", "page-four");
       await loadPageFour();
-      resetPageTwo();
     }
+    resetPageTwo();
 
     // Remove event listeners
     removeEventListeners(document.getElementById("generate-button"), "click");
@@ -430,11 +443,12 @@ async function loadPageTwo() {
     "planning-groups-container",
     "planning-groups-loading"
   );
+  console.info("[OFG.UI] Page two loaded");
 }
 
 // Function to load page three
 async function loadPageThree() {
-  console.log("[OFG] Loading page three");
+  console.info("[OFG.UI] Loading page three");
 
   // Initialize the forecast outputs
   const generatedForecast = applicationState.forecastOutputs.generatedForecast;
@@ -492,7 +506,19 @@ async function loadPageThree() {
   // Add event listener for import button
   addEvent(document.getElementById("import-button"), "click", async () => {
     switchPages("page-three", "page-four");
-    await importForecast();
+
+    if (testMode) {
+      console.info("[OFG.UI] Skipping import in test mode");
+      populateMessage("alert-success", "Forecast tested successfully!");
+    } else {
+      try {
+        await importForecast();
+        populateMessage("alert-success", "Forecast imported successfully!");
+      } catch (error) {
+        console.error("[OFG.UI] Error importing forecast:", error);
+        populateMessage("alert-danger", "Forecast import failed!", error);
+      }
+    }
     await loadPageFour();
     resetPageThree();
 
@@ -515,11 +541,12 @@ async function loadPageThree() {
     "forecast-outputs-container",
     "generate-loading-div"
   );
+  console.info("[OFG.UI] Page three loaded");
 }
 
 // Function to load page four
 async function loadPageFour() {
-  console.log("[OFG] Loading page four");
+  console.info("[OFG.UI] Loading page four");
 
   // Hide loading spinner and show page four
   hideLoadingSpinner("import-results-container", "import-loading-div");
@@ -531,7 +558,7 @@ async function loadPageFour() {
 
   // Add event listener for reset button
   addEvent(document.getElementById("restart-button"), "click", async () => {
-    console.debug("[OFG] Restart button clicked");
+    console.debug("[OFG.UI] Restart button clicked");
     switchPages("page-four", "page-one");
     await loadPageOne();
     resetPageFour();
@@ -542,6 +569,8 @@ async function loadPageFour() {
       "click"
     );
   });
+
+  console.info("[OFG.UI] Page four loaded");
 }
 
 function resetPageTwo() {

@@ -27,17 +27,9 @@ export async function getSelectedPgForecastData(
 
   try {
     const selectedOption = planningGroupListBox.querySelector(".gux-selected");
-    if (!selectedOption) {
-      throw new Error("No planning group selected.");
-    }
-
+    const selectedWeekDay = weekDayDropdown.value;
     const selectedPgName = selectedOption.dataset.name;
     const selectedPgId = selectedOption.dataset.id;
-    const selectedWeekDay = weekDayDropdown.value;
-
-    if (!selectedWeekDay) {
-      throw new Error("No week day selected.");
-    }
 
     let weeklyMode = selectedWeekDay === "99";
     const dayName = applicationConfig.daysOfWeek.find(
@@ -49,7 +41,9 @@ export async function getSelectedPgForecastData(
     ].find((group) => group.planningGroup.id === selectedPgId);
 
     if (!selectedPlanningGroup) {
-      throw new Error("Selected planning group not found in forecast data.");
+      throw new Error(
+        `Planning group (${selectedPgName}) not found in forecast data.`
+      );
     }
 
     let nContacts = selectedPlanningGroup.forecastData.nContacts;
@@ -57,7 +51,7 @@ export async function getSelectedPgForecastData(
     let tHandle = selectedPlanningGroup.forecastData.tHandle;
 
     console.log(
-      `[OFG] [${selectedPgName}] Getting ${
+      `[OFG.MODIFICATIONS] [${selectedPgName}] Getting ${
         weeklyMode ? "weekly" : dayName
       } forecast data`
     );
@@ -68,17 +62,16 @@ export async function getSelectedPgForecastData(
       fcValues: { nContacts, nHandled, tHandle },
     };
   } catch (error) {
-    console.error("[OFG] Error getting forecast data:", error.message);
-    return undefined; // Explicitly return undefined
+    // Planning Group or Week Day not selected. Explicitly return undefined
+    return undefined;
   }
 }
 
 // Function to populate the UI data
 export async function populateGraphAndTable(data) {
   let { selectedPgId, selectedWeekDay, fcValues } = data;
-  console.debug(
-    `[OFG] [${selectedPgId}] Populating graph & table with data`,
-    data
+  console.log(
+    `[OFG.MODIFICATIONS] [${selectedPgId}] Populating graph & table with data`
   );
 
   let nContacts = fcValues.nContacts;
@@ -490,56 +483,56 @@ async function applyModification(data, modToRun) {
 
     if (metricSelect === "offered" || metricSelect === "both") {
       console.debug(
-        `[OFG] Modifying Offered with ${modToRun.name}`,
+        `[OFG.MODIFICATIONS] Modifying Offered with ${modToRun.name}`,
         nContactsDailyTotals
       );
+      try {
+        // Run modification function on nContacts
+        modifiedTotals = modToRun(nContactsDailyTotals);
 
-      // Run modification function on nContacts
-      modifiedTotals = modToRun(nContactsDailyTotals);
+        // Maintain the original sum
+        modifiedTotals = maintainOriginalSum(
+          modifiedTotals,
+          nContactsWeeklyTotal
+        );
 
-      // Maintain the original sum
-      modifiedTotals = maintainOriginalSum(
-        modifiedTotals,
-        nContactsWeeklyTotal
-      );
+        // Scale the values for each day based on the modified totals
+        let modifiedValues = scale2DArrayByDay(nContacts, modifiedTotals);
 
-      // Scale the values for each day based on the modified totals
-      let modifiedValues = scale2DArrayByDay(nContacts, modifiedTotals);
-
-      // Replace the original values with the modified values
-      modifiedData.fcValues.nContacts = modifiedValues;
+        // Replace the original values with the modified values
+        modifiedData.fcValues.nContacts = modifiedValues;
+      } catch (error) {
+        throw new Error("Error modifying Offered data", error);
+      }
     }
 
     if (metricSelect === "aver-handle-time" || metricSelect === "both") {
       console.debug(
-        `[OFG] Modifying AHT with ${modToRun.name}`,
+        `[OFG.MODIFICATIONS] Modifying AHT with ${modToRun.name}`,
         nContactsDailyTotals
       );
 
-      // Run modification function on nHandled
-      modifiedTotals = modToRun(nHandledDailyTotals);
+      try {
+        // Run modification function on nHandled
+        modifiedTotals = modToRun(nHandledDailyTotals);
 
-      // Maintain the original sum
-      // Not currently being used for AHT mods - totals should be impacted... allow user to specify?
-      // modifiedTotals = maintainOriginalSum(modifiedTotals, nHandledWeeklyTotal);
+        // Scale the values for each day based on the modified totals
+        let modifiedValues = scale2DArrayByDay(nHandled, modifiedTotals);
 
-      // Scale the values for each day based on the modified totals
-      let modifiedValues = scale2DArrayByDay(nHandled, modifiedTotals);
+        // Replace the original values with the modified values
+        modifiedData.fcValues.nHandled = modifiedValues;
 
-      // Replace the original values with the modified values
-      modifiedData.fcValues.nHandled = modifiedValues;
+        // Run modification function on tHandle
+        modifiedTotals = modToRun(tHandleDailyTotals);
 
-      // Run modification function on tHandle
-      modifiedTotals = modToRun(tHandleDailyTotals);
+        // Scale the values for each day based on the modified totals
+        modifiedValues = scale2DArrayByDay(tHandle, modifiedTotals);
 
-      // Maintain the original sum
-      //modifiedTotals = maintainOriginalSum(modifiedTotals, tHandleWeeklyTotal);
-
-      // Scale the values for each day based on the modified totals
-      modifiedValues = scale2DArrayByDay(tHandle, modifiedTotals);
-
-      // Replace the original values with the modified values
-      modifiedData.fcValues.tHandle = modifiedValues;
+        // Replace the original values with the modified values
+        modifiedData.fcValues.tHandle = modifiedValues;
+      } catch (error) {
+        throw new Error("Error modifying AHT data", error);
+      }
     }
   } else {
     // Modify intraday values for selected week day

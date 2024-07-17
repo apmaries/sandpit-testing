@@ -18,10 +18,10 @@ const testMode = applicationConfig.testMode;
 
 let generateOperationId;
 
-// Generate the forecast
+// Function to generate the forecast
 async function generateAbmForecast(buId, weekStart, description) {
-  console.log("[OFG] Generating ABM forecast");
-  const abmFcDescription = description + " ([OFG] Inbound ABM)";
+  console.log("[OFG.INBOUND] Generating ABM forecast");
+  const abmFcDescription = description + " ([OFG.INBOUND] Inbound ABM)";
 
   let body = {
     "description": abmFcDescription,
@@ -33,7 +33,7 @@ async function generateAbmForecast(buId, weekStart, description) {
   };
 
   try {
-    generateResponse =
+    let generateResponse =
       await wapi.postWorkforcemanagementBusinessunitWeekShorttermforecastsGenerate(
         buId,
         weekStart,
@@ -41,11 +41,11 @@ async function generateAbmForecast(buId, weekStart, description) {
         opts
       );
     console.log(
-      `[OFG] Inbound forecast generate status = ${generateResponse.status}`
+      `[OFG.INBOUND] Inbound forecast generate status = ${generateResponse.status}`
     );
     return generateResponse;
   } catch (error) {
-    console.error("[OFG] Inbound forecast generation failed!", error);
+    console.error("[OFG.INBOUND] Inbound forecast generation failed!", error);
     throw error;
   }
 }
@@ -55,7 +55,7 @@ async function getInboundForecastData(forecastId) {
   const buId = applicationState.userInputs.businessUnit.id;
   const weekStart = applicationState.userInputs.forecastParameters.weekStart;
 
-  console.log("[OFG] Getting inbound forecast data");
+  console.log("[OFG.INBOUND] Getting inbound forecast data");
 
   try {
     const forecastData = testMode
@@ -66,15 +66,12 @@ async function getInboundForecastData(forecastId) {
           forecastId
         );
     console.log(
-      "[OFG] Inbound forecast data retrieved. Trimming to 7 days only",
+      "[OFG.INBOUND] Inbound forecast data retrieved. Trimming to 7 days only",
       forecastData
     );
 
     // Trim results to 7 days only (8th day will be re-added later after modifications)
     forecastData.result.planningGroups.forEach((pg) => {
-      console.debug(
-        `[OFG] Trimming data for Planning Group ${pg.planningGroupId}`
-      );
       pg.offeredPerInterval = pg.offeredPerInterval.slice(0, 672);
       pg.averageHandleTimeSecondsPerInterval =
         pg.averageHandleTimeSecondsPerInterval.slice(0, 672);
@@ -82,30 +79,42 @@ async function getInboundForecastData(forecastId) {
 
     return forecastData;
   } catch (error) {
-    console.error("[OFG] Inbound forecast data retrieval failed!", error);
+    console.error(
+      "[OFG.INBOUND] Inbound forecast data retrieval failed!",
+      error
+    );
     throw error;
   }
 }
 
 // Handle the asynchronous forecast generation
 async function handleAsyncForecastGeneration(buId) {
+  console.log("[OFG.INBOUND] Handling async forecast generation");
   const topics = ["shorttermforecasts.generate"];
 
   function onSubscriptionSuccess() {
     console.log(
-      "[OFG] Successfully subscribed to forecast generate notifications"
+      "[OFG.INBOUND] Successfully subscribed to forecast generate notifications"
     );
   }
 
-  const generateNotifications = new NotificationHandler(
-    topics,
-    buId,
-    onSubscriptionSuccess,
-    handleInboundForecastNotification
-  );
+  try {
+    let generateNotifications = new NotificationHandler(
+      topics,
+      buId,
+      onSubscriptionSuccess,
+      handleInboundForecastNotification
+    );
 
-  generateNotifications.connect();
-  generateNotifications.subscribeToNotifications();
+    generateNotifications.connect();
+    generateNotifications.subscribeToNotifications();
+  } catch (error) {
+    console.error(
+      "[OFG.INBOUND] Error occurred while subscribing to notifications:",
+      error
+    );
+    throw new Error("Inbound forecast generation failed: " + error.message);
+  }
 
   return new Promise((resolve, reject) => {
     const handleComplete = (event) => {
@@ -127,13 +136,18 @@ async function handleAsyncForecastGeneration(buId) {
 
 // Handle the inbound forecast notification
 async function handleInboundForecastNotification(notification) {
-  console.debug("[OFG] Message from server: ", notification);
+  console.log(
+    "[OFG.INBOUND] Handling inbound forecast notification",
+    notification
+  );
   if (
     notification.eventBody &&
     notification.eventBody.operationId === generateOperationId
   ) {
     const status = notification.eventBody.status;
-    console.log(`[OFG] Generate inbound forecast status updated <${status}>`);
+    console.log(
+      `[OFG.INBOUND] Generate inbound forecast status updated <${status}>`
+    );
 
     if (status === "Complete") {
       const forecastId = notification.eventBody.result.id;
@@ -153,10 +167,8 @@ async function handleInboundForecastNotification(notification) {
 
 // Function to transform and load inbound forecast data
 async function transformAndLoadInboundForecast(inboundFcData) {
+  console.log("[OFG.INBOUND] Transforming and loading inbound forecast data");
   const weekStart = applicationState.userInputs.forecastParameters.weekStart;
-
-  // Add inbound forecast data to generatedForecast if pgId not already present
-  console.log("[OFG] Merging inbound forecast data with completed forecast");
 
   // Process each planning group in inbound forecast data
   inboundFcData.result.planningGroups.forEach((pg) => {
@@ -211,7 +223,7 @@ async function transformAndLoadInboundForecast(inboundFcData) {
 
 // Primary function to generate the inbound forecast
 export async function generateInboundForecast() {
-  console.log("[OFG] Initiating inbound forecast generation");
+  console.info("[OFG.INBOUND] Initiating inbound forecast generation");
 
   const buId = applicationState.userInputs.businessUnit.id;
   const weekStart = applicationState.userInputs.forecastParameters.weekStart;
@@ -222,7 +234,8 @@ export async function generateInboundForecast() {
   if (testMode) {
     const inboundForecastData = await getInboundForecastData();
     console.log(
-      "[OFG] Forecast data loaded from test data",
+      "%c[OFG.INBOUND] Forecast data loaded from test data",
+      "color: red",
       inboundForecastData
     );
     await transformAndLoadInboundForecast(inboundForecastData);
@@ -244,7 +257,7 @@ export async function generateInboundForecast() {
     const inboundForecastData = await getInboundForecastData(forecastId);
     await transformAndLoadInboundForecast(inboundForecastData);
     console.log(
-      "[OFG] Inbound forecast generation complete",
+      "[OFG.INBOUND] Inbound forecast generation complete",
       inboundForecastData
     );
     return inboundForecastData;
@@ -253,7 +266,7 @@ export async function generateInboundForecast() {
     return handleAsyncForecastGeneration(buId);
   } else {
     console.error(
-      "[OFG] Inbound forecast generation failed with initial status: ",
+      "[OFG.INBOUND] Inbound forecast generation failed with initial status: ",
       generateResponse
     );
     throw new Error("Inbound forecast generation failed");
@@ -263,7 +276,7 @@ export async function generateInboundForecast() {
 // Function to delete the inbound forecast
 export function deleteInboundForecast() {
   console.log(
-    `[OFG] Deleting inbound forecast with id: ${applicationConfig.inbound.inboundForecastId}`
+    `[OFG.INBOUND] Deleting inbound forecast with id: ${applicationConfig.inbound.inboundForecastId}`
   );
 
   const buId = applicationState.userInputs.businessUnit.id;
@@ -272,7 +285,9 @@ export function deleteInboundForecast() {
 
   // Return if forecast ID is not set
   if (!forecastId) {
-    console.warn("[OFG] Inbound forecast ID not set. Skipping deletion");
+    console.warn(
+      "[OFG.INBOUND] Inbound forecast ID not set. Skipping deletion"
+    );
     return;
   }
 
@@ -291,11 +306,14 @@ export function deleteInboundForecast() {
       forecastId
     );
   } catch (error) {
-    console.error("[OFG] Inbound forecast deletion failed!", error);
-    throw error;
+    console.error("[OFG.INBOUND] Inbound forecast deletion failed!", error);
+    alert(
+      "An error occurred while deleting the inbound forecast. Please delete manually via UI."
+    );
+    return;
   }
 
   // Reset the forecast ID
   applicationConfig.inbound.inboundForecastId = null;
-  console.log("[OFG] Inbound forecast deleted", delResponse);
+  console.log("[OFG.INBOUND] Inbound forecast deleted", delResponse);
 }

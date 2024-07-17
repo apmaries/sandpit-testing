@@ -21,7 +21,7 @@ export async function queryBuilder() {
   const timeZone = applicationState.userInputs.businessUnit.settings.timeZone;
 
   // Log to console
-  console.log(`[OFG] Query body builder initiated`);
+  console.info("[OFG.QUERY] Query body builder initiated");
 
   // Define predicates array
   let clausePredicates = [];
@@ -42,7 +42,7 @@ export async function queryBuilder() {
     } else {
       if (!cpId) {
         console.warn(
-          `[OFG] [${pgName}] Skipping query on inbound planning group`,
+          `[OFG.QUERY] [${pgName}] Skipping query on inbound planning group`,
           pg
         );
         pg.metadata.forecastMode = "inbound";
@@ -52,7 +52,7 @@ export async function queryBuilder() {
         };
       } else if (!numContacts || Number(numContacts) <= 0) {
         console.warn(
-          `[OFG] [${pgName}] Skipping query with 0 forecast contacts`,
+          `[OFG.QUERY] [${pgName}] Skipping query with 0 forecast contacts`,
           pg
         );
         pg.metadata.forecastMode = "outbound";
@@ -61,7 +61,10 @@ export async function queryBuilder() {
           reason: "Zero forecast outbound contacts",
         };
       } else {
-        console.warn(`[OFG] [${pgName}] Skipping query with invalid data`, pg);
+        console.warn(
+          `[OFG.QUERY] [${pgName}] Skipping query with invalid data`,
+          pg
+        );
         pg.metadata.forecastStatus = {
           isForecast: false,
           reason: "Invalid data",
@@ -77,25 +80,25 @@ export async function queryBuilder() {
 
   // Define query body
   const queryBody = {
-    "filter": {
-      "type": "and",
-      "clauses": [
+    filter: {
+      type: "and",
+      clauses: [
         {
-          "type": "or",
-          "predicates": clausePredicates,
+          type: "or",
+          predicates: clausePredicates,
         },
       ],
-      "predicates": [{ "dimension": "mediaType", "value": "voice" }],
+      predicates: [{ dimension: "mediaType", value: "voice" }],
     },
-    "metrics": ["nOutboundAttempted", "nOutboundConnected", "tHandle"],
-    "groupBy": ["outboundCampaignId"],
-    "granularity": "PT15M",
-    "interval": "",
-    "timeZone": timeZone,
+    metrics: ["nOutboundAttempted", "nOutboundConnected", "tHandle"],
+    groupBy: ["outboundCampaignId"],
+    granularity: "PT15M",
+    interval: "",
+    timeZone: timeZone,
   };
 
   // Return query body
-  console.debug("[OFG] Query body: ", queryBody);
+  console.debug("[OFG.QUERY] Query body: ", queryBody);
   return queryBody;
 }
 
@@ -109,7 +112,7 @@ export async function intervalBuilder() {
     applicationState.userInputs.businessUnit.settings.startDayOfWeek;
 
   // Log to console
-  console.log(`[OFG] Query interval builder initiated`);
+  console.info("[OFG.QUERY] Query interval builder initiated");
 
   // Define arrays
   let intervals = [];
@@ -152,13 +155,13 @@ export async function intervalBuilder() {
   }
 
   // Return intervals array
-  console.debug("[OFG] Intervals: ", intervals);
+  console.debug("[OFG.QUERY] Intervals: ", intervals);
   return intervals;
 }
 
 // Function to execute queries
 export async function executeQueries(body, intervals) {
-  console.log(`[OFG] Executing queries`);
+  console.info("[OFG.QUERY] Executing queries");
   let results = [];
 
   // Function to run query
@@ -169,43 +172,43 @@ export async function executeQueries(body, intervals) {
       );
       return queryResult.results; // Return the results
     } catch (error) {
-      console.error("[OFG] Error getting query results!", error);
+      console.error("[OFG.QUERY] Error getting query results!", error);
       throw error;
     }
   }
 
   if (testMode) {
-    console.log(
-      "[OFG] Test mode enabled. Static data will be used for forecast generation"
+    console.info(
+      "[OFG.QUERY] Test mode enabled. Static data will be used for forecast generation"
     );
 
     try {
       results = await t_capi.getOutboundConversationsAggregates();
     } catch (error) {
-      console.error("[OFG] Test data retrieval failed!", error);
+      console.error("[OFG.QUERY] Test data retrieval failed!", error);
       throw error;
     }
 
     return results.results;
   } else {
-    console.log("[OFG] Query execution initiated");
+    console.info("[OFG.QUERY] Query execution initiated");
 
     // Loop through intervals and execute queries
     for (let i = 0; i < intervals.length; i++) {
-      console.debug(`[OFG] Executing query for interval ${i + 1}`);
+      console.debug(`[OFG.QUERY] Executing query for interval ${i + 1}`);
       body.interval = intervals[i];
-      let queryResults = runQuery(body);
+      let queryResults = await runQuery(body);
       if (queryResults.length > 0) {
         results.push(...queryResults);
       } else {
-        console.warn(`[OFG] No results found for interval ${i + 1}`);
+        console.warn(`[OFG.QUERY] No results found for interval ${i + 1}`);
       }
     }
   }
 
   // Special handling for when results is empty
   if (results.length === 0) {
-    console.warn("[OFG] No results found");
+    console.warn("[OFG.QUERY] No results found");
 
     // Get test results for testing in prod
     results = await fetch(
@@ -214,18 +217,18 @@ export async function executeQueries(body, intervals) {
       .then((response) => response.json())
       .then((data) => data.results)
       .catch((error) =>
-        console.error("[OFG] Error fetching test data: ", error)
+        console.error("[OFG.QUERY] Error fetching test data: ", error)
       );
 
-    console.log("[OFG] Test data in prod retrieval successful");
+    console.info("[OFG.QUERY] Test data in prod retrieval successful");
   } else {
     // Get forecast planning groups from applicationState
-    const forcastPlanningGroups =
+    const forecastPlanningGroups =
       applicationState.forecastOutputs.generatedForecast;
 
-    // Return only data for campaigns in forcastPlanningGroups where isForecast is true
+    // Return only data for campaigns in forecastPlanningGroups where isForecast is true
     results = results.filter((result) => {
-      return forcastPlanningGroups.some((pg) => {
+      return forecastPlanningGroups.some((pg) => {
         return (
           pg.campaign.id === result.group.outboundCampaignId &&
           pg.metadata.forecastStatus.isForecast
@@ -233,7 +236,8 @@ export async function executeQueries(body, intervals) {
       });
     });
   }
+
   // Return results
-  console.debug("[OFG] Query results: ", results);
+  console.debug("[OFG.QUERY] Query results: ", results);
   return results;
 }

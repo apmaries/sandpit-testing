@@ -1,31 +1,23 @@
 // importHandler.js
 // Description: Module to handle the import of forecast data
 
+// Shared state modules
+import { applicationConfig } from "../core/configManager.js";
+
 // API instances
 import { wapi } from "../app.js";
-import { applicationConfig } from "../core/configManager.js";
-import { t_wapi } from "../core/testManager.js";
 
 // App modules
 import { calculateWeightedAverages } from "./numberHandler.js";
 
+// Utility modules
+import { roundToTwo } from "../utils/numberUtils.js";
+import { gzipEncode } from "../utils/compressionUtils.js";
+
 // Function to prepare the forecast import body
 export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
-  console.log("[OFG] Preparing Forecast Import Body and encoding to gzip");
+  console.log("[OFG.IMPORT] Preparing forecast import body");
 
-  // Function to gzip encode the body
-  function gzipEncode(body) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(JSON.stringify(body));
-    return pako.gzip(data);
-  }
-
-  // Function to round the values to 2 decimal places
-  function roundToTwo(num) {
-    return +(Math.round(num + "e+2") + "e-2");
-  }
-
-  // Build the body for the forecast import
   let planningGroupsArray = [];
 
   for (let i = 0; i < groups.length; i++) {
@@ -34,10 +26,14 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     const forecastData = group.forecastData;
 
     if (!forecastData) {
-      console.warn(`[OFG] [${planningGroup.name}] No forecast data found`);
+      console.warn(
+        `[OFG.IMPORT] [${planningGroup.name}] No forecast data found`
+      );
       continue;
     }
-    console.debug(`[OFG] [${planningGroup.name}] Processing forecast data`);
+    console.debug(
+      `[OFG.IMPORT] [${planningGroup.name}] Processing forecast data`
+    );
 
     // Reorder arrays to align to BU start day of week
     const nContacts = forecastData.nContacts;
@@ -100,12 +96,13 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     "planningGroups": planningGroupsArray,
   };
 
-  // downloadJson(fcImportBody, "fcImportBody");
-
+  // Gzip encode the body
   let fcImportGzip = gzipEncode(fcImportBody);
   let contentLengthBytes = fcImportGzip.length;
 
-  console.log(`[OFG] Body encoded to gzip with length: ${contentLengthBytes}`);
+  console.log(
+    `[OFG.IMPORT] Body encoded to gzip with length: ${contentLengthBytes}`
+  );
 
   return [fcImportBody, fcImportGzip, contentLengthBytes];
 }
@@ -116,7 +113,7 @@ export async function generateUrl(
   weekDateId,
   contentLengthBytes
 ) {
-  console.log("[OFG] Generating URL for import");
+  console.log("[OFG.IMPORT] Generating import URL");
 
   let importUrl = null;
   try {
@@ -129,7 +126,7 @@ export async function generateUrl(
         }
       );
   } catch (error) {
-    console.error("[OFG] Error generating import URL: ", error);
+    console.error("[OFG.IMPORT] Error generating import URL: ", error);
     throw error;
   }
 
@@ -138,7 +135,7 @@ export async function generateUrl(
 
 // Function to invoke server-side GCF to upload the forecast data
 export async function invokeGCF(uploadAttributes, forecastData) {
-  console.log("[OFG] Invoking GCF");
+  console.log("[OFG.IMPORT] Invoking GCF");
   // Get client id from session storage
   const clientId = sessionStorage.getItem("oauth_client");
 
@@ -166,17 +163,17 @@ export async function invokeGCF(uploadAttributes, forecastData) {
   });
 
   if (!response.ok) {
-    console.error(`[OFG] GCF HTTP error! status: ${response.status}`);
+    console.error(`[OFG.IMPORT] GCF HTTP error! status: ${response.status}`);
     return null;
   }
 
-  console.log(`[OFG] GCF response status: `, response.status);
+  console.log(`[OFG.IMPORT] GCF response status: `, response.status);
   return response.status;
 }
 
 // Function to import the forecast data
 export async function importFc(businessUnitId, weekDateId, uploadKey) {
-  console.log("[OFG] Importing forecast");
+  console.log("[OFG.IMPORT] Importing forecast");
 
   let importResponse = null;
   try {
@@ -189,11 +186,10 @@ export async function importFc(businessUnitId, weekDateId, uploadKey) {
         }
       );
   } catch (error) {
-    console.error("[OFG] Error importing forecast: ", error);
+    console.error("[OFG.IMPORT] Error importing forecast: ", error);
     throw error;
   }
 
-  console.debug("[OFG] Import response: ", importResponse);
-  console.log("[OFG] Forecast import complete");
+  console.debug("[OFG.IMPORT] Import response: ", importResponse);
   return importResponse;
 }

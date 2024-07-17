@@ -1,4 +1,4 @@
-// main.js
+// forecastHandler.js
 // Description: Main application module
 
 // Shared state modules
@@ -6,7 +6,6 @@ import { applicationConfig } from "../core/configManager.js";
 import { applicationState } from "../core/stateManager.js";
 
 // App modules
-import { loadPageOne } from "./pageHandler.js";
 import {
   queryBuilder,
   intervalBuilder,
@@ -27,6 +26,7 @@ import {
   invokeGCF,
   importFc,
 } from "./importHandler.js";
+import { NotificationHandler } from "./notificationHandler.js";
 
 // Utility modules
 import { updateLoadingMessage, populateMessage } from "../utils/domUtils.js";
@@ -35,44 +35,26 @@ import { updateLoadingMessage, populateMessage } from "../utils/domUtils.js";
 ("use strict");
 const testMode = applicationConfig.testMode;
 
-export function runApp() {
-  console.log("[OFG] Initializing app");
-
-  // Add the logic for the rest of your app here.
-  loadPageOne();
-}
-
 // Generate outbound forecast data
 export async function generateForecast() {
-  console.info("[OFG] Forecast generation initiated");
+  console.info("[OFG.GENERATE] Generation started");
 
-  // Create each planning group in the applicationState.forecastOutputs.generatedForecast object
   applicationState.forecastOutputs.generatedForecast =
-    applicationState.userInputs.planningGroups.map((pg) => {
-      let obj = {
-        planningGroup: { ...pg.planningGroup },
-        campaign: { ...pg.campaign },
-        queue: { ...pg.queue },
-        metadata: { numContacts: pg.numContacts },
-      };
-      return obj;
-      // historicalWeeks and forecastData will be added later by queryHandler
-    });
+    applicationState.userInputs.planningGroups.map((pg) => ({
+      planningGroup: { ...pg.planningGroup },
+      campaign: { ...pg.campaign },
+      queue: { ...pg.queue },
+      metadata: { numContacts: pg.numContacts },
+    }));
 
-  // Declare variables
   let queryResults = [];
 
-  // Functions start here
-
-  // Returns the ISO week of the date.
+  // Helper functions
   function getWeek(date) {
-    var dateCopy = new Date(date.getTime());
+    const dateCopy = new Date(date.getTime());
     dateCopy.setHours(0, 0, 0, 0);
-    // Thursday in current week decides the year.
     dateCopy.setDate(dateCopy.getDate() + 3 - ((dateCopy.getDay() + 6) % 7));
-    // January 4 is always in week 1.
-    var week1 = new Date(dateCopy.getFullYear(), 0, 4);
-    // Adjust to Thursday in week 1 and count number of weeks from date to week1.
+    const week1 = new Date(dateCopy.getFullYear(), 0, 4);
     return (
       1 +
       Math.round(
@@ -84,46 +66,40 @@ export async function generateForecast() {
     );
   }
 
-  // Returns the four-digit year corresponding to the ISO week of the date.
   function getWeekYear(date) {
-    var dateCopy = new Date(date.getTime());
+    const dateCopy = new Date(date.getTime());
     dateCopy.setDate(dateCopy.getDate() + 3 - ((dateCopy.getDay() + 6) % 7));
     return dateCopy.getFullYear();
   }
 
-  // Returns the year and week number in the format "YYYY-WW".
   function getYearWeek(date) {
-    var week = getWeek(date);
-    var year = getWeekYear(date);
-    // Pad the week number with a leading zero if necessary
-    var weekString = String(week).padStart(2, "0");
-    return `${year}-${weekString}`;
+    const week = getWeek(date);
+    const year = getWeekYear(date);
+    return `${year}-${String(week).padStart(2, "0")}`;
   }
 
-  // Process query results
   async function processQueryResults(results) {
-    console.log(`[OFG] Processing ${results.length} groups in query results`);
+    console.info(`[OFG.GENERATE] Processing ${results.length} query groups`);
     const generatedForecast =
       applicationState.forecastOutputs.generatedForecast;
 
-    // Loop through results and crunch numbers
-    for (let i = 0; i < results.length; i++) {
-      var resultsGrouping = results[i];
-      var group = resultsGrouping.group;
-      var data = resultsGrouping.data;
-      var campaignId = group.outboundCampaignId;
-
-      // Find matching planning group in applicationState.forecastOutputs.generatedForecast
-      var planningGroupIndex = generatedForecast.findIndex(
+    for (const resultsGrouping of results) {
+      const { group, data } = resultsGrouping;
+      const campaignId = group.outboundCampaignId;
+      const planningGroupIndex = generatedForecast.findIndex(
         (pg) => pg.campaign.id === campaignId
       );
 
-      // Create a baseWeekArray that contains 7 arrays of 96 zeros
-      var baseWeekArray = Array.from({ length: 7 }, () =>
+      if (planningGroupIndex === -1) {
+        console.warn(
+          `[OFG.GENERATE] Campaign ID ${campaignId} not found, skipping...`
+        );
+        continue;
+      }
+
+      const baseWeekArray = Array.from({ length: 7 }, () =>
         Array.from({ length: 96 }, () => 0)
       );
-
-      // Create a new week object
       let weekObj = {
         weekNumber: "",
         intradayValues: {
@@ -134,110 +110,59 @@ export async function generateForecast() {
         },
       };
 
-      // For each interval in the data, get the week number and add to the campaign object
-      for (let j = 0; j < data.length; j++) {
-        var interval = data[j].interval;
-        var metrics = data[j].metrics;
-
-        const [startString, _] = interval.split("/");
+      for (const { interval, metrics } of data) {
+        const [startString] = interval.split("/");
         const startDate = new Date(startString);
         const weekNumber = getYearWeek(startDate);
-
-        // Get weekday index from startDate
         const dayIndex = startDate.getDay();
+        const totalMinutes = startDate.getHours() * 60 + startDate.getMinutes();
+        const intervalIndex = Math.floor(totalMinutes / 15);
 
-        // Get interval index from startDate
-        const hours = startDate.getHours();
-        const minutes = startDate.getMinutes();
-        const totalMinutes = hours * 60 + minutes;
-        const intervalDuration = 15;
-        const intervalIndex = Math.floor(totalMinutes / intervalDuration);
-
-        // Skip processing if generatedForecast does not contain planningGroupIndex
-        if (planningGroupIndex === -1) {
-          console.warn(
-            `[OFG] Campaign id ${campaignId} not found in Planning Groups. Skipping...`
-          );
-          continue;
-        }
-
-        // Skip processing if weekNumber is not found (e.g. no contacts have been forecast for PG)
         const historicalWeeks =
           generatedForecast[planningGroupIndex].historicalWeeks;
-        if (!historicalWeeks) {
-          continue;
-        }
+        if (!historicalWeeks) continue;
 
-        // Add weekNumber to campaign object if it does not yet exist
-        var weekExists = historicalWeeks.some(
-          (week) => week.weekNumber === weekNumber
-        );
-        if (!weekExists) {
+        if (!historicalWeeks.some((week) => week.weekNumber === weekNumber)) {
           weekObj.weekNumber = weekNumber;
           historicalWeeks.push(weekObj);
         }
 
-        // loop through metrics and add to intradayValues
-        for (let k = 0; k < metrics.length; k++) {
-          var metric = metrics[k];
-          var metricName = metric.metric;
-
-          // nOuotboundAttempted
-          if (metricName === "nOutboundAttempted") {
-            var attempted = metric.stats.count;
-
-            // add nOutboundAttempted stat to intradayValues
+        for (const metric of metrics) {
+          if (metric.metric === "nOutboundAttempted") {
             weekObj.intradayValues.nAttempted[dayIndex][intervalIndex] +=
-              attempted;
+              metric.stats.count;
           }
-
-          // nOutboundConnected
-          if (metricName === "nOutboundConnected") {
-            var connected = metric.stats.count;
-
-            // add nOutboundConnected stat to intradayValues
+          if (metric.metric === "nOutboundConnected") {
             weekObj.intradayValues.nConnected[dayIndex][intervalIndex] +=
-              connected;
+              metric.stats.count;
           }
-
-          // tHandle
-          if (metricName === "tHandle") {
-            var tHandle = metric.stats.sum / 1000; // convert to seconds
-            var nHandled = metric.stats.count;
-
-            // add tHandle stats to intradayValues
-            weekObj.intradayValues.tHandle[dayIndex][intervalIndex] += tHandle;
+          if (metric.metric === "tHandle") {
+            weekObj.intradayValues.tHandle[dayIndex][intervalIndex] +=
+              metric.stats.sum / 1000;
             weekObj.intradayValues.nHandled[dayIndex][intervalIndex] +=
-              nHandled;
+              metric.stats.count;
           }
         }
       }
     }
-
     validateHistoricalData();
-
-    console.log("[OFG] Query results processed");
+    console.info("[OFG.GENERATE] Query results processed");
   }
 
-  // Validate and update PG's if no historical data is found
   function validateHistoricalData() {
+    console.debug("[OFG.GENERATE] Validating historical data");
     const generatedForecast =
       applicationState.forecastOutputs.generatedForecast;
 
-    for (let i = 0; i < generatedForecast.length; i++) {
-      const group = generatedForecast[i];
-      const pgName = group.planningGroup.name;
-      const forecastMode = group.metadata.forecastMode;
+    for (const group of generatedForecast) {
+      const { name } = group.planningGroup;
+      const { forecastMode } = group.metadata;
 
-      // Skip inbound planning groups
-      if (forecastMode === "inbound") {
-        continue;
-      }
+      if (forecastMode === "inbound") continue;
 
-      // Update metadata.forecastStatus if no historical data is found
       const historicalWeeks = group.historicalWeeks;
       if (!historicalWeeks || historicalWeeks.length === 0) {
-        console.warn(`[OFG] [${pgName}] No historical data found!`);
+        console.warn(`[OFG.GENERATE] No historical data for ${name}`);
         group.metadata.forecastStatus = {
           isForecast: false,
           reason: "No historical data",
@@ -246,237 +171,167 @@ export async function generateForecast() {
     }
   }
 
-  // Run forecast prep function on group
   async function runFunctionOnGroup(group, func, funcName, ...args) {
-    const pgName = group.planningGroup.name;
-    console.debug(`[OFG] [${pgName}] Running ${funcName}`);
+    const { name } = group.planningGroup;
+    console.debug(`[OFG.GENERATE] Running ${funcName} on ${name}`);
     try {
-      group = await func(group, ...args);
+      return await func(group, ...args);
     } catch (error) {
-      console.error(`[OFG] Error occurred while running ${funcName}:`, error);
+      console.error(`[OFG.GENERATE] Error in ${funcName} for ${name}:`, error);
     }
     return group;
   }
 
   async function prepareForecast() {
-    let functionsToRun = [
+    console.info("[OFG.GENERATE] Preparing forecast");
+    const functionsToRun = [
       { func: prepFcMetrics, name: "prepFcMetrics" },
       {
         func: generateAverages,
         name: "generateAverages",
         args: [applicationState.userInputs.forecastOptions.ignoreZeroes],
       },
-      {
-        func: applyContacts,
-        name: "applyContacts",
-      },
-      /* Removing this for now
-      {
-        func: resolveContactsAht,
-        name: "resolveContactsAht",
-        args: [resolveContactsAhtMode],
-      },*/
+      { func: applyContacts, name: "applyContacts" },
     ];
 
-    //
     const generatedForecast =
       applicationState.forecastOutputs.generatedForecast;
-    let fcPrepPromises = generatedForecast
-      .filter((group) => group.metadata.forecastStatus.isForecast === true)
+    const fcPrepPromises = generatedForecast
+      .filter((group) => group.metadata.forecastStatus.isForecast)
       .map(async (group) => {
-        const pgName = group.planningGroup.name;
-        console.log(`[OFG] [${pgName}] Preparing outbound forecast`);
-
-        for (let { func, name, args = [] } of functionsToRun) {
+        console.log(`[OFG.GENERATE] Processing ${group.planningGroup.name}`);
+        for (const { func, name, args = [] } of functionsToRun) {
           group = await runFunctionOnGroup(group, func, name, ...args);
         }
-
+        console.log(`[OFG.GENERATE] Completed ${group.planningGroup.name}`);
         return group;
       });
 
-    return Promise.all(fcPrepPromises).then(async (completedPgForecast) => {
-      console.log("[OFG] Outbound Planning Groups have been processed.");
-      return completedPgForecast;
+    return Promise.all(fcPrepPromises).then(() => {
+      console.info("[OFG.GENERATE] All groups processed");
     });
   }
-  // Functions end here
 
-  // Main generate forecast code starts here
-
-  // Execute queryBuilder after queueCampaignMatcher complete
+  // Main forecast generation logic
   updateLoadingMessage("generate-loading-message", "Building queries");
-  var queryBody = await queryBuilder();
+  const queryBody = await queryBuilder();
 
   updateLoadingMessage(
     "generate-loading-message",
     "Generating query intervals"
   );
-  var intervals = await intervalBuilder();
+  const intervals = await intervalBuilder();
 
-  // Execute historical data queries
   updateLoadingMessage("generate-loading-message", "Executing queries");
   queryResults = await executeQueries(queryBody, intervals);
 
-  // Check if query results are empty
   if (queryResults.length === 0) {
-    console.error("[OFG] Query results are empty");
-    const reason = "No historical data found :(";
+    const reason = "No historical data found";
+    console.error("[OFG.GENERATE] " + reason);
     populateMessage("alert-danger", "Forecast generation failed!", reason);
-
     throw new Error(reason);
   }
 
-  // Process query results
   updateLoadingMessage("generate-loading-message", "Processing query results");
   await processQueryResults(queryResults);
 
-  // Prepare forecast
   updateLoadingMessage("generate-loading-message", "Preparing forecast");
   await prepareForecast();
 
-  // Generate inbound forecast if required
   if (applicationState.userInputs.forecastOptions.generateInbound) {
     updateLoadingMessage(
       "generate-loading-message",
       "Generating inbound forecast"
     );
-
-    // Update inbound planning groups in generatedForecast with metadata.forecastStatus.isForecast = true
     applicationState.forecastOutputs.generatedForecast.forEach((pg) => {
-      const forecastMode = pg.metadata.forecastMode;
-      if (forecastMode === "inbound") {
+      if (pg.metadata.forecastMode === "inbound") {
         pg.metadata.forecastStatus = { isForecast: true };
         delete pg.metadata.forecastStatus.reason;
       }
     });
 
-    await generateInboundForecast();
-    if (!applicationState.userInputs.forecastOptions.retainInbound) {
-      deleteInboundForecast();
+    try {
+      await generateInboundForecast();
+      if (!applicationState.userInputs.forecastOptions.retainInbound) {
+        deleteInboundForecast();
+      }
+      console.info("[OFG.GENERATE] Inbound groups processed");
+    } catch (error) {
+      console.error(
+        "[OFG.GENERATE] Inbound forecast generation failed:",
+        error
+      );
+      throw new Error("Inbound forecast generation failed: " + error.message);
     }
-
-    console.log("[OFG] Inbound Planning Groups have been processed.");
   }
-  return;
 }
 
 // Import forecast to GC
 export async function importForecast() {
-  console.info("[OFG] Forecast import initiated");
+  console.info("[OFG.IMPORT] Forecast import started");
 
-  const buId = applicationState.userInputs.businessUnit.id;
-  const weekStart = applicationState.userInputs.forecastParameters.weekStart;
+  const { id: buId } = applicationState.userInputs.businessUnit;
+  const { weekStart, description } =
+    applicationState.userInputs.forecastParameters;
   const startDayOfWeek =
     applicationState.userInputs.businessUnit.settings.startDayOfWeek;
-  const description =
-    applicationState.userInputs.forecastParameters.description;
 
-  // Prepare forecast
   updateLoadingMessage("import-loading-message", "Preparing forecast");
-  let [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
+  const [fcImportBody, importGzip, contentLength] = await prepFcImportBody(
     applicationState.forecastOutputs.modifiedForecast,
     startDayOfWeek,
     description
   );
 
-  // Log the forecast import body
-  console.debug("[OFG] Forecast import body:", fcImportBody);
+  const fcImportUrl = generateUrl(buId, weekStart);
+  updateLoadingMessage("import-loading-message", "Invoking GCF");
 
-  if (testMode) {
-    console.log("[OFG] Test mode enabled. Skipping import.");
-    populateMessage("alert-success", "Forecast tested successfully!", null);
-  } else {
-    // Declare variables
-    let importOperationId = null;
-
-    let topics = ["shorttermforecasts.import"];
-
-    let importNotifications = new NotificationHandler(
-      topics,
-      buId,
-      runImport,
-      handleImportNotification
+  try {
+    const importResponse = await invokeGCF(
+      fcImportUrl,
+      importGzip,
+      contentLength
     );
-    importNotifications.connect();
-    importNotifications.subscribeToNotifications();
+    if (importResponse.status === 200) {
+      console.info("[OFG.IMPORT] Forecast import successful");
 
-    // Main import function
-    async function runImport() {
-      // Generate URL for upload
-      updateLoadingMessage(
-        "import-loading-message",
-        "Generating URL for upload"
-      );
-      let uploadAttributes = await generateUrl(buId, weekStart, contentLength);
+      const runImport = async () => {
+        updateLoadingMessage("import-loading-message", "Running import");
+        await importFc(importResponse, fcImportBody);
+      };
 
-      // Upload forecast
-      updateLoadingMessage("import-loading-message", "Uploading forecast");
-      /* GCF function being used until CORS blocking removed */
-      // importFc(buId, globalWeekStart, importGzip, uploadAttributes);
-      const uploadResponse = await invokeGCF(uploadAttributes, fcImportBody);
+      const handleImportNotification = (message) => {
+        console.log("[OFG.IMPORT] Notification received:", message);
+        updateLoadingMessage("import-loading-message", message.status);
+      };
 
-      // Check if upload was successful
-      if (uploadResponse === 200) {
-        const uploadKey = uploadAttributes.uploadKey;
-        console.log(
-          "[OFG] Forecast uploaded successfully! Calling import method."
+      try {
+        const importNotifications = new NotificationHandler(
+          importResponse.topics,
+          buId,
+          runImport,
+          handleImportNotification
         );
-
-        // Import forecast
-        updateLoadingMessage("import-loading-message", "Importing forecast");
-        const importResponse = await importFc(buId, weekStart, uploadKey);
-
-        // Check if operation id is in response
-        if (importResponse) {
-          importOperationId = importResponse.operationId;
-          console.log(
-            `[OFG] Forecast import initiated. Operation ID: ${importOperationId}`
-          );
-
-          // Assign operationId to global importOperationId variable
-          importOperationId = importResponse.operationId;
-        } else {
-          console.error("[OFG] Forecast import failed.");
-        }
+        importNotifications.connect();
+        importNotifications.subscribeToNotifications();
+      } catch (error) {
+        console.error(
+          "[OFG.IMPORT] Error subscribing to notifications:",
+          error
+        );
+        throw new Error("Subscription error: " + error.message);
       }
+    } else {
+      const reason = importResponse.data.reason;
+      console.error("[OFG.IMPORT] Forecast import failed:", reason);
+      populateMessage("alert-danger", "Forecast import failed!", reason);
     }
-
-    // Handle notification messages
-    async function handleImportNotification(notification) {
-      if (
-        notification.eventBody &&
-        notification.eventBody.operationId === importOperationId
-      ) {
-        const status = notification.eventBody.status;
-        console.log(`[OFG] Forecast import status updated <${status}>`);
-
-        if (status === "Complete") {
-          const forecastId = notification.eventBody.result.id;
-          applicationConfig.forecastId = forecastId;
-
-          console.log(
-            `[OFG] Forecast import completed successfully! ID: ${forecastId}`
-          );
-
-          // Insert div to id="results-container" with success message
-          populateMessage(
-            "alert-success",
-            "Forecast imported successfully!",
-            null
-          );
-        } else if (status === "Error" || status === "Canceled") {
-          console.error("[OFG] Forecast import failed.", notification);
-          // toastUser("Forecast import failed!");
-          const userMessage = notification.metadata.errorInfo.userMessage;
-
-          // Insert div to id="results-container" with error message
-          populateMessage(
-            "alert-danger",
-            "Forecast import failed!",
-            userMessage
-          );
-        }
-      }
-    }
+  } catch (error) {
+    console.error("[OFG.IMPORT] Forecast import error:", error);
+    throw new Error("Forecast import error: " + error.message);
   }
+}
+
+export function initializeApp() {
+  console.log("[APP] Application initialized");
 }

@@ -1,15 +1,15 @@
 // app.js
 // Description: The main entry point file that initializes the app and starts the main logic.
 
-// Main module
-import { runApp } from "./modules/forecastHandler.js";
-
 // Shared state modules
 import { applicationConfig } from "./core/configManager.js";
 
 // Core modules
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
+
+// App modules
+import { loadPageOne } from "./modules/pageHandler.js";
 
 // Global variables
 ("use strict");
@@ -78,3 +78,8 @@ export async function startApp() {
 }
 
 export { capi, napi, oapi, tapi, uapi, wapi };
+
+function runApp() {
+  console.log("[OFG] Initializing application");
+  loadPageOne();
+}

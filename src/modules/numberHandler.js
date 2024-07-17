@@ -155,7 +155,7 @@ async function distributeData(data, distribution) {
   let distributedData = [];
   let sumOfDistribution = distribution.reduce((a, b) => {
     if (typeof a !== "number" || typeof b !== "number") {
-      throw new Error(`[OFG] Invalid distribution value: ${a} or ${b}`);
+      throw new Error(`[OFG.NUMBERS] Invalid distribution value: ${a} or ${b}`);
     }
     return a + b;
   }, 0);
@@ -166,7 +166,9 @@ async function distributeData(data, distribution) {
 
   for (let i = 0; i < distribution.length; i++) {
     if (typeof distribution[i] !== "number") {
-      throw new Error(`[OFG] Invalid distribution value: ${distribution[i]}`);
+      throw new Error(
+        `[OFG.NUMBERS] Invalid distribution value: ${distribution[i]}`
+      );
     }
     distributedData.push((data * distribution[i]) / sumOfDistribution);
   }
@@ -214,7 +216,7 @@ export async function prepFcMetrics(group) {
     // Check if the week contains intradayValues
     if (!historicalWeeks[w] || !historicalWeeks[w].intradayValues) {
       console.error(
-        `[OFG] [${pgName}] Intraday values are required in the input object`,
+        `[OFG.NUMBERS] [${pgName}] Intraday values are required in the input object`,
         group
       );
       return;
@@ -236,7 +238,7 @@ export async function prepFcMetrics(group) {
     await intradayPromise;
   }
 
-  console.debug(`[OFG] [${pgName}] Contact rates calcuated`);
+  console.debug(`[OFG.NUMBERS] [${pgName}] Contact rates calcuated`);
 
   // Return the processed group
   return group;
@@ -301,7 +303,7 @@ export async function generateAverages(group, ignoreZeroes = true) {
     }
   });
 
-  console.debug(`[OFG] [${campaignPgName}] Averages generated`);
+  console.debug(`[OFG.NUMBERS] [${campaignPgName}] Averages generated`);
 
   return group;
 }
@@ -321,7 +323,7 @@ export async function applyContacts(group) {
   );
 
   console.debug(
-    `[OFG] [${campaignPgName}] Applied ${campaignContacts} contacts`
+    `[OFG.NUMBERS] [${campaignPgName}] Applied ${campaignContacts} contacts`
   );
 
   return group;
@@ -334,7 +336,9 @@ export async function resolveContactsAht(campaignData, resolveContactsAht) {
   const campaignPgName = campaignData.planningGroup.name;
 
   if (resolveContactsAht) {
-    console.log(`[OFG] [${campaignPgName}] Resolving AHT values for contacts.`);
+    console.log(
+      `[OFG.NUMBERS] [${campaignPgName}] Resolving AHT values for contacts.`
+    );
     const nContacts = campaignData.fcData.nContacts;
     let tHandle = campaignData.fcData.tHandle;
 
@@ -349,7 +353,7 @@ export async function resolveContactsAht(campaignData, resolveContactsAht) {
           (tHandle[i][j] === 0 || tHandle[i][j] === undefined)
         ) {
           console.debug(
-            `[OFG] [${campaignPgName}] Day ${i}, interval ${j} has contacts but no AHT value. Populating daily AHT value of ${dailyTotals[i]}.`
+            `[OFG.NUMBERS] [${campaignPgName}] Day ${i}, interval ${j} has contacts but no AHT value. Populating daily AHT value of ${dailyTotals[i]}.`
           );
           tHandle[i][j] = dailyTotals[i];
         }
@@ -361,7 +365,7 @@ export async function resolveContactsAht(campaignData, resolveContactsAht) {
       day.forEach((interval, j) => {
         if (interval === 0 && tHandle[i][j] !== 0) {
           console.debug(
-            `[OFG] [${campaignPgName}] Day ${i}, interval ${j} has 0 contacts but AHT of ${tHandle[i][j]}. Setting AHT to 0.`
+            `[OFG.NUMBERS] [${campaignPgName}] Day ${i}, interval ${j} has 0 contacts but AHT of ${tHandle[i][j]}. Setting AHT to 0.`
           );
           tHandle[i][j] = 0;
         }
@@ -377,7 +381,7 @@ export async function resolveContactsAht(campaignData, resolveContactsAht) {
   }
 
   console.debug(
-    `[OFG] [${campaignPgName}] AHT resolved to contacts.`,
+    `[OFG.NUMBERS] [${campaignPgName}] AHT resolved to contacts.`,
     JSON.parse(JSON.stringify(campaignData))
   );
 

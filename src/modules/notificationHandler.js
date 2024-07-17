@@ -4,9 +4,6 @@
 // Shared state modules
 import { applicationConfig } from "../core/configManager.js";
 
-// App modules
-//import { loadPageFour } from "../modules/pageHandler.js";
-
 // Global variables
 ("use strict");
 const testMode = applicationConfig.testMode;
@@ -20,25 +17,9 @@ export class NotificationHandler {
     this.uri = notificationsUri;
     this.id = notificationsId;
 
-    let resultsContainer = document.getElementById("import-results-container");
-    let message = document.createElement("div");
-
     if ((!this.uri || !this.id) && !testMode) {
       alert("An error occurred. Please refresh the page and try again.");
-      loadPageFour();
-
-      // Insert div to id="import-results-container" with error message
-      message.className = "alert-danger";
-      message.innerHTML =
-        "Something went wrong :(<br>Please refresh the page and try again.";
-      resultsContainer.appendChild(message);
-
-      const reason = document.createElement("div");
-
-      reason.innerHTML = "Missing required session storage items";
-      resultsContainer.appendChild(reason);
-
-      throw new Error("Missing required session storage items");
+      throw new Error("Notifications channel URI and ID not defined");
     }
 
     this.topics = topics;
@@ -75,7 +56,7 @@ export class NotificationHandler {
     console.info("[OFG] Subscribing to forecast notifications");
 
     if (testMode) {
-      console.log("[OFG] Skipping subscription in test mode");
+      console.log("%c[OFG] Skipping subscription in test mode", "color: red");
       return;
     } else {
       let apiInstance = new window.ofg.PlatformClient.NotificationsApi();
