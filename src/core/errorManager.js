@@ -23,6 +23,6 @@ window.onerror = function (message, source, lineno, colno, error) {
 };
 
 export function handleError(logMessage, genericMessage, specificMessage) {
-  console.error(logMessage, genericMessage);
+  console.error(`${logMessage}: ${specificMessage}`);
   throw new Error(`${genericMessage}|${specificMessage}`);
 }
