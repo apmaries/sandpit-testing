@@ -153,7 +153,7 @@ export async function generateUrl(
 
 // Function to invoke server-side GCF to upload the forecast data
 export async function invokeGCF(uploadAttributes, forecastData) {
-  console.info("[OFG.IMPORT] Invoking GCF");
+  console.info("[OFG.IMPORT] Uploading file to URL");
   try {
     // Get client id from session storage
     const clientId = sessionStorage.getItem("gc_clientId");
@@ -187,9 +187,7 @@ export async function invokeGCF(uploadAttributes, forecastData) {
 
     if (response.status !== 200) {
       console.error("[OFG.IMPORT] GCF response error: ", response);
-      throw new Error(
-        `Message: ${response.message} Status code: ${response.status}`
-      );
+      throw new Error(`${response.message} Status code: ${response.status}`);
     }
 
     return response.status;
