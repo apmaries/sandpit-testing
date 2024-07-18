@@ -192,7 +192,7 @@ export async function invokeGCF(uploadAttributes, forecastData) {
     }
   } catch (error) {
     console.error(`[OFG.IMPORT] ${error}`);
-    throw error;
+    throw new Error(error);
   }
 }
 
