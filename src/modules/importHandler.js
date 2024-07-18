@@ -183,16 +183,16 @@ export async function invokeGCF(uploadAttributes, forecastData) {
       body: JSON.stringify(data),
     });
 
-    console.log(`[OFG.IMPORT] GCF response status: `, response.status);
+    console.log(`[OFG.IMPORT] Upload response status: `, response.status);
 
     if (response.status !== 200) {
-      console.error("[OFG.IMPORT] GCF response error: ", response);
+      console.error("[OFG.IMPORT] Upload response error: ", response);
       throw new Error(`${response.message} Status code: ${response.status}`);
     }
 
     return response.status;
   } catch (error) {
-    console.error("[OFG.IMPORT] Error invoking GCF: ", error);
+    console.error("[OFG.IMPORT] Error uploading file: ", error);
     throw error;
   }
 }
