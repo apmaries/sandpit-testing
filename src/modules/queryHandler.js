@@ -202,6 +202,7 @@ export async function executeQueries(body, intervals) {
   } else {
     console.info("[OFG.QUERY] Query execution initiated");
 
+    /*
     // Loop through intervals and execute queries
     for (let i = 0; i < intervals.length; i++) {
       console.debug(`[OFG.QUERY] Executing query for interval ${i + 1}`);
@@ -213,6 +214,29 @@ export async function executeQueries(body, intervals) {
         console.warn(`[OFG.QUERY] No results found for interval ${i + 1}`);
       }
     }
+    */
+
+    // Create an array to hold all the promises
+    const queryPromises = intervals.map((interval, index) => {
+      console.debug(`[OFG.QUERY] Preparing query for interval ${index + 1}`);
+      body.interval = interval;
+      return runQuery(body).then((queryResults) => {
+        if (queryResults.length > 0) {
+          return queryResults;
+        } else {
+          console.warn(
+            `[OFG.QUERY] No results found for interval ${index + 1}`
+          );
+          return [];
+        }
+      });
+    });
+
+    // Use Promise.all to wait for all queries to complete
+    Promise.all(queryPromises).then((allResults) => {
+      const results = allResults.flat(); // Flatten the array of arrays
+      // Process results here
+    });
   }
 
   // Special handling for when results is empty
