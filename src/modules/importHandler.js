@@ -158,9 +158,9 @@ export async function invokeGCF(uploadAttributes, forecastData) {
     // Get client id from session storage
     const clientId = sessionStorage.getItem("gc_clientId");
 
-    // TODO: Check this API key bizzo and document in the README
-
     // Define the URL for the GCF
+    // TODO: Check this API key bizzo and document in the README
+    // TODO: Move this to a config file
     const url =
       "https://us-central1-outboundforecastgenerator.cloudfunctions.net/makePUT"; // GCF URL
     const apiKey = clientId; // Using users OAuth client id as API key
@@ -184,14 +184,12 @@ export async function invokeGCF(uploadAttributes, forecastData) {
     });
     const responseText = await response.text();
 
-    console.log(`[OFG.IMPORT] Upload response: ${responseText}`);
-
-    if (response.status !== 200) {
-      console.error("[OFG.IMPORT] Upload response error: ", response);
+    if (response.status == 200) {
+      console.log(`[OFG.IMPORT] ${responseText}`);
+      return response.status;
+    } else {
       throw new Error(`${responseText} Status code: ${response.status}`);
     }
-
-    return response.status;
   } catch (error) {
     console.error("[OFG.IMPORT] Error uploading file: ", error);
     throw error;
