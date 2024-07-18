@@ -516,7 +516,7 @@ async function loadPageThree() {
         await importForecast();
         populateMessage("alert-success", "Forecast imported successfully!");
       } catch (error) {
-        console.error("[OFG.UI] Error importing forecast:", error);
+        console.error("[OFG.UI] Forecast import failed");
         const [genericMessage, specificMessage] = error.message.split("|");
         populateMessage("alert-danger", genericMessage, specificMessage);
       }
