@@ -346,6 +346,7 @@ export async function importForecast() {
     try {
       updateLoadingMessage("import-loading-message", "Uploading forecast");
       importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
+      console.warn(importResponse);
     } catch (invokeError) {
       console.warn(invokeError);
       console.warn(invokeError.message);
