@@ -188,10 +188,10 @@ export async function invokeGCF(uploadAttributes, forecastData) {
       console.log(`[OFG.IMPORT] ${responseText}`);
       return response.status;
     } else {
-      throw new Error(`${responseText} Status code: ${response.status}`);
+      throw new Error(responseText);
     }
   } catch (error) {
-    console.error("[OFG.IMPORT] Error uploading file: ", error);
+    console.error(`[OFG.IMPORT] ${error}`);
     throw error;
   }
 }

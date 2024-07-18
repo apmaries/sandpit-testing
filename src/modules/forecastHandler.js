@@ -347,6 +347,8 @@ export async function importForecast() {
       updateLoadingMessage("import-loading-message", "Uploading forecast");
       importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
     } catch (invokeError) {
+      console.warn(invokeError);
+      console.warn(invokeError.message);
       handleError(
         "[OFG.IMPORT] Forecast import failed",
         "Import file upload failed!",
