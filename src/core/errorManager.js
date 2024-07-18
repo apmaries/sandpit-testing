@@ -22,7 +22,7 @@ window.onerror = function (message, source, lineno, colno, error) {
   logError(errorDetails);
 };
 
-export function handleError(logMessage, genericMessage, specificMessage) {
-  console.error(`${logMessage}: ${specificMessage}`);
-  throw new Error(`${genericMessage}|${specificMessage}`);
+export function handleError(genericMessage, specificMessage) {
+  console.error(`[OFG] ${genericMessage}: ${specificMessage}`);
+  throw new Error(`${genericMessage}!|${specificMessage}`);
 }
