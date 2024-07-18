@@ -233,12 +233,50 @@ export async function executeQueries(body, intervals) {
     });
 
     // Use Promise.all to wait for all queries to complete
-    Promise.all(queryPromises).then((allResults) => {
+    Promise.all(queryPromises).then(async (allResults) => {
       const results = allResults.flat(); // Flatten the array of arrays
       // Process results here
+      // Special handling for when results is empty
+      if (results.length === 0) {
+        console.warn("[OFG.QUERY] No results found");
+
+        // Get test results for testing in prod
+        results = await fetch(
+          "/sandpit-testing/test/outboundAggregateData_prod.json"
+        )
+          .then((response) => response.json())
+          .then((data) => data.results)
+          .catch((error) =>
+            console.error("[OFG.QUERY] Error fetching test data: ", error)
+          );
+
+        console.info(
+          "%c[OFG.QUERY] Test data in prod retrieval successful",
+          "color: red"
+        );
+      } else {
+        // Get forecast planning groups from applicationState
+        const forecastPlanningGroups =
+          applicationState.forecastOutputs.generatedForecast;
+
+        // Return only data for campaigns in forecastPlanningGroups where isForecast is true
+        results = results.filter((result) => {
+          return forecastPlanningGroups.some((pg) => {
+            return (
+              pg.campaign.id === result.group.outboundCampaignId &&
+              pg.metadata.forecastStatus.isForecast
+            );
+          });
+        });
+      }
+
+      // Return results
+      console.debug("[OFG.QUERY] Query results: ", results);
+      return results;
     });
   }
 
+  /*
   // Special handling for when results is empty
   if (results.length === 0) {
     console.warn("[OFG.QUERY] No results found");
@@ -276,4 +314,5 @@ export async function executeQueries(body, intervals) {
   // Return results
   console.debug("[OFG.QUERY] Query results: ", results);
   return results;
+  */
 }
