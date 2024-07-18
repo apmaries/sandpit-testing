@@ -107,7 +107,7 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     };
   } catch (error) {
     console.error("[OFG.IMPORT] Error creating forecast import body: ", error);
-    throw error.message || error;
+    throw error;
   }
 
   let fcImportGzip;
@@ -118,7 +118,7 @@ export async function prepFcImportBody(groups, buStartDayOfWeek, description) {
     contentLengthBytes = fcImportGzip.length;
   } catch (error) {
     console.error("[OFG.IMPORT] Error encoding body to gzip: ", error);
-    throw error.message || error;
+    throw error;
   }
   console.log(
     `[OFG.IMPORT] Body encoded to gzip with length: ${contentLengthBytes}`
@@ -133,15 +133,10 @@ export async function generateUrl(
   weekDateId,
   contentLengthBytes
 ) {
-  console.info(
-    "[OFG.IMPORT] Generating import URL",
-    businessUnitId,
-    weekDateId,
-    contentLengthBytes
-  );
+  console.info("[OFG.IMPORT] Generating import URL");
 
   try {
-    importUrl =
+    let importUrl =
       await wapi.postWorkforcemanagementBusinessunitWeekShorttermforecastsImportUploadurl(
         businessUnitId,
         weekDateId,
@@ -152,56 +147,55 @@ export async function generateUrl(
     return importUrl;
   } catch (error) {
     console.error("[OFG.IMPORT] Error generating import URL: ", error);
-    throw error.message || error;
+    throw error;
   }
 }
 
 // Function to invoke server-side GCF to upload the forecast data
 export async function invokeGCF(uploadAttributes, forecastData) {
   console.info("[OFG.IMPORT] Invoking GCF");
-  // Get client id from session storage
-  const clientId = sessionStorage.getItem("gc_clientId");
+  try {
+    // Get client id from session storage
+    const clientId = sessionStorage.getItem("gc_clientId");
 
-  // TODO: Check this API key bizzo and document in the README
+    // TODO: Check this API key bizzo and document in the README
 
-  // Define the URL for the GCF
-  const url =
-    "https://us-central1-outboundforecastgenerator.cloudfunctions.net/makePUT"; // GCF URL
-  const apiKey = clientId; // Using users OAuth client id as API key
+    // Define the URL for the GCF
+    const url =
+      "https://us-central1-outboundforecastgenerator.cloudfunctions.net/makePUT"; // GCF URL
+    const apiKey = clientId; // Using users OAuth client id as API key
 
-  const uploadUrl = uploadAttributes.url;
-  const uploadHeaders = uploadAttributes.headers;
+    const uploadUrl = uploadAttributes.url;
+    const uploadHeaders = uploadAttributes.headers;
 
-  const data = {
-    url: uploadUrl,
-    header: uploadHeaders,
-    data: forecastData,
-  };
+    const data = {
+      url: uploadUrl,
+      header: uploadHeaders,
+      data: forecastData,
+    };
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": apiKey,
-    },
-    body: JSON.stringify(data),
-  });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": apiKey,
+      },
+      body: JSON.stringify(data),
+    });
 
-  if (!response.ok) {
-    throw new Error(`Upload response status: ${response.status}`);
+    console.log(`[OFG.IMPORT] GCF response status: `, response.status);
+    return response.status;
+  } catch (error) {
+    console.error("[OFG.IMPORT] Error invoking GCF: ", error);
+    throw error;
   }
-
-  console.log(`[OFG.IMPORT] GCF response status: `, response.status);
-  return response.status;
 }
 
 // Function to import the forecast data
 export async function importFc(businessUnitId, weekDateId, uploadKey) {
   console.info("[OFG.IMPORT] Importing forecast");
-
-  let importResponse = null;
   try {
-    importResponse =
+    let importResponse =
       await wapi.postWorkforcemanagementBusinessunitWeekShorttermforecastsImport(
         businessUnitId, // Pass selected Business Unit ID
         weekDateId, // Pass selected Week Date ID
@@ -209,11 +203,11 @@ export async function importFc(businessUnitId, weekDateId, uploadKey) {
           "uploadKey": uploadKey,
         }
       );
+
+    console.debug("[OFG.IMPORT] Import response: ", importResponse);
+    return importResponse;
   } catch (error) {
     console.error("[OFG.IMPORT] Error importing forecast: ", error);
-    throw error.message || error;
+    throw error;
   }
-
-  console.debug("[OFG.IMPORT] Import response: ", importResponse);
-  return importResponse;
 }

@@ -22,7 +22,7 @@ window.onerror = function (message, source, lineno, colno, error) {
   logError(errorDetails);
 };
 
-export function handleError(error, logMessage, userFriendlyMessage) {
+export function handleError(logMessage, genericMessage, specificMessage) {
   console.error(logMessage, error);
-  throw new Error(`${userFriendlyMessage}|${error.message || error}`);
+  throw new Error(`${genericMessage}|${specificMessage}`);
 }
