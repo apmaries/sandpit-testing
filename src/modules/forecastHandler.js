@@ -1,5 +1,5 @@
 // forecastHandler.js
-// Description: Main application module
+// Description:Main application module
 
 // Shared state modules
 import { applicationConfig } from "../core/configManager.js";
@@ -226,7 +226,7 @@ export async function generateForecast() {
     intervals = await intervalBuilder();
   } catch (queryBodyError) {
     handleError(
-      "[OFG.GENERATE] Forecast generation error: ",
+      "[OFG.GENERATE] Forecast generation error:",
       "Error generating historical data queries!",
       queryBodyError.message || queryBodyError
     );
@@ -244,7 +244,7 @@ export async function generateForecast() {
     }
   } catch (queryError) {
     handleError(
-      "[OFG.GENERATE] Forecast generation error: ",
+      "[OFG.GENERATE] Forecast generation error:",
       "Error executing historical data queries!",
       queryError.message || queryError
     );
@@ -258,7 +258,7 @@ export async function generateForecast() {
     await processQueryResults(queryResults);
   } catch (processingError) {
     handleError(
-      "[OFG.GENERATE] Forecast generation error: ",
+      "[OFG.GENERATE] Forecast generation error:",
       "Error processing query results!",
       processingError.message || processingError
     );
@@ -269,7 +269,7 @@ export async function generateForecast() {
     await prepareForecast();
   } catch (prepError) {
     handleError(
-      "[OFG.GENERATE] Forecast generation error: ",
+      "[OFG.GENERATE] Forecast generation error:",
       "Error preparing forecast!",
       prepError.message || prepError
     );
@@ -295,7 +295,7 @@ export async function generateForecast() {
       console.info("[OFG.GENERATE] Inbound groups processed");
     } catch (inboundError) {
       handleError(
-        "[OFG.GENERATE] Forecast generation error: ",
+        "[OFG.GENERATE] Forecast generation error:",
         "Error generating inbound forecast!",
         inboundError.message || inboundError
       );
@@ -324,7 +324,7 @@ export async function importForecast() {
       );
     } catch (prepError) {
       handleError(
-        "[OFG.IMPORT] Forecast import preparation failed: ",
+        "[OFG.IMPORT] Forecast import preparation failed:",
         "Import preparation failed!",
         prepError.message || prepError
       );
@@ -332,11 +332,11 @@ export async function importForecast() {
 
     let fcImportUrl;
     try {
+      updateLoadingMessage("import-loading-message", "Generating upload URL");
       fcImportUrl = await generateUrl(buId, weekStart, contentLength);
-      updateLoadingMessage("import-loading-message", "Invoking GCF");
     } catch (urlError) {
       handleError(
-        "[OFG.IMPORT] Error generating upload URL: ",
+        "[OFG.IMPORT] Error generating upload URL:",
         "Error generating upload URL!",
         prepError.message || prepError
       );
@@ -344,6 +344,7 @@ export async function importForecast() {
 
     let importResponse;
     try {
+      updateLoadingMessage("import-loading-message", "Uploading forecast");
       importResponse = await invokeGCF(fcImportUrl, importGzip, contentLength);
     } catch (invokeError) {
       handleError(
@@ -362,7 +363,7 @@ export async function importForecast() {
           await importFc(importResponse, fcImportBody);
         } catch (runImportError) {
           handleError(
-            "[OFG.IMPORT] Forecast import failed: ",
+            "[OFG.IMPORT] Forecast import failed:",
             "Running import failed!",
             runImportError.message || runImportError
           );
@@ -385,7 +386,7 @@ export async function importForecast() {
         importNotifications.subscribeToNotifications();
       } catch (notificationError) {
         handleError(
-          "[OFG.IMPORT] Subscribing to notifications failed: ",
+          "[OFG.IMPORT] Subscribing to notifications failed:",
           "Subscribing to notifications failed!",
           notificationError.message || notificationError
         );
@@ -393,14 +394,14 @@ export async function importForecast() {
     } else {
       const reason = importResponse.data.reason;
       handleError(
-        "[OFG.IMPORT] Forecast import failed: ",
+        "[OFG.IMPORT] Forecast import failed:",
         "Forecast import failed!",
         reason
       );
     }
   } catch (error) {
     handleError(
-      "[OFG.IMPORT] Forecast import error: ",
+      "[OFG.IMPORT] Forecast import error:",
       "Forecast import error!",
       error.message || error
     );
