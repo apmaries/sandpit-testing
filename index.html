@@ -483,13 +483,18 @@
                 </gux-loading-message>
               </div>
             </div>
-            <div id="import-success-message" style="display: none">
+            <div id="import-success-div" style="display: none">
               <gux-card-beta>
                 <h4>Forecast imported successfully!</h4>
                 <p>
                   The forecast has been imported successfully. You can now view
                   the forecast in the Genesys Cloud UI.
                 </p>
+              </gux-card-beta>
+            </div>
+            <div id="import-fail-div" style="display: none">
+              <gux-card-beta id="import-fail-card">
+                <h4>Forecast imported failed!</h4>
               </gux-card-beta>
             </div>
             <div id="page-four-buttons" class="row" style="padding-top: 20px">

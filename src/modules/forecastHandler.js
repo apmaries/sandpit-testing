@@ -316,6 +316,7 @@ export async function importForecast() {
       unhideElement("import-step-three");
       unhideElement("import-step-four-success-icon");
       unhideElement("import-step-four");
+      unhideElement("import-success-div");
     } else {
       updateLoadingMessage(
         "results-loading-message",
@@ -332,7 +333,7 @@ export async function importForecast() {
       } catch (prepError) {
         unhideElement("import-step-one-fail-icon");
         displayErrorReason(
-          "import-step-one-error-message",
+          "import-fail-card",
           "Import file preparation failed!",
           prepError.message || prepError
         );
@@ -351,7 +352,7 @@ export async function importForecast() {
       } catch (urlError) {
         unhideElement("import-step-two-fail-icon");
         displayErrorReason(
-          "import-step-two-error-message",
+          "import-fail-card",
           "Upload URL generation failed!",
           urlError.message || urlError
         );
@@ -376,7 +377,7 @@ export async function importForecast() {
         console.warn(uploadError.message);
         unhideElement("import-step-three-fail-icon");
         displayErrorReason(
-          "import-step-three-error-message",
+          "import-fail-card",
           "Import file upload failed!",
           uploadError.message || uploadError
         );
@@ -385,7 +386,7 @@ export async function importForecast() {
       }
 
       if (uploadResponse.status === 200) {
-        console.info("[OFG.IMPORT] Forecast upload to URL~ successful");
+        console.info("[OFG.IMPORT] Forecast upload to URL successful");
 
         const runImport = async () => {
           updateLoadingMessage(
@@ -398,7 +399,7 @@ export async function importForecast() {
           } catch (runImportError) {
             unhideElement("import-step-four-fail-icon");
             displayErrorReason(
-              "import-step-four-error-message",
+              "import-fail-card",
               "Forecast import failed!",
               runImportError.message || runImportError
             );
@@ -423,7 +424,7 @@ export async function importForecast() {
           importNotifications.subscribeToNotifications();
         } catch (notificationError) {
           displayErrorReason(
-            "import-results-container-new",
+            "import-fail-card",
             "Subscribing to notifications failed!",
             notificationError.message || notificationError
           );
@@ -431,7 +432,7 @@ export async function importForecast() {
       } else {
         const reason = uploadResponse.data.reason;
         displayErrorReason(
-          "import-results-container-new",
+          "import-fail-card",
           "Forecast import failed!",
           reason
         );
@@ -439,7 +440,7 @@ export async function importForecast() {
     }
   } catch (error) {
     displayErrorReason(
-      "import-results-container-new",
+      "import-fail-card",
       "Forecast import failed!",
       error.message || error
     );
