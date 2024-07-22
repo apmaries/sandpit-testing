@@ -508,19 +508,13 @@ async function loadPageThree() {
   addEvent(document.getElementById("import-button"), "click", async () => {
     switchPages("page-three", "page-four");
 
-    if (testMode) {
-      console.info("[OFG.UI] Skipping import in test mode");
-      populateMessage("alert-success", "Forecast tested successfully!");
-    } else {
-      try {
-        await importForecast();
-        populateMessage("alert-success", "Forecast imported successfully!");
-      } catch (error) {
-        console.error("[OFG.UI] Forecast import failed");
-        const [genericMessage, specificMessage] = error.message.split("|");
-        populateMessage("alert-danger", genericMessage, specificMessage);
-      }
+    try {
+      await importForecast();
+    } catch (error) {
+      console.error("[OFG.UI] Forecast import failed");
     }
+
+    document.getElementById("open-forecast-button").disabled = false;
     await loadPageFour();
     resetPageThree();
 
@@ -551,7 +545,7 @@ async function loadPageFour() {
   console.info("[OFG.UI] Loading page four");
 
   // Hide loading spinner and show page four
-  hideLoadingSpinner("import-results-container", "import-loading-div");
+  hideLoadingSpinner("import-results-container-new", "results-loading-message");
 
   // Add event listener for open forecast button
   addEvent(document.getElementById("open-forecast-button"), "click", () => {

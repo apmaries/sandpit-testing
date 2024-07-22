@@ -257,3 +257,21 @@ export function getNextWeekdayDate(startDate, weekday) {
 
   return nextDate;
 }
+
+export async function unhideElement(elementId) {
+  const element = document.getElementById(elementId);
+  element.style.display = "block";
+}
+
+export function displayErrorReason(elem, genereicMessage, specificMessage) {
+  const elemToDisplay = document.getElementById(elem);
+
+  // Append a p tag with the message
+  let genericP = document.createElement("p");
+  genericP.innerHTML = genereicMessage;
+  elemToDisplay.appendChild(genericP);
+
+  let specificP = document.createElement("p");
+  specificP.innerHTML = specificMessage;
+  elemToDisplay.appendChild(specificP);
+}

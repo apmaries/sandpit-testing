@@ -118,8 +118,8 @@ footer img {
 .alert-danger,
 .alert-success {
   border-radius: 50em;
-  padding: 10px;
-  margin-bottom: 20px;
+  padding: 2px;
+
   text-align: center;
 }
 
