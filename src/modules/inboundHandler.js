@@ -21,7 +21,7 @@ let generateOperationId;
 // Function to generate the forecast
 async function generateAbmForecast(buId, weekStart, description) {
   console.log("[OFG.INBOUND] Generating ABM forecast");
-  const abmFcDescription = description + " ([OFG.INBOUND] Inbound ABM)";
+  const abmFcDescription = description + " (OFG Inbound ABM)";
 
   let body = {
     "description": abmFcDescription,
