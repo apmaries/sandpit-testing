@@ -261,7 +261,7 @@ export async function generateInboundForecast() {
       inboundForecastData
     );
     return inboundForecastData;
-  } else if (generateResponse === "Processing") {
+  } else if (generateResponse.status === "Processing") {
     // Asynchronous handling through notifications
     return handleAsyncForecastGeneration(buId);
   } else {
