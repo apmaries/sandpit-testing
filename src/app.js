@@ -1,15 +1,21 @@
 // app.js
 // Description: The main entry point file that initializes the app and starts the main logic.
 
+// Shared state modules
 import { applicationConfig } from "./core/configManager.js";
-import { runApp } from "./main.js";
-import { startSession } from "./core/sessionManager.js";
 
-const testMode = applicationConfig.testMode;
+// Core modules
+import { startSession } from "./core/sessionManager.js";
+import { initializeTestMode } from "./core/testManager.js";
+
+// App modules
+import { loadPageOne } from "./modules/pageHandler.js";
+
+// Global variables
 ("use strict");
+const testMode = applicationConfig.testMode;
 
 let platformClient = require("platformClient");
-
 let url = new URL(document.location.href);
 let gc_region = url.searchParams.get("gc_region");
 let gc_clientId = url.searchParams.get("gc_clientId");
@@ -29,16 +35,21 @@ gc_redirectUrl
 const client = platformClient.ApiClient.instance;
 const capi = new platformClient.ConversationsApi();
 const napi = new platformClient.NotificationsApi();
+const oapi = new platformClient.OutboundApi();
 const tapi = new platformClient.TokensApi();
 const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
-  console.log("{am} Starting application");
+  console.log("[OFG] Starting application");
 
   if (testMode) {
-    console.log("%c{am} Test mode enabled", "color: red");
+    // Initialize test mode
+    console.log("%c[OFG] Test mode enabled", "color: red");
+
+    await initializeTestMode();
   } else {
+    // Set environment and login to Genesys Cloud
     try {
       client.setEnvironment(gc_region);
       client.setPersistSettings(true, "_am_");
@@ -55,10 +66,10 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-      console.log("%c{am} Logging in to Genesys Cloud", "color: green");
+      console.log("%c[OFG] Logging in to Genesys Cloud", "color: green");
       await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
     } catch (err) {
-      console.log("{am} Error: ", err);
+      console.log("[OFG] Error: ", err);
     }
   }
   //Enter in starting code.
@@ -66,4 +77,9 @@ export async function startApp() {
   runApp();
 }
 
-export { capi, napi, tapi, uapi, wapi };
+export { capi, napi, oapi, tapi, uapi, wapi };
+
+function runApp() {
+  console.log("[OFG] Initializing application");
+  loadPageOne();
+}
