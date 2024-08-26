@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
-    <title>SPA Login App</title>
+    <title>Training Interaction Library</title>
     <link rel="icon" href="./img/favicon.ico" type="image/x-icon" />
 
     <!-- CSS -->
@@ -24,14 +24,14 @@
     ></script>
 
     <script>
-      console.log("{am} index page loaded");
+      console.log("[TIL] index page loaded");
     </script>
   </head>
   <body>
-    <h1>SPA Login App</h1>
+    <h1>Training Interaction Library</h1>
     <div id="content"></div>
     <script>
-      console.log("{am} scripts loading...");
+      console.log("[TIL] scripts loading...");
     </script>
 
     <!-- Load Genesys Cloud SDK's -->
@@ -40,18 +40,18 @@
 
     <script type="module">
       import { startApp } from "./src/app.js";
-      console.log("{am} app.js loaded");
+      console.log("[TIL] app.js loaded");
 
       startApp()
         .then(() => {
-          console.log("{am} Start function completed");
+          console.log("[TIL] Start function completed");
         })
         .catch((err) => {
-          console.error("{am} Error during start:", err);
+          console.error("[TIL] Error during start:", err);
         });
     </script>
     <script>
-      console.log("{am} scripts loaded!");
+      console.log("[TIL] scripts loaded!");
     </script>
   </body>
 </html>

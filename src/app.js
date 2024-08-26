@@ -9,7 +9,6 @@ import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
 // App modules
-import { loadPageOne } from "./modules/pageHandler.js";
 
 // Global variables
 ("use strict");
@@ -41,11 +40,11 @@ const uapi = new platformClient.UsersApi();
 const wapi = new platformClient.WorkforceManagementApi();
 
 export async function startApp() {
-  console.log("[OFG] Starting application");
+  console.log("[TIL] Starting application");
 
   if (testMode) {
     // Initialize test mode
-    console.log("%c[OFG] Test mode enabled", "color: red");
+    console.log("%c[TIL] Test mode enabled", "color: red");
 
     await initializeTestMode();
   } else {
@@ -66,10 +65,10 @@ export async function startApp() {
     client.config.logger.setLogger(); // To apply above changes
     */
 
-      console.log("%c[OFG] Logging in to Genesys Cloud", "color: green");
+      console.log("%c[TIL] Logging in to Genesys Cloud", "color: green");
       await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
     } catch (err) {
-      console.log("[OFG] Error: ", err);
+      console.log("[TIL] Error: ", err);
     }
   }
   //Enter in starting code.
@@ -80,6 +79,7 @@ export async function startApp() {
 export { capi, napi, oapi, tapi, uapi, wapi };
 
 function runApp() {
-  console.log("[OFG] Initializing application");
-  loadPageOne();
+  console.log("[TIL] Initializing application");
+  // Add application logic here
+  // load page
 }
