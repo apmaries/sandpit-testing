@@ -1,0 +1,18 @@
+gux-button {
+  width: 80px;
+  padding: 0px 5px;
+}
+
+.align-right {
+  margin-left: auto;
+}
+
+.align-left {
+  margin-right: auto;
+}
+
+.add-to-divs {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}

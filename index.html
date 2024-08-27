@@ -8,7 +8,7 @@
     <link rel="icon" href="./img/favicon.ico" type="image/x-icon" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="./img/favicon.ico" />
+    <link rel="stylesheet" href="./styles/styles.css" />
 
     <!-- Error handling -->
     <script src="./src/core/errorManager.js"></script>
@@ -22,19 +22,63 @@
       type="module"
       src="https://dhqbrvplips7x.cloudfront.net/common-ui-docs/genesys-webcomponents/3.8.1-178/genesys-webcomponents/genesys-webcomponents.esm.js"
     ></script>
-
-    <script>
-      console.log("[TIL] index page loaded");
-    </script>
   </head>
   <body>
-    <h1>Training Interaction Library</h1>
-    <div id="content">
-      <p>Test</p>
-    </div>
-    <script>
-      console.log("[TIL] scripts loading...");
-    </script>
+    <main>
+      <h1>Training Interaction Library</h1>
+      <div id="welcome-div"></div>
+      <fieldset id="widget-fieldset">
+        <gux-tabs>
+          <gux-tab-list slot="tab-list">
+            <gux-tab id="good-tab" tab-id="1">Good Interactions</gux-tab>
+            <gux-tab id="bad-tab" tab-id="2">Bad Interactions</gux-tab>
+            <gux-tab id="add-tab" tab-id="3">Add Interactions</gux-tab>
+          </gux-tab-list>
+          <gux-tab-panel tab-id="1"> </gux-tab-panel>
+          <gux-tab-panel tab-id="2">
+            <a href="https://apps.mypurecloud.com.au">Login</a>
+          </gux-tab-panel>
+        </gux-tabs>
+        <!--
+        <gux-accordion>
+          <gux-accordion-section id="good-accordion">
+            <h2 slot="header">Good Interactions</h2>
+            <div slot="content">
+              <div id="add-to-good-div" class="add-to-divs">
+                <gux-form-field-text-like>
+                  <input
+                    slot="input"
+                    type="text"
+                    value="Enter interaction id"
+                  />
+                </gux-form-field-text-like>
+                <gux-button id="add-to-good-btn" accent="primary"
+                  >Add</gux-button
+                >
+              </div>
+            </div>
+          </gux-accordion-section>
+          <gux-accordion-section id="bad-accordion">
+            <h2 slot="header">Bad Interactions</h2>
+            <div slot="content">
+              <div id="add-to-bad-div" class="add-to-divs">
+                <gux-form-field-text-like>
+                  <input
+                    slot="input"
+                    type="text"
+                    value="Enter interaction id"
+                  />
+                </gux-form-field-text-like>
+                <gux-button id="add-to-bad-btn" accent="primary"
+                  >Add</gux-button
+                >
+              </div>
+            </div>
+          </gux-accordion-section>
+        </gux-accordion>
+        -->
+      </fieldset>
+    </main>
 
     <!-- Load Genesys Cloud SDK's -->
     <script src="https://sdk-cdn.mypurecloud.com/javascript/latest/purecloud-platform-client-v2.min.js"></script>
@@ -42,7 +86,6 @@
 
     <script type="module">
       import { startApp } from "./src/app.js";
-      console.log("[TIL] app.js loaded");
 
       startApp()
         .then(() => {
@@ -51,9 +94,6 @@
         .catch((err) => {
           console.error("[TIL] Error during start:", err);
         });
-    </script>
-    <script>
-      console.log("[TIL] scripts loaded!");
     </script>
   </body>
 </html>

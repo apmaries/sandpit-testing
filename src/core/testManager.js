@@ -26,10 +26,10 @@ async function fetchData(url) {
 export async function initializeTestMode() {
   console.log("[TIL] Initializing test mode");
 
-  const config = applicationConfig.testing;
+  const testData = applicationConfig.testingData;
 
   // Define mock data promises
-  // const businessUnitsPromise = fetchData(config.businessUnitsUrl);
+  // const businessUnitsPromise = fetchData(testData.businessUnitsUrl);
 
   // Assign mock data promises to mock API functions
   t_capi = {

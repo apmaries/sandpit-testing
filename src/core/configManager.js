@@ -3,7 +3,7 @@
 
 let applicationConfig = {
   testMode: window.location.protocol !== "https:",
-  testing: {
+  testingData: {
     businessUnitsUrl: "/sandpit-testing/test/businessUnits.json",
   },
   // Add more configuration options as needed
