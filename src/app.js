@@ -37,12 +37,8 @@ redirect_url
   : (redirect_url = sessionStorage.getItem("redirect_url"));
 
 const client = platformClient.ApiClient.instance;
-const capi = new platformClient.ConversationsApi();
-const napi = new platformClient.NotificationsApi();
-const oapi = new platformClient.OutboundApi();
-const tapi = new platformClient.TokensApi();
-const uapi = new platformClient.UsersApi();
-const wapi = new platformClient.WorkforceManagementApi();
+const aApi = new platformClient.ArchitectApi();
+const uApi = new platformClient.UsersApi();
 
 export async function startApp() {
   console.log("[TIL] Starting application");
@@ -81,7 +77,7 @@ export async function startApp() {
   runApp();
 }
 
-export { capi, napi, oapi, tapi, uapi, wapi };
+export { aApi, uApi };
 
 function runApp() {
   console.log("[TIL] Initializing application");

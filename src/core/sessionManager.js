@@ -2,7 +2,7 @@
 // Description: Module for handling session-related logic
 
 import { applicationConfig } from "./configManager.js";
-import { uapi } from "../app.js";
+import { uApi } from "../app.js";
 
 const testMode = applicationConfig.testMode;
 ("use strict");
