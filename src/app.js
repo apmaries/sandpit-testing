@@ -56,7 +56,7 @@ export async function startApp() {
     // Set environment and login to Genesys Cloud
     try {
       client.setEnvironment(gc_region);
-      client.setPersistSettings(true, "_am_");
+      client.setPersistSettings(true, "_TIL_");
 
       // Set client logging
       /*
@@ -71,7 +71,7 @@ export async function startApp() {
     */
 
       console.log("%c[TIL] Logging in to Genesys Cloud", "color: green");
-      await client.loginImplicitGrant(gc_clientId, gc_redirectUrl, {});
+      await client.loginImplicitGrant(gc_client, redirect_url, {});
     } catch (err) {
       console.log("[TIL] Error: ", err);
     }
