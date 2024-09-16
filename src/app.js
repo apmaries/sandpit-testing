@@ -17,21 +17,24 @@ const testMode = applicationConfig.testMode;
 let platformClient = require("platformClient");
 let url = new URL(document.location.href);
 let gc_region = url.searchParams.get("gc_region");
-let gc_clientId = url.searchParams.get("gc_clientId");
-let gc_redirectUrl = url.searchParams.get("gc_redirectUrl");
+let gc_client = url.searchParams.get("gc_client");
+let gc_datatable = url.searchParams.get("gc_datatable");
 
-console.log(window.location.href);
+const redirect_url = window.location.origin + window.location.pathname;
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region
   ? sessionStorage.setItem("gc_region", gc_region)
   : (gc_region = sessionStorage.getItem("gc_region"));
-gc_clientId
-  ? sessionStorage.setItem("gc_clientId", gc_clientId)
-  : (gc_clientId = sessionStorage.getItem("gc_clientId"));
-gc_redirectUrl
-  ? sessionStorage.setItem("gc_redirectUrl", gc_redirectUrl)
-  : (gc_redirectUrl = sessionStorage.getItem("gc_redirectUrl"));
+gc_client
+  ? sessionStorage.setItem("gc_client", gc_client)
+  : (gc_client = sessionStorage.getItem("gc_clientId"));
+gc_datatable
+  ? sessionStorage.setItem("gc_datatable", gc_datatable)
+  : (gc_datatable = sessionStorage.getItem("gc_datatable"));
+redirect_url
+  ? sessionStorage.setItem("redirect_url", redirect_url)
+  : (redirect_url = sessionStorage.getItem("redirect_url"));
 
 const client = platformClient.ApiClient.instance;
 const capi = new platformClient.ConversationsApi();
