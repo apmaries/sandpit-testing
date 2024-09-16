@@ -30,17 +30,40 @@
       <fieldset id="widget-fieldset">
         <gux-tabs>
           <gux-tab-list slot="tab-list">
-            <gux-tab id="good-tab" tab-id="1">Good Interactions</gux-tab>
-            <gux-tab id="bad-tab" tab-id="2">Bad Interactions</gux-tab>
-            <gux-tab id="add-tab" tab-id="3">Add Interactions</gux-tab>
+            <gux-tab id="good-tab" tab-id="1">Good</gux-tab>
+            <gux-tab id="bad-tab" tab-id="2">Bad</gux-tab>
+            <gux-tab id="add-tab" tab-id="3">Manage</gux-tab>
           </gux-tab-list>
-          <gux-tab-panel tab-id="1"> </gux-tab-panel>
+          <gux-tab-panel tab-id="1">
+            <div id="add-to-good-div" class="add-to-divs">
+              <gux-form-field-text-like>
+                <input slot="input" type="text" value="Enter interaction id" />
+              </gux-form-field-text-like>
+              <gux-button id="add-to-good-btn" accent="primary">Add</gux-button>
+            </div>
+          </gux-tab-panel>
           <gux-tab-panel tab-id="2">
-            <a
-              href="https://apps.mypurecloud.com.au/directory/#/analytics/interactions/7ee5f3dc-a0b4-4b1f-b748-8b892fc2275a/admin?tabId=5d2cee0a-7951-4f69-85a6-76f2e05610c3"
-              target="_blank"
-              >Login</a
-            >
+            <div id="add-to-bad-div" class="add-to-divs">
+              <gux-form-field-text-like>
+                <input slot="input" type="text" value="Enter interaction id" />
+              </gux-form-field-text-like>
+              <gux-button id="add-to-bad-btn" accent="primary">Add</gux-button>
+            </div>
+          </gux-tab-panel>
+          <gux-tab-panel tab-id="3">
+            <div id="datatable-selection-div">
+              <h2>Select datatable</h2>
+              <gux-dropdown
+                id="datatable-dropdown"
+                placeholder="Select datatable"
+              >
+                <gux-listbox aria-label="Countries">
+                  <gux-option value="AFG">Afghanistan</gux-option>
+                  <gux-option value="ALA">Åland Islands</gux-option>
+                  <!-- dropdown options to be returned via script -->
+                </gux-listbox>
+              </gux-dropdown>
+            </div>
           </gux-tab-panel>
         </gux-tabs>
         <!--
