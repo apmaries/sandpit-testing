@@ -20,6 +20,8 @@ let gc_region = url.searchParams.get("gc_region");
 let gc_clientId = url.searchParams.get("gc_clientId");
 let gc_redirectUrl = url.searchParams.get("gc_redirectUrl");
 
+console.log(window.location.href);
+
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region
   ? sessionStorage.setItem("gc_region", gc_region)

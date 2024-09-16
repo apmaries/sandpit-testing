@@ -100,17 +100,6 @@
     <script type="module">
       import { startApp } from "./src/app.js";
 
-      // Get the current script element
-      const currentScript =
-        document.currentScript ||
-        document.querySelector('script[src*="index.html"]');
-
-      // Extract the integration URL from the script's src attribute
-      const integrationUrl = new URL(currentScript.src).href;
-
-      // Store the integration URL in sessionStorage
-      sessionStorage.setItem("integrationUrl", integrationUrl);
-
       startApp()
         .then(() => {
           console.log("[TIL] Start function completed");
