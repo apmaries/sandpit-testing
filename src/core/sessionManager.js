@@ -16,7 +16,7 @@ export async function startSession() {
   } else {
     try {
       // GET Current UserId
-      let user = await uapi.getUsersMe({});
+      let user = await uApi.getUsersMe({});
       console.log("[TIL] User details returned", user);
       appUser = user.name;
     } catch (error) {

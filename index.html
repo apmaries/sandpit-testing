@@ -42,8 +42,8 @@
               </gux-form-field-text-like>
               <gux-button id="add-to-good-btn" accent="primary">Add</gux-button>
             </div>
-            <div id="table-div">
-              <gux-table-beta>
+            <div id="good-table-div">
+              <gux-table-beta id="good-table">
                 <table slot="data">
                   <thead>
                     <tr>
@@ -69,9 +69,6 @@
                         Sentiment Trend
                       </th>
                       <th data-column-name="empathy-score">Empathy Score</th>
-                      <th data-column-name="file-state">File State</th>
-                      <th data-column-name="archive-date">Archive Date</th>
-                      <th data-column-name="delete-date">Delete Date</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -88,6 +85,41 @@
                 <input slot="input" type="text" value="Enter interaction id" />
               </gux-form-field-text-like>
               <gux-button id="add-to-bad-btn" accent="primary">Add</gux-button>
+            </div>
+            <div id="bad-table-div">
+              <gux-table-beta id="bad-table">
+                <table slot="data">
+                  <thead>
+                    <tr>
+                      <th data-column-name="conversation-id">
+                        Conversation ID
+                      </th>
+                      <th data-column-name="division-name">Division Name</th>
+                      <th data-colum-name="conversation-start">
+                        Conversation Start
+                      </th>
+                      <th data-column-name="conversation-end">
+                        Conversation End
+                      </th>
+                      <th data-colum-name="queue-name">Queue Name</th>
+                      <th data-column-name="media-type">Media Type</th>
+                      <th data-column-name="evaluation-score">
+                        Evaluation Score
+                      </th>
+                      <th data-column-name="sentiment-score">
+                        Sentiment Score
+                      </th>
+                      <th data-column-name="sentiment-trend">
+                        Sentiment Trend
+                      </th>
+                      <th data-column-name="empathy-score">Empathy Score</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr></tr>
+                  </tbody>
+                </table>
+              </gux-table-beta>
             </div>
           </gux-tab-panel>
           <gux-tab-panel tab-id="3"> </gux-tab-panel>

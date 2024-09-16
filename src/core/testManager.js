@@ -7,9 +7,7 @@ import { applicationConfig } from "./configManager.js";
 // Global variables
 ("use strict");
 
-let t_capi = null;
-let t_oapi = null;
-let t_wapi = null;
+let t_aApi = null;
 
 // Utility function to fetch test data
 async function fetchData(url) {
@@ -29,33 +27,14 @@ export async function initializeTestMode() {
   const testData = applicationConfig.testingData;
 
   // Define mock data promises
-  // const businessUnitsPromise = fetchData(testData.businessUnitsUrl);
+  const flowsDatatableRowsPromise = fetchData(testData.datatableUrl);
 
   // Assign mock data promises to mock API functions
-  t_capi = {
-    getOutboundConversationsAggregates: function () {
-      return outboundAggregatesDataPromise;
-    },
-  };
-  t_oapi = {
-    getOutboundCampaigns: function () {
-      return campaignsPromise;
-    },
-  };
-  t_wapi = {
-    getBusinessUnits: function () {
-      return businessUnitsPromise;
-    },
-    getBusinessUnitData: function () {
-      return businessUnitSettingsPromise;
-    },
-    getPlanningGroups: function () {
-      return planningGroupsPromise;
-    },
-    getInboundShorttermforecastData: function () {
-      return inboundFcDataPromise;
+  t_aApi = {
+    getFlowsDatatableRows: function () {
+      return flowsDatatableRowsPromise;
     },
   };
 }
 
-export { t_capi, t_oapi, t_wapi };
+export { t_aApi };
