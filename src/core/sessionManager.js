@@ -4,12 +4,12 @@
 // Shared state modules
 import { applicationConfig } from "./configManager.js";
 
-// Core modules
-import { architectApi, usersApi } from "../app.js";
-import { t_architectApi } from "./testManager.js";
+// Api modules
+import { getDatatableRows } from "../utils/architect.js";
+import { getUser } from "../utils/users.js";
 
 // Utility modules
-import { populateTable } from "../utils/tableUtils.js";
+import { populateTable } from "../utils/domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.testMode;
@@ -17,53 +17,9 @@ const testMode = applicationConfig.testMode;
 
 export async function startSession() {
   console.log("[TIL] Starting session");
-  let appUser = null;
-  let rows = [];
 
-  // Return user details
-  async function getUser() {
-    try {
-      let user = await usersApi.getUsersMe({});
-      console.log("[TIL] User details returned", user);
-      appUser = user.name;
-    } catch (error) {
-      console.error("[TIL] Error getting user details. ", error);
-      throw error;
-    }
-  }
-
-  // Return datatable rows
-  async function getDatatableRows() {
-    let datatableId = sessionStorage.getItem("gc_datatable");
-    let opts = {
-      "pageNumber": 1, // Number | Page number
-      "pageSize": 500, // Number | Page size
-      "showbrief": false, // Boolean | If true returns just the key value of the row
-    };
-
-    try {
-      let response = await architectApi.getFlowsDatatableRows(
-        datatableId,
-        opts
-      );
-      rows = response.entities; // Access the entities array
-      console.log("[TIL] Datatable rows returned", rows);
-    } catch (error) {
-      console.error("[TIL] Error getting datatable rows. ", error);
-      throw error;
-    }
-  }
-
-  if (testMode) {
-    // Get datatable rows using test API
-    appUser = "Test User";
-    let t_response = await t_architectApi.getFlowsDatatableRows();
-    rows = t_response.entities;
-    console.log("[TIL] Datatable rows returned", rows);
-  } else {
-    // Get user and datatable rows concurrently using Genesys Cloud API
-    await Promise.all([getUser(), getDatatableRows()]);
-  }
+  // Run getUser and getDatatableRows concurrently
+  const [appUser, rows] = await Promise.all([getUser(), getDatatableRows()]);
 
   document.getElementById("welcome-div").innerText =
     "Welcome, " + appUser + "!";

@@ -38,6 +38,9 @@ redirect_url
 
 const client = platformClient.ApiClient.instance;
 const architectApi = new platformClient.ArchitectApi();
+const analyticsApi = new platformClient.AnalyticsApi();
+const authorizationApi = new platformClient.AuthorizationApi();
+const conversationsApi = new platformClient.ConversationsApi();
 const usersApi = new platformClient.UsersApi();
 
 export async function startApp() {
@@ -77,7 +80,7 @@ export async function startApp() {
   runApp();
 }
 
-export { architectApi, usersApi };
+export { architectApi, conversationsApi, usersApi };
 
 function runApp() {
   console.log("[TIL] Initializing application");

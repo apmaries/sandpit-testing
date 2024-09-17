@@ -8,6 +8,7 @@ import { applicationConfig } from "./configManager.js";
 ("use strict");
 
 let t_architectApi = null;
+let t_conversationsApi = null;
 
 // Utility function to fetch test data
 async function fetchData(url) {
@@ -28,6 +29,7 @@ export async function initializeTestMode() {
 
   // Define mock data promises
   const flowsDatatableRowsPromise = fetchData(testData.datatableUrl);
+  const conversationsPromise = fetchData(testData.conversationsUrl);
 
   // Assign mock data promises to mock API functions
   t_architectApi = {
@@ -35,6 +37,11 @@ export async function initializeTestMode() {
       return flowsDatatableRowsPromise;
     },
   };
+  t_conversationsApi = {
+    getAnalyticsConversationsDetails: function () {
+      return conversationsPromise;
+    },
+  };
 }
 
-export { t_architectApi };
+export { t_architectApi, t_conversationsApi };

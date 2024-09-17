@@ -1,4 +1,4 @@
-// populateTable.js
+// domUtils.js
 // Description: Utility for populating a table with data
 
 // Utility function to populate the table with data
