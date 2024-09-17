@@ -16,6 +16,7 @@ const testMode = applicationConfig.testMode;
 
 // Return datatable rows
 export async function getDatatableRows() {
+  console.log("[TIL] Getting datatable rows");
   let rows = [];
 
   if (testMode) {

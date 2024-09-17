@@ -5,8 +5,8 @@
 import { applicationConfig } from "./configManager.js";
 
 // Api modules
-import { getDatatableRows } from "../utils/architect.js";
-import { getUser } from "../utils/users.js";
+import { getDatatableRows } from "../modules/architect.js";
+import { getUser } from "../modules/users.js";
 
 // Utility modules
 import { populateTable } from "../utils/domUtils.js";

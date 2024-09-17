@@ -8,8 +8,6 @@ import { applicationConfig } from "./core/configManager.js";
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
-// App modules
-
 // Global variables
 ("use strict");
 const testMode = applicationConfig.testMode;
@@ -75,15 +73,21 @@ export async function startApp() {
       console.log("[TIL] Error: ", err);
     }
   }
-  //Enter in starting code.
-  await startSession();
-  runApp();
+
+  // Start session
+  try {
+    await startSession();
+    console.log("[TIL] Session started");
+    runApp();
+  } catch (err) {
+    console.log("[TIL] Error: ", err);
+  }
 }
 
 export { architectApi, conversationsApi, usersApi };
 
 function runApp() {
-  console.log("[TIL] Initializing application");
+  console.log("[TIL] Application started");
   // Add application logic here
   // load page
 }
