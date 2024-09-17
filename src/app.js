@@ -88,6 +88,18 @@ export { architectApi, conversationsApi, usersApi };
 
 function runApp() {
   console.log("[TIL] Application started");
-  // Add application logic here
-  // load page
+
+  // Enable event listeners
+  async function enableEventListeners() {
+    // Add event listeners here
+  }
+
+  // Check if user is an admin
+  let isAdmin = false;
+  if (testMode) {
+    isAdmin = true;
+  } else {
+    let permissions = client.authData.accessTokenInfo.token.permissions;
+    isAdmin = permissions.includes("admin");
+  }
 }
