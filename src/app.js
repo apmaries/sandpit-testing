@@ -37,8 +37,8 @@ redirect_url
   : (redirect_url = sessionStorage.getItem("redirect_url"));
 
 const client = platformClient.ApiClient.instance;
-const aApi = new platformClient.ArchitectApi();
-const uApi = new platformClient.UsersApi();
+const architectApi = new platformClient.ArchitectApi();
+const usersApi = new platformClient.UsersApi();
 
 export async function startApp() {
   console.log("[TIL] Starting application");
@@ -56,15 +56,15 @@ export async function startApp() {
 
       // Set client logging
       /*
-    client.config.logger.log_level =
-      client.config.logger.logLevelEnum.level.LTrace;
-    client.config.logger.log_format =
-      client.config.logger.logFormatEnum.formats.JSON;
-    client.config.logger.log_request_body = true;
-    client.config.logger.log_response_body = true;
-    client.config.logger.log_to_console = true;
-    client.config.logger.setLogger(); // To apply above changes
-    */
+      client.config.logger.log_level =
+        client.config.logger.logLevelEnum.level.LTrace;
+      client.config.logger.log_format =
+        client.config.logger.logFormatEnum.formats.JSON;
+      client.config.logger.log_request_body = true;
+      client.config.logger.log_response_body = true;
+      client.config.logger.log_to_console = true;
+      client.config.logger.setLogger(); // To apply above changes
+      */
 
       console.log("%c[TIL] Logging in to Genesys Cloud", "color: green");
       await client.loginImplicitGrant(gc_client, redirect_url, {});
@@ -77,7 +77,7 @@ export async function startApp() {
   runApp();
 }
 
-export { aApi, uApi };
+export { architectApi, usersApi };
 
 function runApp() {
   console.log("[TIL] Initializing application");

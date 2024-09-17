@@ -1,10 +1,8 @@
 // populateTable.js
-// Description: Module for populating a table with data
+// Description: Utility for populating a table with data
 
 // Utility function to populate the table with data
 export function populateTable(t, r) {
-  console.log("[TIL] Populating table with data");
-
   let table = document.getElementById(t);
   let tbody = table.getElementsByTagName("tbody")[0];
   tbody.innerHTML = ""; // Clear existing rows
@@ -45,4 +43,5 @@ export function populateTable(t, r) {
 
     tbody.appendChild(tr);
   });
+  console.log(`[TIL] Table ${t} populated with ${r.length} rows`);
 }

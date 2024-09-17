@@ -5,11 +5,11 @@
 import { applicationConfig } from "./configManager.js";
 
 // Core modules
-import { aApi, uApi } from "../app.js";
-import { t_aApi } from "./testManager.js";
+import { architectApi, usersApi } from "../app.js";
+import { t_architectApi } from "./testManager.js";
 
 // Utility modules
-import { populateTable } from "../utils/populateTable.js";
+import { populateTable } from "../utils/tableUtils.js";
 
 // Global variables
 const testMode = applicationConfig.testMode;
@@ -23,7 +23,7 @@ export async function startSession() {
   // Return user details
   async function getUser() {
     try {
-      let user = await uApi.getUsersMe({});
+      let user = await usersApi.getUsersMe({});
       console.log("[TIL] User details returned", user);
       appUser = user.name;
     } catch (error) {
@@ -42,7 +42,10 @@ export async function startSession() {
     };
 
     try {
-      let response = await aApi.getFlowsDatatableRows(datatableId, opts);
+      let response = await architectApi.getFlowsDatatableRows(
+        datatableId,
+        opts
+      );
       rows = response.entities; // Access the entities array
       console.log("[TIL] Datatable rows returned", rows);
     } catch (error) {
@@ -54,7 +57,7 @@ export async function startSession() {
   if (testMode) {
     // Get datatable rows using test API
     appUser = "Test User";
-    let t_response = await t_aApi.getFlowsDatatableRows();
+    let t_response = await t_architectApi.getFlowsDatatableRows();
     rows = t_response.entities;
     console.log("[TIL] Datatable rows returned", rows);
   } else {
@@ -69,7 +72,8 @@ export async function startSession() {
   const goodRows = rows.filter((row) => row.type === "good");
   const badRows = rows.filter((row) => row.type === "bad");
 
-  // Populate good and bad tables
+  // Populate good and bad tables on session start
+  console.log("[TIL] Populating tables with data");
   populateTable("good-table", goodRows);
   populateTable("bad-table", badRows);
 }

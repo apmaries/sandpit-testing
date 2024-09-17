@@ -7,7 +7,7 @@ import { applicationConfig } from "./configManager.js";
 // Global variables
 ("use strict");
 
-let t_aApi = null;
+let t_architectApi = null;
 
 // Utility function to fetch test data
 async function fetchData(url) {
@@ -30,11 +30,11 @@ export async function initializeTestMode() {
   const flowsDatatableRowsPromise = fetchData(testData.datatableUrl);
 
   // Assign mock data promises to mock API functions
-  t_aApi = {
+  t_architectApi = {
     getFlowsDatatableRows: function () {
       return flowsDatatableRowsPromise;
     },
   };
 }
 
-export { t_aApi };
+export { t_architectApi };
