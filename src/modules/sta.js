@@ -5,8 +5,8 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api instances
-import { sta } from "../app.js";
-import { t_conversationsApi } from "../core/testManager.js";
+import { staApi } from "../app.js";
+import { t_staApi } from "../core/testManager.js";
 
 // Utility modules
 
@@ -15,31 +15,50 @@ import { t_conversationsApi } from "../core/testManager.js";
 const testMode = applicationConfig.mode.isTest;
 
 // Get conversation sta data
-export async function getStaData(conversationId) {
+async function getStaData(conversationId) {
   console.log("[TIL] Getting STA data");
   let staData;
 
   if (testMode) {
     // Get sta data using test API
-    let t_response = await t_conversationsApi.getAnalyticsStaData();
-    let allStaData = t_response.staData;
+    let t_response = await t_staApi.getSpeechandtextanalyticsConversation();
+    // Not using conversation id in test mode - using a dummy conversation id to best replicate actual API call
 
-    // Filter the sta data to match the provided conversationId
-    staData = allStaData.filter(
-      (staData) => staData.conversationId === conversationId
-    );
-
-    return staData;
+    return t_response;
   }
 
   try {
-    let response = await conversationsApi.getAnalyticsStaData(conversationId);
-    staData = response.staData;
-    console.log("[TIL] Sta data returned", staData);
+    let response = await staApi.getSpeechandtextanalyticsConversation(
+      conversationId
+    );
+    console.log("[TIL] STA data returned", response);
   } catch (error) {
-    console.error("[TIL] Error getting sta data. ", error);
+    console.error("[TIL] Error getting STA data. ", error);
     throw error;
   }
 
-  return staData;
+  return response;
+}
+
+export async function processStaData(conversationId) {
+  // Get STA data
+  let staData = await getStaData(conversationId);
+
+  // Process sentiment score / sentiment trend
+  let sentimentScore = staData.sentimentScore;
+  let sentimentTrendClass = staData.sentimentTrendClass;
+
+  // Process empathy scores
+  let empathyScores = staData.empathyScores.map((scoreObj) => scoreObj.score);
+
+  // Get min & max empathy scores
+  let minEmpathyScore = Math.min(...empathyScores);
+  let maxEmpathyScore = Math.max(...empathyScores);
+
+  return {
+    sentimentScore,
+    sentimentTrendClass,
+    minEmpathyScore,
+    maxEmpathyScore,
+  };
 }

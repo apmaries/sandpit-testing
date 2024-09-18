@@ -30,7 +30,7 @@ export async function initializeTestMode() {
   const testData = {
     conversationsUrl: "../test/conversation_details.json",
     datatableUrl: "../test/datatable.json",
-    staUrl: "../test/convsersation_sta.json",
+    staUrl: "../test/conversation_sta.json",
     userUrl: "../test/user.json",
   };
 

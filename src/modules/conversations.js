@@ -15,8 +15,8 @@ import { t_conversationsApi } from "../core/testManager.js";
 const testMode = applicationConfig.mode.isTest;
 
 // Get conversation data
-export async function getConversations(conversationIds) {
-  console.log("[TIL] Getting conversations");
+async function getConversationsData(conversationIds) {
+  console.log(`[TIL] Getting conversation data`);
   let conversations = [];
 
   let opts = {
@@ -52,4 +52,76 @@ export async function getConversations(conversationIds) {
   }
 
   return conversations;
+}
+
+export async function processConversationData(conversationIds) {
+  // Get interaction details from conversation api
+  let conversationData = await getConversationsData(conversationIds);
+
+  // Initialize an array to hold processed conversation data
+  let processedConversations = [];
+
+  // Iterate over each conversation in the conversationData array
+  conversationData.forEach((conversation) => {
+    // Get conversation ACD participant info
+    let conversationParticipants = conversation.participants;
+    let acdParticipants = conversationParticipants.filter(
+      (participant) => participant.purpose === "acd"
+    );
+
+    // Get queue ids and names
+    let queueIds = acdParticipants.map(
+      (participant) => participant.participantId
+    );
+    let queueNames = acdParticipants.map(
+      (participant) => participant.participantName
+    );
+
+    // Get media types
+    let mediaTypes = [];
+    for (let i = 0; i < acdParticipants.length; i++) {
+      let participantSessions = acdParticipants[i].sessions;
+      participantSessions.forEach((session) => {
+        let mediaType = session.mediaType;
+        if (!mediaTypes.includes(mediaType)) {
+          mediaTypes.push(mediaType);
+        }
+      });
+    }
+
+    // Get conversation evaluation data
+    let averageEvalScore;
+    let averageEvalCriticalScore;
+
+    // Iterate through evaluations and average oTotalScore and oTotalCriticalScore values
+    if (conversation.evaluations) {
+      let totalScore = 0;
+      let totalCriticalScore = 0;
+      let evaluations = conversation.evaluations;
+      let evaluationCount = evaluations.length;
+
+      evaluations.forEach((evaluation) => {
+        totalScore += evaluation.oTotalScore;
+        totalCriticalScore += evaluation.oTotalCriticalScore;
+      });
+
+      averageEvalScore = totalScore / evaluationCount;
+      averageEvalCriticalScore = totalCriticalScore / evaluationCount;
+    }
+
+    // Push the processed conversation data to the array
+    processedConversations.push({
+      id: conversation.conversationId,
+      divisionIds: conversation.divisionIds,
+      conversationStart: conversation.conversationStart,
+      conversationEnd: conversation.conversationEnd,
+      queuesIds: queueIds,
+      queuesNames: queueNames,
+      mediaTypes: mediaTypes,
+      avgEvalScore: averageEvalScore,
+      avgEvalCriticalScore: averageEvalCriticalScore,
+    });
+  });
+
+  return processedConversations;
 }
