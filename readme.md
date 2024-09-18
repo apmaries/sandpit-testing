@@ -32,13 +32,14 @@ Support admins / users through scripts run on redirect
    - routing:readonly (used to get queue / skill / language / wrap names)
    - speech-and-text-analytics:readonly (STA data source for silence / overtalk etc.)
    - user-basic-info
-2. Configure Integration
-   1. URL = <url>?<gc_region>&<gc_client>&<gc_datatable>
-   1. Add 'allow-popups' to Iframe Sandbox Options
-3. Data table
-4. Groups
+1. Groups
    1. TIL Admins (can edit interactions in library)
-   2. TIL Users (can view / open only)
+   1. TIL Users (can view / open only)
+1. Configure Integration
+   1. URL = <url>?<gc_region>&<gc_client>&<gc_datatable>&[<til_admins_group_id> : <til_admins_ids>]
+   1. Add 'allow-popups' to Iframe Sandbox Options
+   1. Assign TIL Admins / TIL Users groups
+1. Data table
 
 ## Limits
 
@@ -46,6 +47,10 @@ Support admins / users through scripts run on redirect
 1. Max interactions by category? Saves on search / refresh API call complexity
 1. Conversations that span across queues?
 
-## Questions
+## Questions / To Work Through
 
 1. Should archived / deleted recordings still be listed (greyed out) or removed? Can retrieve archived recording but probably wouldn't want to as it's a limited number available... perhaps keep in datatable but not present in UI is best.
+1. Check behaviour for
+   - digital interactions
+   - transfers
+   - transfers across divisions

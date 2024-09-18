@@ -1,5 +1,5 @@
 // domUtils.js
-// Description: Utility for populating a table with data
+// Description: Utility for updating the DOM
 
 // Utility function to populate the table with data
 export function populateTable(t, r) {

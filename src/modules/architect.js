@@ -12,7 +12,7 @@ import { t_architectApi } from "../core/testManager.js";
 
 // Global variables
 ("use strict");
-const testMode = applicationConfig.testMode;
+const testMode = applicationConfig.mode.isTest;
 
 // Return datatable rows
 export async function getDatatableRows() {

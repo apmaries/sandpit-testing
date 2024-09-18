@@ -16,3 +16,17 @@ gux-button {
   display: flex;
   align-items: center;
 }
+
+.admin-hidden {
+  display: none;
+}
+
+.admin-visible {
+  display: block;
+}
+
+.add-to-divs.admin-visible {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}

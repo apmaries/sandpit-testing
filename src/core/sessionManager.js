@@ -12,7 +12,7 @@ import { getUser } from "../modules/users.js";
 import { populateTable } from "../utils/domUtils.js";
 
 // Global variables
-const testMode = applicationConfig.testMode;
+const testMode = applicationConfig.mode.isTest;
 ("use strict");
 
 export async function startSession() {
@@ -22,7 +22,7 @@ export async function startSession() {
   const [appUser, rows] = await Promise.all([getUser(), getDatatableRows()]);
 
   document.getElementById("welcome-div").innerText =
-    "Welcome, " + appUser + "!";
+    "Welcome, " + appUser.name + "!";
 
   // Delineate between good and bad records
   const goodRows = rows.filter((row) => row.type === "good");

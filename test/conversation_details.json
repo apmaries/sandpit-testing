@@ -400,6 +400,412 @@
           ]
         }
       ]
+    },
+    {
+      "conversationEnd": "2024-09-17T08:30:52.286Z",
+      "conversationId": "9446e0c9-ff5a-4a53-ae7f-42deb1af5424",
+      "conversationStart": "2024-09-17T08:29:51.690Z",
+      "divisionIds": ["e798387e-a708-40da-8486-d6877e7c7991"],
+      "mediaStatsMinConversationMos": 4.352830404629657,
+      "mediaStatsMinConversationRFactor": 86.46220397949219,
+      "originatingDirection": "inbound",
+      "evaluations": [
+        {
+          "contextId": "055d05d0-c2fb-4794-83dc-e277dfc7c2fd",
+          "evaluationId": "70dff552-6d76-4b1d-a3c0-21ce90cba181",
+          "evaluationStatus": "Finished",
+          "evaluatorId": "b5c0c3af-b7dc-4d33-986e-43ffec63f663",
+          "eventTime": "2024-09-17T08:33:47.095Z",
+          "formId": "63bb6c65-5568-468e-947a-552d0d4e1811",
+          "formName": "5 Star Call Form (KJW)",
+          "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+          "released": true,
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
+          "oTotalCriticalScore": 100,
+          "oTotalScore": 57
+        }
+      ],
+      "surveys": [
+        {
+          "eventTime": "2024-09-17T08:31:26.613Z",
+          "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+          "surveyFormContextId": "93fed91e-2c69-4dca-b3b0-3873b6be045d",
+          "surveyId": "b780510f-138a-481c-998c-179fc94d63d8",
+          "surveyStatus": "Sent",
+          "surveyType": "Web",
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f"
+        }
+      ],
+      "participants": [
+        {
+          "externalContactId": "dcabc9ac-de08-4c91-aa37-e136825ea3a6",
+          "participantId": "39f38a74-5cf0-48f8-a5b3-221bb3447d47",
+          "participantName": "Mobile Number, United Kingdom",
+          "purpose": "customer",
+          "sessions": [
+            {
+              "activeSkillIds": ["5acf3059-bd14-4809-a2e1-bc7d50c09bff"],
+              "ani": "tel:+447408849791",
+              "direction": "inbound",
+              "dnis": "tel:+16504344007",
+              "edgeId": "08fc4e9f-7ea2-4843-88fd-b88e99f1c949",
+              "mediaType": "voice",
+              "protocolCallId": "375959200_124691206@67.231.13.110",
+              "provider": "Edge",
+              "recording": true,
+              "remoteNameDisplayable": "Mobile Number, United Kingdom",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
+              "sessionDnis": "tel:+16504344007",
+              "sessionId": "b76f6b48-7323-474f-860b-d2dcfb0089ae",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:21.977Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882529332649108,
+                  "minRFactor": 92.44884490966797,
+                  "receivedPackets": 1511
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:32.122Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882344942206287,
+                  "minRFactor": 92.4407958984375,
+                  "receivedPackets": 500
+                },
+                {
+                  "codecs": ["audio/PCMU"],
+                  "eventTime": "2024-09-17T08:30:44.978Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.352830404629657,
+                  "minRFactor": 90.574951171875,
+                  "receivedPackets": 2649
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 13,
+                  "eventTime": "2024-09-17T08:30:44.979Z",
+                  "maxLatencyMs": 130,
+                  "minMos": 4.714440575149014,
+                  "minRFactor": 86.46220397949219,
+                  "receivedPackets": 628
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-17T08:29:51.884Z",
+                  "name": "nConnected",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:44.931Z",
+                  "name": "tConnected",
+                  "value": 53047
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-17T08:29:51.884Z",
+                  "segmentStart": "2024-09-17T08:29:51.690Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "endpoint",
+                  "q850ResponseCodes": [16],
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:44.931Z",
+                  "segmentStart": "2024-09-17T08:29:51.884Z",
+                  "segmentType": "interact"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "47f2cdc3-0a16-409f-a706-d67df49f9206",
+          "participantName": "Dunder_Mifflin_Inbound_FLow",
+          "purpose": "ivr",
+          "sessions": [
+            {
+              "ani": "tel:+447408849791",
+              "direction": "inbound",
+              "dnis": "tel:+16504344007",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "b76f6b48-7323-474f-860b-d2dcfb0089ae",
+              "protocolCallId": "90195c3b-00b9-4153-8f7a-a254c6e21ba2",
+              "provider": "Edge",
+              "remote": "Mobile Number, United Kingdom",
+              "remoteNameDisplayable": "Woodside CA",
+              "sessionDnis": "tel:+16504344007",
+              "sessionId": "979b7a63-a5f5-473e-9522-6f6c667316dd",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:22.007Z",
+                  "maxLatencyMs": 39,
+                  "minMos": 4.798244428464676,
+                  "minRFactor": 89.18092346191406,
+                  "receivedPackets": 1510
+                }
+              ],
+              "flow": {
+                "endingLanguage": "en-us",
+                "entryReason": "tel:+16504344007",
+                "entryType": "dnis",
+                "exitReason": "TRANSFER",
+                "flowId": "6f10bd8d-5ede-48e0-a40f-8b5b59519bb0",
+                "flowName": "Dunder_Mifflin_Inbound_FLow",
+                "flowType": "INBOUNDCALL",
+                "flowVersion": "7.0",
+                "startingLanguage": "en-us",
+                "transferTargetAddress": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                "transferTargetName": "Dunder_Mifflin_PaperSales",
+                "transferType": "ACD"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-17T08:29:52.407Z",
+                  "name": "nFlow",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:21.951Z",
+                  "name": "tIvr",
+                  "value": 30217
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:21.954Z",
+                  "name": "tFlow",
+                  "value": 29547
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:21.954Z",
+                  "name": "tFlowExit",
+                  "value": 29547
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-17T08:29:51.734Z",
+                  "segmentStart": "2024-09-17T08:29:51.715Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "segmentEnd": "2024-09-17T08:30:21.951Z",
+                  "segmentStart": "2024-09-17T08:29:51.734Z",
+                  "segmentType": "ivr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "4e7bae6e-7589-43a2-bf76-72c430829450",
+          "participantName": "Dunder_Mifflin_PaperSales",
+          "purpose": "acd",
+          "sessions": [
+            {
+              "activeSkillIds": ["5acf3059-bd14-4809-a2e1-bc7d50c09bff"],
+              "ani": "tel:+447408849791",
+              "destinationAddresses": [
+                "sip:dwightschrutedm%40genesys.com@localhost"
+              ],
+              "direction": "inbound",
+              "dnis": "tel:+16504344007",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "flowInType": "ivr",
+              "mediaType": "voice",
+              "peerId": "b76f6b48-7323-474f-860b-d2dcfb0089ae",
+              "protocolCallId": "cb2718b5-10a6-4bd9-8f9a-51f36cf09805",
+              "provider": "Edge",
+              "remote": "Mobile Number, United Kingdom",
+              "remoteNameDisplayable": "Dunder_Mifflin_PaperSales",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
+              "sessionDnis": "tel:+16504344007",
+              "sessionId": "15099ebe-703d-4b66-87ee-a0048a52a23e",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:32.118Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882568412342888,
+                  "minRFactor": 92.45055389404297,
+                  "receivedPackets": 499
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-17T08:30:22.004Z",
+                  "name": "nOffered",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:32.048Z",
+                  "name": "tAcd",
+                  "value": 10044
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:22.004Z",
+                  "segmentStart": "2024-09-17T08:30:21.959Z",
+                  "segmentType": "delay"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:32.048Z",
+                  "segmentStart": "2024-09-17T08:30:22.004Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [410]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "b4603e27-ea73-4e81-9572-7b5157a9276f",
+          "purpose": "agent",
+          "teamId": "20cc85da-39bc-4137-b8c8-88edf6bd5cb6",
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
+          "sessions": [
+            {
+              "activeSkillIds": ["5acf3059-bd14-4809-a2e1-bc7d50c09bff"],
+              "agentAssistantId": "d9e44c6f-2b0b-46df-98ea-5681c24efefc",
+              "ani": "tel:+447408849791",
+              "direction": "inbound",
+              "dnis": "tel:+16504344007",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "b76f6b48-7323-474f-860b-d2dcfb0089ae",
+              "protocolCallId": "f9d4ef07-b686-4304-a4a3-7676347da466",
+              "provider": "Edge",
+              "remote": "Mobile Number, United Kingdom",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
+              "sessionDnis": "sip:5eced18f894805223d10fdfa+genesys2.orgspan.com;tgrp=29e81de9-d4fb-4205-9920-c562f3c6229d;trunk-context=genesys2@localhost",
+              "sessionId": "9110ef32-2bdb-48c3-9405-471499e9ee33",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:44.967Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882199685900358,
+                  "minRFactor": 92.43445587158203,
+                  "receivedPackets": 654
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 13,
+                  "eventTime": "2024-09-17T08:30:44.967Z",
+                  "maxLatencyMs": 130,
+                  "minMos": 4.714727406985859,
+                  "minRFactor": 86.47090148925781,
+                  "receivedPackets": 629
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-17T08:30:31.999Z",
+                  "name": "tAlert",
+                  "value": 5051
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:31.999Z",
+                  "name": "tAnswered",
+                  "value": 10044
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:44.937Z",
+                  "name": "nError",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:44.937Z",
+                  "name": "tTalk",
+                  "value": 12938
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:44.937Z",
+                  "name": "tTalkComplete",
+                  "value": 12938
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:52.286Z",
+                  "name": "tAcw",
+                  "value": 7349
+                },
+                {
+                  "emitDate": "2024-09-17T08:30:52.286Z",
+                  "name": "tHandle",
+                  "value": 20287
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:31.999Z",
+                  "segmentStart": "2024-09-17T08:30:26.948Z",
+                  "segmentType": "alert"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:44.937Z",
+                  "segmentStart": "2024-09-17T08:30:31.999Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "errorCode": "error.ininedgecontrol.session.inactive",
+                  "q850ResponseCodes": [16],
+                  "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+                  "requestedRoutingSkillIds": [
+                    "5acf3059-bd14-4809-a2e1-bc7d50c09bff"
+                  ],
+                  "segmentEnd": "2024-09-17T08:30:52.286Z",
+                  "segmentStart": "2024-09-17T08:30:44.937Z",
+                  "segmentType": "wrapup",
+                  "wrapUpCode": "f5c5bcda-62ea-4268-8acb-8c2ec9d6dbf8"
+                }
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }

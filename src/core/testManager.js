@@ -9,6 +9,8 @@ import { applicationConfig } from "./configManager.js";
 
 let t_architectApi = null;
 let t_conversationsApi = null;
+let t_staApi = null;
+let t_usersApi = null;
 
 // Utility function to fetch test data
 async function fetchData(url) {
@@ -25,11 +27,18 @@ async function fetchData(url) {
 export async function initializeTestMode() {
   console.log("[TIL] Initializing test mode");
 
-  const testData = applicationConfig.testingData;
+  const testData = {
+    conversationsUrl: "../test/conversation_details.json",
+    datatableUrl: "../test/datatable.json",
+    staUrl: "../test/convsersation_sta.json",
+    userUrl: "../test/user.json",
+  };
 
   // Define mock data promises
   const flowsDatatableRowsPromise = fetchData(testData.datatableUrl);
   const conversationsPromise = fetchData(testData.conversationsUrl);
+  const staPromise = fetchData(testData.staUrl);
+  const usersPromise = fetchData(testData.userUrl);
 
   // Assign mock data promises to mock API functions
   t_architectApi = {
@@ -42,6 +51,16 @@ export async function initializeTestMode() {
       return conversationsPromise;
     },
   };
+  t_staApi = {
+    getSpeechandtextanalyticsConversation: function () {
+      return staPromise;
+    },
+  };
+  t_usersApi = {
+    getUsersMe: function () {
+      return usersPromise;
+    },
+  };
 }
 
-export { t_architectApi, t_conversationsApi };
+export { t_architectApi, t_conversationsApi, t_staApi, t_usersApi };

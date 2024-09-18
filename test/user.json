@@ -1,0 +1,121 @@
+{
+  "id": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+  "name": "Test User",
+  "division": {
+    "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+    "name": "Bluth Company",
+    "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+  },
+  "chat": {
+    "jabberId": "5e7ad7b81b5036154089a59d@genesys2.orgspan.com"
+  },
+  "email": "andy.maries@genesys.com",
+  "primaryContactInfo": [
+    {
+      "address": "andy.maries@genesys.com",
+      "mediaType": "EMAIL",
+      "type": "PRIMARY"
+    },
+    {
+      "address": "+61403361963",
+      "display": "+61 403 361 963",
+      "mediaType": "PHONE",
+      "type": "PRIMARY"
+    }
+  ],
+  "addresses": [
+    {
+      "address": "+61403361963",
+      "display": "+61 403 361 963",
+      "mediaType": "PHONE",
+      "type": "MOBILE",
+      "countryCode": "AU"
+    },
+    {
+      "address": "+61311111111",
+      "display": "+61 3 1111 1111",
+      "mediaType": "PHONE",
+      "type": "HOME",
+      "countryCode": "AU"
+    }
+  ],
+  "state": "active",
+  "title": "Team Leader",
+  "username": "andy.maries@genesys.com",
+  "images": [
+    {
+      "resolution": "x48",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/f39f6189/d962/49be/a52e/016620084090.jpg"
+    },
+    {
+      "resolution": "x96",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/d200e212/4b3c/4f2c/ad41/2acf8d846e2a.jpg"
+    },
+    {
+      "resolution": "x128",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/2454143e/bf6e/445e/a393/8d11efb0d648.jpg"
+    },
+    {
+      "resolution": "x200",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/5fae5f02/6276/419c/a0aa/c43258886fbb.jpg"
+    },
+    {
+      "resolution": "x300",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/6032f444/fc7a/4c44/8e96/3bff59fab6ee.jpg"
+    },
+    {
+      "resolution": "x400",
+      "imageUri": "https://prod-usw2-inin-directory-service-profile.s3-us-west-2.amazonaws.com/5b565a08/0f3d/4807/86be/d24774c2f097.jpg"
+    }
+  ],
+  "version": 123,
+  "preferredName": "Peter",
+  "groups": [
+    {
+      "id": "0c86da66-8eff-464d-b75a-265033881a96",
+      "selfUri": "/api/v2/groups/0c86da66-8eff-464d-b75a-265033881a96"
+    },
+    {
+      "id": "4ee4f449-b7fa-4a71-8770-336191b594f3",
+      "selfUri": "/api/v2/groups/4ee4f449-b7fa-4a71-8770-336191b594f3"
+    },
+    {
+      "id": "6b777ea9-e06d-41f0-82fb-f4e18b0cb994",
+      "selfUri": "/api/v2/groups/6b777ea9-e06d-41f0-82fb-f4e18b0cb994"
+    },
+    {
+      "id": "9156a708-1278-4869-b27e-c66bc56ad128",
+      "selfUri": "/api/v2/groups/9156a708-1278-4869-b27e-c66bc56ad128"
+    },
+    {
+      "id": "aa4e5a13-7359-4397-91d8-baefe55b7eae",
+      "selfUri": "/api/v2/groups/aa4e5a13-7359-4397-91d8-baefe55b7eae"
+    },
+    {
+      "id": "632e7236-1b00-4a09-b9b6-0fdc73aeef07",
+      "selfUri": "/api/v2/groups/632e7236-1b00-4a09-b9b6-0fdc73aeef07"
+    },
+    {
+      "id": "a7069eab-82de-4bc3-b3f2-af6632a3da92",
+      "selfUri": "/api/v2/groups/a7069eab-82de-4bc3-b3f2-af6632a3da92"
+    },
+    {
+      "id": "bbc07a23-79e4-4f71-aac4-e031bc18d73d",
+      "selfUri": "/api/v2/groups/bbc07a23-79e4-4f71-aac4-e031bc18d73d"
+    },
+    {
+      "id": "db09aaf3-0daf-4665-8175-ba40855b5c6f",
+      "selfUri": "/api/v2/groups/db09aaf3-0daf-4665-8175-ba40855b5c6f"
+    },
+    {
+      "id": "de68d49d-abef-4e46-a904-54ebfa2f8e6e",
+      "selfUri": "/api/v2/groups/de68d49d-abef-4e46-a904-54ebfa2f8e6e"
+    },
+    {
+      "id": "6120c8ee-1344-4bf1-9473-362adc8272a9",
+      "selfUri": "/api/v2/groups/6120c8ee-1344-4bf1-9473-362adc8272a9"
+    }
+  ],
+  "acdAutoAnswer": false,
+  "selfUri": "/api/v2/users/be1c20dd-f6a5-457e-bba4-aaabe81e1ceb"
+}

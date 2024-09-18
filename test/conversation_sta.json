@@ -1,0 +1,14 @@
+{
+  "conversation": {
+    "id": "10c61f20-c91b-4279-b765-f52679fbd254",
+    "selfUri": "/api/v2/conversations/10c61f20-c91b-4279-b765-f52679fbd254"
+  },
+  "sentimentScore": 0.46211715726000974,
+  "sentimentTrendClass": "NotCalculated",
+  "empathyScores": [
+    {
+      "score": 100,
+      "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+    }
+  ]
+}

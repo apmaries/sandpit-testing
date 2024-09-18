@@ -8,38 +8,46 @@ import { applicationConfig } from "./core/configManager.js";
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
+// Utility modules
+import { handleAddToLibraryClick } from "./utils/eventUtils.js";
+
 // Global variables
 ("use strict");
-const testMode = applicationConfig.testMode;
+const testMode = applicationConfig.mode.isTest;
+const platformClient = require("platformClient");
+const client = platformClient.ApiClient.instance;
+const architectApi = new platformClient.ArchitectApi();
+const conversationsApi = new platformClient.ConversationsApi();
+const staApi = new platformClient.SpeechTextAnalyticsApi();
+const usersApi = new platformClient.UsersApi();
 
-let platformClient = require("platformClient");
+// URL parameters
 let url = new URL(document.location.href);
 let gc_region = url.searchParams.get("gc_region");
 let gc_client = url.searchParams.get("gc_client");
 let gc_datatable = url.searchParams.get("gc_datatable");
+let til_adminsGroupId = url.searchParams.get("til_adminsGroupId");
+let til_adminsIds = url.searchParams.get("til_adminsIds");
 
-const redirect_url = window.location.origin + window.location.pathname;
+let redirect_url = window.location.origin + window.location.pathname;
 
 // Getting and setting the GC details from dynamic URL and session storage
-gc_region
-  ? sessionStorage.setItem("gc_region", gc_region)
-  : (gc_region = sessionStorage.getItem("gc_region"));
-gc_client
-  ? sessionStorage.setItem("gc_client", gc_client)
-  : (gc_client = sessionStorage.getItem("gc_clientId"));
-gc_datatable
-  ? sessionStorage.setItem("gc_datatable", gc_datatable)
-  : (gc_datatable = sessionStorage.getItem("gc_datatable"));
-redirect_url
-  ? sessionStorage.setItem("redirect_url", redirect_url)
-  : (redirect_url = sessionStorage.getItem("redirect_url"));
+gc_region = gc_region || sessionStorage.getItem("gc_region");
+gc_client = gc_client || sessionStorage.getItem("gc_clientId");
+gc_datatable = gc_datatable || sessionStorage.getItem("gc_datatable");
+til_adminsGroupId =
+  til_adminsGroupId || sessionStorage.getItem("til_adminsGroupId");
+til_adminsIds = til_adminsIds || sessionStorage.getItem("til_adminsIds");
+redirect_url = redirect_url || sessionStorage.getItem("redirect_url");
 
-const client = platformClient.ApiClient.instance;
-const architectApi = new platformClient.ArchitectApi();
-const analyticsApi = new platformClient.AnalyticsApi();
-const authorizationApi = new platformClient.AuthorizationApi();
-const conversationsApi = new platformClient.ConversationsApi();
-const usersApi = new platformClient.UsersApi();
+// Setting the values in sessionStorage if they are provided
+if (gc_region) sessionStorage.setItem("gc_region", gc_region);
+if (gc_client) sessionStorage.setItem("gc_client", gc_client);
+if (gc_datatable) sessionStorage.setItem("gc_datatable", gc_datatable);
+if (til_adminsGroupId)
+  sessionStorage.setItem("til_adminsGroupId", til_adminsGroupId);
+if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
+if (redirect_url) sessionStorage.setItem("redirect_url", redirect_url);
 
 export async function startApp() {
   console.log("[TIL] Starting application");
@@ -84,22 +92,64 @@ export async function startApp() {
   }
 }
 
-export { architectApi, conversationsApi, usersApi };
+export { architectApi, conversationsApi, staApi, usersApi };
 
-function runApp() {
+async function runApp() {
   console.log("[TIL] Application started");
 
   // Enable event listeners
   async function enableEventListeners() {
-    // Add event listeners here
+    // Select all buttons with the name 'add-to-library'
+    const addButtons = document.querySelectorAll(
+      'gux-button[name="add-to-library"]'
+    );
+
+    // Iterate over the NodeList and add event listeners
+    addButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        let library;
+        let inputValue;
+
+        if (button.id === "add-to-good-btn") {
+          library = "good";
+          inputValue = document.querySelector(
+            '#add-to-good-div input[slot="input"]'
+          ).value;
+        } else if (button.id === "add-to-bad-btn") {
+          library = "bad";
+          inputValue = document.querySelector(
+            '#add-to-bad-div input[slot="input"]'
+          ).value;
+        }
+
+        // Validate the input value for GUID syntax
+        const guidPattern =
+          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+        if (!guidPattern.test(inputValue)) {
+          alert("Please enter a valid GUID.");
+          return;
+        }
+
+        handleAddToLibraryClick(library, inputValue);
+      });
+    });
   }
 
-  // Check if user is an admin
-  let isAdmin = false;
-  if (testMode) {
-    isAdmin = true;
+  const isAdmin = applicationConfig.mode.isAdmin;
+
+  if (isAdmin) {
+    // Find all elements with the 'admin-hidden' class
+    const adminHiddenElements = document.querySelectorAll(".admin-hidden");
+
+    // Update each element to replace 'admin-hidden' with 'admin-visible'
+    adminHiddenElements.forEach((element) => {
+      element.classList.remove("admin-hidden");
+      element.classList.add("admin-visible");
+    });
+
+    await enableEventListeners();
+    console.log("[TIL] Admin features enabled");
   } else {
-    let permissions = client.authData.accessTokenInfo.token.permissions;
-    isAdmin = permissions.includes("admin");
+    console.log("[TIL] User is not admin");
   }
 }

@@ -32,15 +32,28 @@
           <gux-tab-list slot="tab-list">
             <gux-tab id="good-tab" tab-id="1">Good</gux-tab>
             <gux-tab id="bad-tab" tab-id="2">Bad</gux-tab>
-            <gux-tab id="add-tab" tab-id="3">Manage</gux-tab>
+            <gux-tab id="admin-tab" tab-id="3" class="admin-hidden"
+              >Manage</gux-tab
+            >
           </gux-tab-list>
+
+          <!-- Tab 1 - Good interactions -->
           <gux-tab-panel tab-id="1">
-            <div id="add-to-good-div" class="add-to-divs">
+            <div id="add-to-good-div" class="add-to-divs admin-hidden">
               <gux-form-field-text-like label-position="screenreader">
                 <label slot="label">Screenreader</label>
-                <input slot="input" type="text" value="Enter interaction id" />
+                <input
+                  slot="input"
+                  type="text"
+                  placeholder="Enter interaction id"
+                />
               </gux-form-field-text-like>
-              <gux-button id="add-to-good-btn" accent="primary">Add</gux-button>
+              <gux-button
+                name="add-to-library"
+                id="add-to-good-btn"
+                accent="primary"
+                >Add</gux-button
+              >
             </div>
             <div id="good-table-div">
               <gux-table-beta id="good-table">
@@ -78,13 +91,24 @@
               </gux-table-beta>
             </div>
           </gux-tab-panel>
+
+          <!-- Tab 2 - Bad interactions -->
           <gux-tab-panel tab-id="2">
-            <div id="add-to-bad-div" class="add-to-divs">
+            <div id="add-to-bad-div" class="add-to-divs admin">
               <gux-form-field-text-like label-position="screenreader">
                 <label slot="label">Screenreader</label>
-                <input slot="input" type="text" value="Enter interaction id" />
+                <input
+                  slot="input"
+                  type="text"
+                  placeholder="Enter interaction id"
+                />
               </gux-form-field-text-like>
-              <gux-button id="add-to-bad-btn" accent="primary">Add</gux-button>
+              <gux-button
+                name="add-to-library"
+                id="add-to-bad-btn"
+                accent="primary"
+                >Add</gux-button
+              >
             </div>
             <div id="bad-table-div">
               <gux-table-beta id="bad-table">
@@ -122,6 +146,8 @@
               </gux-table-beta>
             </div>
           </gux-tab-panel>
+
+          <!-- Tab 3 - Admin management -->
           <gux-tab-panel tab-id="3"> </gux-tab-panel>
         </gux-tabs>
         <!--
