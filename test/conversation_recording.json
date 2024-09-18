@@ -1,0 +1,18 @@
+[
+  {
+    "id": "db7e115c-648c-49ed-8a12-5d56b22ca381",
+    "conversationId": "9446e0c9-ff5a-4a53-ae7f-42deb1af5424",
+    "startTime": "2024-09-17T08:29:51.882Z",
+    "endTime": "2024-09-17T08:30:44.925Z",
+    "media": "audio",
+    "annotations": [],
+    "fileState": "AVAILABLE",
+    "archiveMedium": "CLOUDARCHIVE",
+    "deleteDate": "2025-10-08T08:30:52.368Z",
+    "maxAllowedRestorationsForOrg": 100,
+    "remainingRestorationsAllowedForOrg": 99,
+    "sessionId": "b76f6b48-7323-474f-860b-d2dcfb0089ae",
+    "region": "us-west-2",
+    "selfUri": "/api/v2/conversations/9446e0c9-ff5a-4a53-ae7f-42deb1af5424/recordingmetadata/db7e115c-648c-49ed-8a12-5d56b22ca381"
+  }
+]

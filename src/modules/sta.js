@@ -17,7 +17,6 @@ const testMode = applicationConfig.mode.isTest;
 // Get conversation sta data
 async function getStaData(conversationId) {
   console.log("[TIL] Getting STA data");
-  let staData;
 
   if (testMode) {
     // Get sta data using test API

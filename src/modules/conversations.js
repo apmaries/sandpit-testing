@@ -63,8 +63,9 @@ export async function processConversationData(conversationIds) {
 
   // Iterate over each conversation in the conversationData array
   conversationData.forEach((conversation) => {
-    // Get conversation ACD participant info
     let conversationParticipants = conversation.participants;
+
+    // Get conversation ACD participant info
     let acdParticipants = conversationParticipants.filter(
       (participant) => participant.purpose === "acd"
     );
@@ -89,6 +90,25 @@ export async function processConversationData(conversationIds) {
       });
     }
 
+    // Get conversation Agent participant data
+    let agentParticipants = conversationParticipants.filter(
+      (participant) => participant.purpose === "agent"
+    );
+
+    // Get total talk time for all agents
+    let totalTalkTime = 0;
+    agentParticipants.forEach((participant) => {
+      let participantSessions = participant.sessions;
+      participantSessions.forEach((session) => {
+        let metrics = session.metrics;
+        // return only if metric name is tHandle
+        let talkTime = metrics.find((metric) => metric.name === "tTalk");
+        if (talkTime) {
+          totalTalkTime += talkTime.value;
+        }
+      });
+    });
+
     // Get conversation evaluation data
     let averageEvalScore;
     let averageEvalCriticalScore;
@@ -111,15 +131,20 @@ export async function processConversationData(conversationIds) {
 
     // Push the processed conversation data to the array
     processedConversations.push({
-      id: conversation.conversationId,
-      divisionIds: conversation.divisionIds,
-      conversationStart: conversation.conversationStart,
-      conversationEnd: conversation.conversationEnd,
-      queuesIds: queueIds,
-      queuesNames: queueNames,
-      mediaTypes: mediaTypes,
-      avgEvalScore: averageEvalScore,
-      avgEvalCriticalScore: averageEvalCriticalScore,
+      conversation: {
+        id: conversation.conversationId,
+        divisionIds: conversation.divisionIds,
+        conversationStart: conversation.conversationStart,
+        conversationEnd: conversation.conversationEnd,
+        queuesIds: queueIds,
+        queuesNames: queueNames,
+        mediaTypes: mediaTypes,
+        totalTalkTime: totalTalkTime,
+      },
+      evaluation: {
+        averageEvalScore: averageEvalScore,
+        averageEvalCriticalScore: averageEvalCriticalScore,
+      },
     });
   });
 

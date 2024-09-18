@@ -9,6 +9,7 @@ import { applicationConfig } from "./configManager.js";
 
 let t_architectApi = null;
 let t_conversationsApi = null;
+let t_recordingApi = null;
 let t_staApi = null;
 let t_usersApi = null;
 
@@ -30,6 +31,7 @@ export async function initializeTestMode() {
   const testData = {
     conversationsUrl: "../test/conversation_details.json",
     datatableUrl: "../test/datatable.json",
+    recordingUrl: "../test/conversation_recording.json",
     staUrl: "../test/conversation_sta.json",
     userUrl: "../test/user.json",
   };
@@ -37,6 +39,7 @@ export async function initializeTestMode() {
   // Define mock data promises
   const flowsDatatableRowsPromise = fetchData(testData.datatableUrl);
   const conversationsPromise = fetchData(testData.conversationsUrl);
+  const recordingPromise = fetchData(testData.recordingUrl);
   const staPromise = fetchData(testData.staUrl);
   const usersPromise = fetchData(testData.userUrl);
 
@@ -51,6 +54,11 @@ export async function initializeTestMode() {
       return conversationsPromise;
     },
   };
+  t_recordingApi = {
+    getConversationRecordingmetadata: function () {
+      return recordingPromise;
+    },
+  };
   t_staApi = {
     getSpeechandtextanalyticsConversation: function () {
       return staPromise;
@@ -63,4 +71,10 @@ export async function initializeTestMode() {
   };
 }
 
-export { t_architectApi, t_conversationsApi, t_staApi, t_usersApi };
+export {
+  t_architectApi,
+  t_conversationsApi,
+  t_recordingApi,
+  t_staApi,
+  t_usersApi,
+};
