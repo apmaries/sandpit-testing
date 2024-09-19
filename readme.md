@@ -51,6 +51,7 @@ Check if logged in user has permissions below permissions per division listed in
 1. Any additional metrics?
 1. Dynamically build datatable schema (management tool)
 1. Refresh datatable schema & retain records (management tool)
+1. Notify admins if datatable schema broken / corrupted
 
 ## Completed
 
