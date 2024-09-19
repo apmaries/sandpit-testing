@@ -8,6 +8,9 @@ import { applicationConfig } from "../core/configManager.js";
 import { conversationsApi } from "../app.js";
 import { t_conversationsApi } from "../core/testManager.js";
 
+// Api Modules
+import { getDivisions } from "./objects.js";
+
 // Utility modules
 
 // Global variables
@@ -62,7 +65,11 @@ export async function processConversationData(conversationIds) {
   let processedConversations = [];
 
   // Iterate over each conversation in the conversationData array
-  conversationData.forEach((conversation) => {
+  for (const conversation of conversationData) {
+    // Get conversation divisions
+    let conversationDivisions = await getDivisions(conversation.divisionIds);
+
+    // Get conversation participants
     let conversationParticipants = conversation.participants;
 
     // Get conversation ACD participant info
@@ -71,12 +78,10 @@ export async function processConversationData(conversationIds) {
     );
 
     // Get queue ids and names
-    let queueIds = acdParticipants.map(
-      (participant) => participant.participantId
-    );
-    let queueNames = acdParticipants.map(
-      (participant) => participant.participantName
-    );
+    let conversationQueues = acdParticipants.map((participant) => ({
+      id: participant.participantId,
+      name: participant.participantName,
+    }));
 
     // Get media types
     let mediaTypes = [];
@@ -90,7 +95,7 @@ export async function processConversationData(conversationIds) {
       });
     }
 
-    // Get conversation Agent participant data
+    // Get conversation agent participant data
     let agentParticipants = conversationParticipants.filter(
       (participant) => participant.purpose === "agent"
     );
@@ -129,24 +134,48 @@ export async function processConversationData(conversationIds) {
       averageEvalCriticalScore = totalCriticalScore / evaluationCount;
     }
 
+    // Get conversation survey data
+    let surveyPromoterScore;
+    let oSurveyTotalScore;
+
+    if (conversation.surveys && conversation.surveys.length > 0) {
+      // Assuming we are interested in the first survey if multiple surveys exist
+      let survey = conversation.surveys[0];
+
+      if (survey.surveyPromoterScore !== undefined) {
+        surveyPromoterScore = survey.surveyPromoterScore;
+      }
+
+      if (survey.oSurveyTotalScore !== undefined) {
+        oSurveyTotalScore = survey.oSurveyTotalScore;
+      }
+    }
+
     // Push the processed conversation data to the array
     processedConversations.push({
       conversation: {
-        id: conversation.conversationId,
-        divisionIds: conversation.divisionIds,
-        conversationStart: conversation.conversationStart,
-        conversationEnd: conversation.conversationEnd,
-        queuesIds: queueIds,
-        queuesNames: queueNames,
-        mediaTypes: mediaTypes,
-        totalTalkTime: totalTalkTime,
-      },
-      evaluation: {
-        averageEvalScore: averageEvalScore,
-        averageEvalCriticalScore: averageEvalCriticalScore,
+        details: {
+          id: conversation.conversationId,
+          conversationStart: conversation.conversationStart,
+          conversationEnd: conversation.conversationEnd,
+          divisions: conversationDivisions,
+          queues: conversationQueues,
+          mediaTypes: mediaTypes,
+        },
+        metrics: {
+          totalTalkTime: totalTalkTime,
+        },
+        evaluation: {
+          averageEvalScore: averageEvalScore,
+          averageEvalCriticalScore: averageEvalCriticalScore,
+        },
+        survey: {
+          surveyPromoterScore: surveyPromoterScore,
+          surveyTotalScore: oSurveyTotalScore,
+        },
       },
     });
-  });
+  }
 
   return processedConversations;
 }

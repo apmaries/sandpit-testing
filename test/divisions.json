@@ -1,0 +1,17 @@
+{
+  "entities": [
+    {
+      "id": "e798387e-a708-40da-8486-d6877e7c7991",
+      "name": "Dunder Mifflin",
+      "homeDivision": false,
+      "selfUri": "/api/v2/authorization/divisions/e798387e-a708-40da-8486-d6877e7c7991"
+    }
+  ],
+  "pageSize": 25,
+  "pageNumber": 1,
+  "total": 1,
+  "lastUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
+  "firstUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
+  "selfUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
+  "pageCount": 1
+}

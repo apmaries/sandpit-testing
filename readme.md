@@ -12,14 +12,6 @@ Check if logged in user has permissions below permissions per division listed in
   /api/v2/authorization/divisionspermitted/paged/me
   Returns which divisions the current user has the given permission in.
 
-Support admins / users through scripts run on redirect
-
-- Authenticate and redirect
-- Get user name
-- Check user name against group
-  - 'TIL Admins'
-  - 'TIL Users'
-
 ## Prerequisites
 
 1. OAuth Client
@@ -36,7 +28,9 @@ Support admins / users through scripts run on redirect
    1. TIL Admins (can edit interactions in library)
    1. TIL Users (can view / open only)
 1. Configure Integration
-   1. URL = <url>?<gc_region>&<gc_client>&<gc_datatable>&[<til_admins_group_id> : <til_admins_ids>]
+   1. URL
+      - Syntax = <url>?<gc_region>&<gc_client>&<gc_datatable>&[<til_admins_group_id> : <til_admins_ids>]
+      - Supports either using a group for admins or comma separated list of admin ids (not mutually exclusive)
    1. Add 'allow-popups' to Iframe Sandbox Options
    1. Assign TIL Admins / TIL Users groups
 1. Data table
@@ -54,3 +48,11 @@ Support admins / users through scripts run on redirect
    - digital interactions
    - transfers
    - transfers across divisions
+1. Any additional metrics?
+1. Dynamically build datatable schema (management tool)
+1. Refresh datatable schema & retain records (management tool)
+
+## Completed
+
+1. Add survey data
+1. Get division names

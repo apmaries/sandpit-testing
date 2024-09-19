@@ -14,6 +14,37 @@ import { t_architectApi } from "../core/testManager.js";
 ("use strict");
 const testMode = applicationConfig.mode.isTest;
 
+// Get datatable schema
+export async function getDatatableSchema() {
+  console.log("[TIL] Getting datatable schema");
+  let schema = [];
+
+  let opts = {
+    "expand": "schema", // String | Expand instructions for the result
+  };
+
+  if (testMode) {
+    // Get datatable schema using test API
+    let t_response = await t_architectApi.getFlowsDatatable();
+    schema = t_response.entities;
+    console.log("[TIL] Datatable schema returned", schema);
+    return schema;
+  }
+
+  let datatableId = sessionStorage.getItem("gc_datatable");
+
+  try {
+    let response = await architectApi.getFlowsDatatable(datatableId, opts);
+    schema = response.columns; // Access the columns array
+    console.log("[TIL] Datatable schema returned", schema);
+  } catch (error) {
+    console.error("[TIL] Error getting datatable schema. ", error);
+    throw error;
+  }
+
+  return schema;
+}
+
 // Return datatable rows
 export async function getDatatableRows() {
   console.log("[TIL] Getting datatable rows");

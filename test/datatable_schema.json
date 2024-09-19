@@ -1,0 +1,28 @@
+{
+  "id": "d90f1f51-dda7-4b07-8d9b-444a9833c11c",
+  "name": "til_elastic",
+  "division": {
+    "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+    "name": "Bluth Company",
+    "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+  },
+  "schema": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "til_elastic",
+    "type": "object",
+    "required": ["key"],
+    "properties": {
+      "key": {
+        "title": "conversation_id",
+        "type": "string",
+        "$id": "/properties/key",
+        "displayOrder": 0,
+        "maxLength": 256,
+        "minLength": 1
+      }
+    },
+    "additionalProperties": false,
+    "datatableId": "d90f1f51-dda7-4b07-8d9b-444a9833c11c"
+  },
+  "selfUri": "/api/v2/flows/datatables/d90f1f51-dda7-4b07-8d9b-444a9833c11c"
+}

@@ -28,16 +28,13 @@ export async function handleAddToLibraryClick(library, inputValue) {
 
   // Get STA data
   let staDetails = await processStaData(inputValue);
-  console.log("[TIL] STA details", staDetails);
 
   // Get recording data
   let recordingDetails = await processRecordingData(inputValue);
-  console.log("[TIL] Recording details", recordingDetails);
 
   // Map conversation details to a new object
   let conversationObj = {
     conversationDetail: conversationDetails[0].conversation, // Assuming only one conversation is returned as only a single id can be supplied in input value
-    evaluationDetail: conversationDetails[0].evaluation,
     staDetail: staDetails,
     recordingDetail: recordingDetails,
   };

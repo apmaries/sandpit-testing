@@ -18,6 +18,7 @@ const platformClient = require("platformClient");
 const client = platformClient.ApiClient.instance;
 const architectApi = new platformClient.ArchitectApi();
 const conversationsApi = new platformClient.ConversationsApi();
+const objectsApi = new platformClient.ObjectsApi();
 const recordingApi = new platformClient.RecordingApi();
 const staApi = new platformClient.SpeechTextAnalyticsApi();
 const usersApi = new platformClient.UsersApi();
@@ -93,7 +94,14 @@ export async function startApp() {
   }
 }
 
-export { architectApi, conversationsApi, recordingApi, staApi, usersApi };
+export {
+  architectApi,
+  conversationsApi,
+  objectsApi,
+  recordingApi,
+  staApi,
+  usersApi,
+};
 
 async function runApp() {
   console.log("[TIL] Application started");

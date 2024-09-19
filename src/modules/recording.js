@@ -23,7 +23,6 @@ async function getRecordingData(conversationId) {
     let t_response = await t_recordingApi.getConversationRecordingmetadata();
     // Not using recordingId in test mode - using a dummy recordingId to best replicate actual API call
 
-    console.log("[TIL] Recording data returned", t_response);
     return t_response;
   }
 
