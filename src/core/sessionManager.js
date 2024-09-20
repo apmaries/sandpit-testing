@@ -24,12 +24,18 @@ export async function startSession() {
   document.getElementById("welcome-div").innerText =
     "Welcome, " + appUser.name + "!";
 
-  // Delineate between good and bad records
-  const goodRows = rows.filter((row) => row.type === "good");
-  const badRows = rows.filter((row) => row.type === "bad");
+  try {
+    // Delineate between good and bad records
+    const goodRows = rows.filter((row) => row.type === "good");
+    const badRows = rows.filter((row) => row.type === "bad");
 
-  // Populate good and bad tables on session start
-  console.log("[TIL] Populating tables with data");
-  populateTable("good-table", goodRows);
-  populateTable("bad-table", badRows);
+    // Populate good and bad tables on session start
+    console.log("[TIL] Populating tables with data");
+    populateTable("good-table", goodRows);
+    populateTable("bad-table", badRows);
+  } catch (error) {
+    console.error("[TIL] Error populating tables. ", error);
+    console.error("[TIL] Rows returned", rows);
+    throw error;
+  }
 }
