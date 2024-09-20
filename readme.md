@@ -62,3 +62,4 @@ Single data table to store interaction details with a type field to flag with su
 
 1. Add survey data
 1. Get division names
+1. Generate and download datatable schema

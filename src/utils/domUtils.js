@@ -1,8 +1,11 @@
 // domUtils.js
 // Description: Utility for updating the DOM
 
+// Utility function to create the table
+export function makeDomTable(t, c) {}
+
 // Utility function to populate the table with data
-export function populateTable(t, r) {
+export function populateDomTable(t, r) {
   let table = document.getElementById(t);
   let tbody = table.getElementsByTagName("tbody")[0];
   tbody.innerHTML = ""; // Clear existing rows

@@ -9,7 +9,7 @@ import { getDatatableRows } from "../modules/architect.js";
 import { getUser } from "../modules/users.js";
 
 // Utility modules
-import { populateTable } from "../utils/domUtils.js";
+import { populateDomTable } from "../utils/domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -31,8 +31,8 @@ export async function startSession() {
 
     // Populate good and bad tables on session start
     console.log("[TIL] Populating tables with data");
-    populateTable("good-table", goodRows);
-    populateTable("bad-table", badRows);
+    populateDomTable("good-table", goodRows);
+    populateDomTable("bad-table", badRows);
   } catch (error) {
     console.error("[TIL] Error populating tables. ", error);
     console.error("[TIL] Rows returned", rows);

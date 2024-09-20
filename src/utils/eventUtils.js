@@ -10,12 +10,12 @@ import { processStaData } from "../modules/sta.js";
 import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
-import { makeDatatable } from "./datatableUtils.js";
-import { populateTable } from "../utils/domUtils.js";
+import { generateDatatableSchema } from "./managementUtils.js";
+import { populateDomTable } from "../utils/domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
-window.makeDatatable = makeDatatable;
+window.generateDatatableSchema = generateDatatableSchema;
 ("use strict");
 
 // Enable event listeners for add to library buttons

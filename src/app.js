@@ -13,7 +13,7 @@ import { getUser } from "./modules/users.js";
 
 // Utility modules
 import { validateDatatableSchema } from "./utils/datatableUtils.js";
-import { populateTable } from "./utils/domUtils.js";
+import { populateDomTable } from "./utils/domUtils.js";
 import {
   enableAddButtonEventListeners,
   enableManagementToolsEventListeners,

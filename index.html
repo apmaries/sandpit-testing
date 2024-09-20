@@ -154,19 +154,24 @@
                 <legend>Management tools</legend>
 
                 <div class="management-tools-container">
-                  <h3>Build datatable schema</h3>
+                  <h3>Generate datatable schema</h3>
+                  <p>
+                    Generates and downloads the required datatable schema which
+                    can be imported via API
+                  </p>
                   <gux-button
                     name="management-tools-button"
-                    id="build-fix-datatable"
+                    id="generate-schema-btn"
                     accent="primary"
                     management-button="true"
-                    function-to-run="makeDatatable"
+                    function-to-run="generateDatatableSchema"
                   >
-                    Build / Fix Datatable
+                    Generate schema
                   </gux-button>
                   <div
-                    id="build-fix-datatable-response"
+                    id="generate-schema-response"
                     class="response-container"
+                    hidden
                   ></div>
                 </div>
               </fieldset>

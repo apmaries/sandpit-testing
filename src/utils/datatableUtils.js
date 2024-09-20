@@ -9,24 +9,11 @@ import { getDatatable, updateDatatableSchema } from "../modules/architect.js";
 
 // Utility modules
 import { updateManagementToolsResponse } from "./domUtils.js";
+import { flattenSchema } from "./managementUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
 ("use strict");
-
-// Flatten the expected schema
-async function flattenSchema(schema) {
-  const flatSchema = {};
-  for (const category in schema) {
-    for (const key in schema[category]) {
-      flatSchema[key] = {
-        type: schema[category][key].type,
-        displayOrder: schema[category][key].displayOrder,
-      };
-    }
-  }
-  return flatSchema;
-}
 
 // Function to validate datatable schema
 export async function validateDatatableSchema() {
@@ -72,57 +59,4 @@ export async function validateDatatableSchema() {
 
   console.log("Schema validation passed.");
   return true;
-}
-
-export async function makeDatatable() {
-  console.log("[TIL] Making datatable");
-  let managementToolsEle = document.getElementById(
-    "build-fix-datatable-response"
-  );
-
-  const config = applicationConfig.datatable;
-
-  const dtName = config.name;
-  const dtFields = await flattenSchema(config.datatableColumns);
-
-  const properties = {};
-
-  for (const [key, field] of Object.entries(dtFields)) {
-    properties[key] = {
-      "title": key,
-      "type": field.type,
-      "$id": `/properties/${key}`,
-      "displayOrder": field.displayOrder,
-    };
-
-    // Add specific attributes based on the field type
-    if (field.type === "string") {
-      properties[key].maxLength = 256;
-      properties[key].minLength = 1;
-    } else if (field.type === "integer") {
-      properties[key].maximum = 999999999999999;
-      properties[key].minimum = -999999999999999;
-    } else if (field.type === "decimal") {
-      properties[key].default = 0;
-      properties[key].maximum = 1e40;
-      properties[key].minimum = -1e40;
-    }
-  }
-
-  const datatable = {
-    "name": dtName,
-    "schema": {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": properties,
-      "required": ["key"],
-    },
-  };
-
-  let response = await updateDatatableSchema(datatable);
-  updateManagementToolsResponse(managementToolsEle, response);
-  console.log(`[TIL] ${response}`);
-
-  return datatable;
 }
