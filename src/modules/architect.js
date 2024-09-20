@@ -15,34 +15,36 @@ import { t_architectApi } from "../core/testManager.js";
 const testMode = applicationConfig.mode.isTest;
 
 // Get datatable schema
-export async function getDatatableSchema() {
-  console.log("[TIL] Getting datatable schema");
-  let schema = [];
+export async function getDatatable() {
+  console.log("[TIL] Getting datatable");
+  let datatable;
 
   let opts = {
     "expand": "schema", // String | Expand instructions for the result
   };
 
-  if (testMode) {
-    // Get datatable schema using test API
-    let t_response = await t_architectApi.getFlowsDatatable();
-    schema = t_response.entities;
-    console.log("[TIL] Datatable schema returned", schema);
-    return schema;
-  }
-
-  let datatableId = sessionStorage.getItem("gc_datatable");
-
   try {
-    let response = await architectApi.getFlowsDatatable(datatableId, opts);
-    schema = response.columns; // Access the columns array
-    console.log("[TIL] Datatable schema returned", schema);
+    if (testMode) {
+      // Get datatable using test API
+      datatable = await t_architectApi.getFlowsDatatable();
+    } else {
+      let datatableId = sessionStorage.getItem("gc_datatable");
+      datatable = await architectApi.getFlowsDatatable(datatableId, opts);
+    }
   } catch (error) {
-    console.error("[TIL] Error getting datatable schema. ", error);
+    console.error("[TIL] Error getting datatable. ", error);
     throw error;
   }
 
-  return schema;
+  // Update application config with datatable specifics
+  applicationConfig.datatable.name = datatable.name;
+  applicationConfig.datatable.id = datatable.id;
+  console.log("[TIL] Datatable returned", datatable);
+  console.log(
+    `[TIL] Updated application config with datatable: ${applicationConfig.datatable.name} (${applicationConfig.datatable.id})`
+  );
+
+  return datatable;
 }
 
 // Return datatable rows

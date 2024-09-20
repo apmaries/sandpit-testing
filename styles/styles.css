@@ -3,6 +3,12 @@ gux-button {
   padding: 0px 5px;
 }
 
+/* Override styles for specific buttons identified by the attribute 'data-special' */
+gux-button[management-button="true"] {
+  width: 500px; /* Example override */
+  padding: 10px; /* Example override */
+}
+
 .align-right {
   margin-left: auto;
 }

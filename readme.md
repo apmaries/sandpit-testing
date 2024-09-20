@@ -2,17 +2,9 @@
 
 ## Design
 
-Single data table to store interaction details with a type field to flag with sublibrary (e.g. good / bad).
+Single data table to store interaction details with a type field to flag with sublibrary (e.g. good / bad)
 
-Check if logged in user has permissions below permissions per division listed in table rows
-
-- Analytics > Agent Conversation Detail OR
-- Analytics > Conversation Detail > View
-  get
-  /api/v2/authorization/divisionspermitted/paged/me
-  Returns which divisions the current user has the given permission in.
-
-## Prerequisites
+## Deployment
 
 1. OAuth Client
    1. Scopes:
@@ -24,16 +16,22 @@ Check if logged in user has permissions below permissions per division listed in
    - routing:readonly (used to get queue / skill / language / wrap names)
    - speech-and-text-analytics:readonly (STA data source for silence / overtalk etc.)
    - user-basic-info
-1. Groups
-   1. TIL Admins (can edit interactions in library)
+1. Create Groups
+   1. TIL Admins (can edit interactions in library and perform management tasks) \*optional
    1. TIL Users (can view / open only)
+1. Data table
+   1. Create a datatable
+      - Name: Set any name as desired
+      - Description: Set any description as desired
+      - Division: Set any division as desired
+      - Reference Key Label: Enter "conversation_id" (without quotation marks)
+   1. Note the datatable id (can be retrieved from the URL e.g. https://apps.region/directory/#/admin/routing/datatables/0c91184a-93b9-4e8b-ae10-xxxxxxxxxxxx)
 1. Configure Integration
    1. URL
       - Syntax = <url>?<gc_region>&<gc_client>&<gc_datatable>&[<til_admins_group_id> : <til_admins_ids>]
       - Supports either using a group for admins or comma separated list of admin ids (not mutually exclusive)
    1. Add 'allow-popups' to Iframe Sandbox Options
    1. Assign TIL Admins / TIL Users groups
-1. Data table
 
 ## Limits
 
@@ -52,6 +50,13 @@ Check if logged in user has permissions below permissions per division listed in
 1. Dynamically build datatable schema (management tool)
 1. Refresh datatable schema & retain records (management tool)
 1. Notify admins if datatable schema broken / corrupted
+1. Add functionality to show / hide column topics (e.g. metrics, evaluations, survey etc.)
+1. Check if logged in user has permissions below permissions per division listed in table rows
+   - Analytics > Agent Conversation Detail OR
+   - Analytics > Conversation Detail > View
+     get
+     /api/v2/authorization/divisionspermitted/paged/me
+     Returns which divisions the current user has the given permission in.
 
 ## Completed
 

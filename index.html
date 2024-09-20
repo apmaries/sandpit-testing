@@ -148,46 +148,22 @@
           </gux-tab-panel>
 
           <!-- Tab 3 - Admin management -->
-          <gux-tab-panel tab-id="3"> </gux-tab-panel>
+          <gux-tab-panel tab-id="3">
+            <div id="management-tools-div">
+              <fieldset>
+                <legend>Management tools</legend>
+                <gux-button
+                  name="management-tools-button"
+                  id="build-fix-datatable"
+                  accent="primary"
+                  management-button="true"
+                  function-to-run="makeDatatable"
+                  >Build / Fix Datatable
+                </gux-button>
+              </fieldset>
+            </div>
+          </gux-tab-panel>
         </gux-tabs>
-        <!--
-        <gux-accordion>
-          <gux-accordion-section id="good-accordion">
-            <h2 slot="header">Good Interactions</h2>
-            <div slot="content">
-              <div id="add-to-good-div" class="add-to-divs">
-                <gux-form-field-text-like>
-                  <input
-                    slot="input"
-                    type="text"
-                    value="Enter interaction id"
-                  />
-                </gux-form-field-text-like>
-                <gux-button id="add-to-good-btn" accent="primary"
-                  >Add</gux-button
-                >
-              </div>
-            </div>
-          </gux-accordion-section>
-          <gux-accordion-section id="bad-accordion">
-            <h2 slot="header">Bad Interactions</h2>
-            <div slot="content">
-              <div id="add-to-bad-div" class="add-to-divs">
-                <gux-form-field-text-like>
-                  <input
-                    slot="input"
-                    type="text"
-                    value="Enter interaction id"
-                  />
-                </gux-form-field-text-like>
-                <gux-button id="add-to-bad-btn" accent="primary"
-                  >Add</gux-button
-                >
-              </div>
-            </div>
-          </gux-accordion-section>
-        </gux-accordion>
-        -->
       </fieldset>
     </main>
 

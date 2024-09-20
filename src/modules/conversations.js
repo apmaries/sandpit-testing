@@ -48,7 +48,7 @@ async function getConversationsData(conversationIds) {
       opts
     );
     conversations = response.conversations;
-    console.log("[TIL] Conversations returned", conversations);
+    console.debug("[TIL] Conversations returned", conversations);
   } catch (error) {
     console.error("[TIL] Error getting conversations. ", error);
     throw error;

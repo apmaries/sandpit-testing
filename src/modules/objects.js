@@ -44,7 +44,7 @@ export async function getDivisions(divisionIds) {
   try {
     let response = await objectsApi.getAuthorizationDivisions(opts);
     divisions = response.entities;
-    console.log("[TIL] Divisions returned", divisions);
+    console.debug("[TIL] Divisions returned", divisions);
   } catch (error) {
     console.error("[TIL] Error getting divisions. ", error);
     throw error;

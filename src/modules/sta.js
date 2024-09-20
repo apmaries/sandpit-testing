@@ -30,7 +30,7 @@ async function getStaData(conversationId) {
     let response = await staApi.getSpeechandtextanalyticsConversation(
       conversationId
     );
-    console.log("[TIL] STA data returned", response);
+    console.debug("[TIL] STA data returned", response);
   } catch (error) {
     console.error("[TIL] Error getting STA data. ", error);
     throw error;

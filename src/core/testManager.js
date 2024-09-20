@@ -31,7 +31,7 @@ export async function initializeTestMode() {
 
   const testData = {
     conversationsUrl: "../test/conversation_details.json",
-    datatableUrl: "../test/datatable_schema.json",
+    datatableSchemaUrl: "../test/datatable_schema.json",
     datatableRowsUrl: "../test/datatable_rows.json",
     divisionsUrl: "../test/divisions.json",
     recordingUrl: "../test/conversation_recording.json",
@@ -40,7 +40,7 @@ export async function initializeTestMode() {
   };
 
   // Define mock data promises
-  const flowsDatatablePromise = fetchData(testData.datatableRowsUrl);
+  const flowsDatatablePromise = fetchData(testData.datatableSchemaUrl);
   const flowsDatatableRowsPromise = fetchData(testData.datatableRowsUrl);
   const conversationsPromise = fetchData(testData.conversationsUrl);
   const divisionsPromise = fetchData(testData.divisionsUrl);

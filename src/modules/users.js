@@ -28,7 +28,7 @@ export async function getUser() {
         "expand": ["groups"], // [String] | Which fields, if any, to expand.
       };
       user = await usersApi.getUsersMe(opts);
-      console.log("[TIL] User returned", user);
+      console.debug("[TIL] User returned", user);
     } catch (error) {
       console.error("[TIL] Error getting user. ", error);
       throw error;

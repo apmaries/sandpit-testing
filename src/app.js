@@ -8,8 +8,16 @@ import { applicationConfig } from "./core/configManager.js";
 import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
+// Api modules
+import { getUser } from "./modules/users.js";
+
 // Utility modules
-import { handleAddToLibraryClick } from "./utils/eventUtils.js";
+import { validateDatatableSchema } from "./utils/datatableUtils.js";
+import { populateTable } from "./utils/domUtils.js";
+import {
+  enableAddButtonEventListeners,
+  enableManagementToolsEventListeners,
+} from "./utils/eventUtils.js";
 
 // Global variables
 ("use strict");
@@ -86,8 +94,6 @@ export async function startApp() {
 
   // Start session
   try {
-    await startSession();
-    console.log("[TIL] Session started");
     runApp();
   } catch (err) {
     console.log("[TIL] Error: ", err);
@@ -106,42 +112,15 @@ export {
 async function runApp() {
   console.log("[TIL] Application started");
 
-  // Enable event listeners
-  async function enableEventListeners() {
-    // Select all buttons with the name 'add-to-library'
-    const addButtons = document.querySelectorAll(
-      'gux-button[name="add-to-library"]'
-    );
+  // Get user details
+  const appUser = await getUser();
+  document.getElementById("welcome-div").innerText =
+    "Welcome, " + appUser.name + "!";
 
-    // Iterate over the NodeList and add event listeners
-    addButtons.forEach((button) => {
-      button.addEventListener("click", (event) => {
-        let library;
-        let inputValue;
-
-        if (button.id === "add-to-good-btn") {
-          library = "good";
-          inputValue = document.querySelector(
-            '#add-to-good-div input[slot="input"]'
-          ).value;
-        } else if (button.id === "add-to-bad-btn") {
-          library = "bad";
-          inputValue = document.querySelector(
-            '#add-to-bad-div input[slot="input"]'
-          ).value;
-        }
-
-        // Validate the input value for GUID syntax
-        const guidPattern =
-          /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-        if (!guidPattern.test(inputValue)) {
-          alert("Please enter a valid GUID.");
-          return;
-        }
-
-        handleAddToLibraryClick(library, inputValue);
-      });
-    });
+  // Validate datatable schema
+  const isValidTable = await validateDatatableSchema();
+  if (!isValidTable) {
+    console.error("[TIL] Datatable schema is not valid");
   }
 
   const isAdmin = applicationConfig.mode.isAdmin;
@@ -156,7 +135,10 @@ async function runApp() {
       element.classList.add("admin-visible");
     });
 
-    await enableEventListeners();
+    // Enable admin features
+    await enableAddButtonEventListeners();
+    await enableManagementToolsEventListeners();
+
     console.log("[TIL] Admin features enabled");
   } else {
     console.log("[TIL] User is not admin");
