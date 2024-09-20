@@ -47,6 +47,24 @@ export async function getDatatable() {
   return datatable;
 }
 
+// Udpate datatable schema
+export async function updateDatatableSchema(schema) {
+  if (testMode) {
+    return "Datatable schema updated";
+  }
+
+  let datatableId = sessionStorage.getItem("gc_datatable");
+
+  try {
+    await architectApi.putFlowsDatatable(datatableId, schema);
+    console.log("[TIL] Datatable schema updated");
+    return "Datatable schema updated";
+  } catch (error) {
+    console.error("[TIL] Error updating datatable schema. ", error);
+    return error;
+  }
+}
+
 // Return datatable rows
 export async function getDatatableRows() {
   console.log("[TIL] Getting datatable rows");

@@ -3,12 +3,6 @@ gux-button {
   padding: 0px 5px;
 }
 
-/* Override styles for specific buttons identified by the attribute 'data-special' */
-gux-button[management-button="true"] {
-  width: 500px; /* Example override */
-  padding: 10px; /* Example override */
-}
-
 .align-right {
   margin-left: auto;
 }
@@ -36,3 +30,28 @@ gux-button[management-button="true"] {
   display: flex;
   align-items: center;
 }
+
+/* Management tools */
+gux-button[management-button="true"] {
+  width: 95%;
+  padding: 10px;
+}
+
+.management-tools-container {
+  width: 400px;
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.response-container {
+  width: 95%; /* Match the width of the button */
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+/* End of Management tools */

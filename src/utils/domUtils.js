@@ -45,3 +45,9 @@ export function populateTable(t, r) {
   });
   console.log(`[TIL] Table ${t} populated with ${r.length} rows`);
 }
+
+// Function to update management tools response
+export function updateManagementToolsResponse(ele, response) {
+  let responseDiv = ele;
+  responseDiv.innerText = response;
+}

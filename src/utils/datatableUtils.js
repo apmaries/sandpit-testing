@@ -5,9 +5,10 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { getDatatable } from "../modules/architect.js";
+import { getDatatable, updateDatatableSchema } from "../modules/architect.js";
 
 // Utility modules
+import { updateManagementToolsResponse } from "./domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -75,6 +76,9 @@ export async function validateDatatableSchema() {
 
 export async function makeDatatable() {
   console.log("[TIL] Making datatable");
+  let managementToolsEle = document.getElementById(
+    "build-fix-datatable-response"
+  );
 
   const config = applicationConfig.datatable;
 
@@ -116,7 +120,9 @@ export async function makeDatatable() {
     },
   };
 
-  console.log("[TIL] Datatable created", datatable);
+  let response = await updateDatatableSchema(datatable);
+  updateManagementToolsResponse(managementToolsEle, response);
+  console.log(`[TIL] ${response}`);
 
   return datatable;
 }
