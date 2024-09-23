@@ -32,7 +32,7 @@ export async function getDatatable() {
       datatable = await architectApi.getFlowsDatatable(datatableId, opts);
     }
   } catch (error) {
-    console.error("[TIL] Error getting datatable. ", error);
+    console.error("[TIL] Error getting datatable", error);
     throw error;
   }
 
@@ -75,7 +75,7 @@ export async function createDatatable(body) {
     console.log("[TIL] Datatable created");
     return datatable;
   } catch (error) {
-    console.error("[TIL] Error creating datatable. ", error);
+    console.error("[TIL] Error creating datatable", error);
     return error;
   }
 }

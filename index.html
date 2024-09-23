@@ -40,6 +40,7 @@
           <!-- Tab 1 - Good interactions -->
           <gux-tab-panel tab-id="1">
             <container id="good-table-container">
+              <!-- Add to good library -->
               <div
                 id="add-to-good-library"
                 class="management-tools-container admin-hidden"
@@ -64,6 +65,8 @@
                   >
                 </div>
               </div>
+
+              <!-- Column groups -->
               <div id="good-table-checkbox-div">
                 <gux-form-field-checkbox-group-beta
                   class="horizontal-checkbox-group"
@@ -140,6 +143,8 @@
                   </div>
                 </gux-form-field-checkbox-group-beta>
               </div>
+
+              <!-- Table -->
               <div id="good-table-div" data-table-id="good-table">
                 <gux-table-beta id="good-table">
                   <table slot="data">
@@ -157,31 +162,34 @@
 
           <!-- Tab 2 - Bad interactions -->
           <gux-tab-panel tab-id="2">
-            <div
-              id="add-to-bad-library"
-              class="management-tools-container admin-hidden"
-            >
-              <h3>Add to Bad</h3>
-              <p>Add to bad library by entering a conversation id</p>
-              <div class="add-to-divs">
-                <gux-form-field-text-like label-position="screenreader">
-                  <label slot="label">Screenreader</label>
-                  <input
-                    slot="input"
-                    type="text"
-                    placeholder="Enter interaction id"
-                    class="add-to-input"
-                  />
-                </gux-form-field-text-like>
-                <gux-button
-                  name="add-to-library"
-                  id="add-to-good-btn"
-                  accent="primary"
-                  >Add</gux-button
-                >
-              </div>
-            </div>
             <container id="bad-table-container">
+              <!-- Add to bad library -->
+              <div
+                id="add-to-bad-library"
+                class="management-tools-container admin-hidden"
+              >
+                <h3>Add to Bad</h3>
+                <p>Add to bad library by entering a conversation id</p>
+                <div class="add-to-divs">
+                  <gux-form-field-text-like label-position="screenreader">
+                    <label slot="label">Screenreader</label>
+                    <input
+                      slot="input"
+                      type="text"
+                      placeholder="Enter interaction id"
+                      class="add-to-input"
+                    />
+                  </gux-form-field-text-like>
+                  <gux-button
+                    name="add-to-library"
+                    id="add-to-good-btn"
+                    accent="primary"
+                    >Add</gux-button
+                  >
+                </div>
+              </div>
+
+              <!-- Column groups -->
               <div id="bad-table-checkbox-div">
                 <gux-form-field-checkbox-group-beta
                   class="horizontal-checkbox-group"
@@ -258,6 +266,8 @@
                   </div>
                 </gux-form-field-checkbox-group-beta>
               </div>
+
+              <!-- Table -->
               <div id="bad-table-div" data-table-id="bad-table">
                 <gux-table-beta id="bad-table">
                   <table slot="data">
