@@ -23,7 +23,7 @@ export async function validateDatatableSchema() {
   const expectedSchema = await flattenSchema(
     applicationConfig.datatable.datatableColumns
   );
-  console.log("[TIL] Expected schema", expectedSchema);
+  console.debug("[TIL] Expected schema", expectedSchema);
 
   // Define the current schema
   const datatable = await getDatatable();
@@ -57,6 +57,6 @@ export async function validateDatatableSchema() {
     return false;
   }
 
-  console.log("Schema validation passed.");
+  console.log("[TIL] Schema validation passed");
   return true;
 }

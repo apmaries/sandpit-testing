@@ -1,6 +1,6 @@
 {
-  "id": "d90f1f51-dda7-4b07-8d9b-444a9833c11c",
-  "name": "til_elastic",
+  "id": "bd72db41-7951-4c71-8882-ecc1998d3fdf",
+  "name": "TIL Datatable",
   "division": {
     "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
     "name": "Bluth Company",
@@ -8,21 +8,181 @@
   },
   "schema": {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "til_elastic",
+    "title": "TIL Datatable",
     "type": "object",
     "required": ["key"],
     "properties": {
       "key": {
         "title": "conversation_id",
         "type": "string",
-        "$id": "/properties/key",
+        "$id": "/properties/conversation_id",
         "displayOrder": 0,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "type": {
+        "title": "type",
+        "type": "string",
+        "$id": "/properties/type",
+        "displayOrder": 1,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "division_ids": {
+        "title": "division_ids",
+        "type": "string",
+        "$id": "/properties/division_ids",
+        "displayOrder": 2,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "division_names": {
+        "title": "division_names",
+        "type": "string",
+        "$id": "/properties/division_names",
+        "displayOrder": 3,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "start_date": {
+        "title": "start_date",
+        "type": "string",
+        "$id": "/properties/start_date",
+        "displayOrder": 4,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "end_date": {
+        "title": "end_date",
+        "type": "string",
+        "$id": "/properties/end_date",
+        "displayOrder": 5,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "queue_ids": {
+        "title": "queue_ids",
+        "type": "string",
+        "$id": "/properties/queue_ids",
+        "displayOrder": 6,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "queue_names": {
+        "title": "queue_names",
+        "type": "string",
+        "$id": "/properties/queue_names",
+        "displayOrder": 7,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "media_type": {
+        "title": "media_type",
+        "type": "string",
+        "$id": "/properties/media_type",
+        "displayOrder": 8,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "total_talk_time": {
+        "title": "total_talk_time",
+        "type": "integer",
+        "$id": "/properties/total_talk_time",
+        "displayOrder": 9,
+        "maximum": 999999999999999,
+        "minimum": -999999999999999
+      },
+      "evluation_total_score": {
+        "title": "evluation_total_score",
+        "type": "integer",
+        "$id": "/properties/evluation_total_score",
+        "displayOrder": 10,
+        "maximum": 999999999999999,
+        "minimum": -999999999999999
+      },
+      "evluation_total_critical_score": {
+        "title": "evluation_total_critical_score",
+        "type": "integer",
+        "$id": "/properties/evluation_total_critical_score",
+        "displayOrder": 11,
+        "maximum": 999999999999999,
+        "minimum": -999999999999999
+      },
+      "sentiment_score": {
+        "title": "sentiment_score",
+        "type": "number",
+        "$id": "/properties/sentiment_score",
+        "displayOrder": 12,
+        "minimum": -1e40,
+        "maximum": 1e40
+      },
+      "sentiment_trend_class": {
+        "title": "sentiment_trend_class",
+        "type": "string",
+        "$id": "/properties/sentiment_trend_class",
+        "displayOrder": 13,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "min_empathy_score": {
+        "title": "min_empathy_score",
+        "type": "number",
+        "$id": "/properties/min_empathy_score",
+        "displayOrder": 14,
+        "minimum": -1e40,
+        "maximum": 1e40
+      },
+      "max_empathy_score": {
+        "title": "max_empathy_score",
+        "type": "number",
+        "$id": "/properties/max_empathy_score",
+        "displayOrder": 15,
+        "minimum": -1e40,
+        "maximum": 1e40
+      },
+      "survey_total_score": {
+        "title": "survey_total_score",
+        "type": "integer",
+        "$id": "/properties/survey_total_score",
+        "displayOrder": 16,
+        "maximum": 999999999999999,
+        "minimum": -999999999999999
+      },
+      "survey_promoter_score": {
+        "title": "survey_promoter_score",
+        "type": "integer",
+        "$id": "/properties/survey_promoter_score",
+        "displayOrder": 17,
+        "maximum": 999999999999999,
+        "minimum": -999999999999999
+      },
+      "file_state": {
+        "title": "file_state",
+        "type": "string",
+        "$id": "/properties/file_state",
+        "displayOrder": 18,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "archive_date": {
+        "title": "archive_date",
+        "type": "string",
+        "$id": "/properties/archive_date",
+        "displayOrder": 19,
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "delete_date": {
+        "title": "delete_date",
+        "type": "string",
+        "$id": "/properties/delete_date",
+        "displayOrder": 20,
         "maxLength": 256,
         "minLength": 1
       }
     },
     "additionalProperties": false,
-    "datatableId": "d90f1f51-dda7-4b07-8d9b-444a9833c11c"
+    "datatableId": "bd72db41-7951-4c71-8882-ecc1998d3fdf"
   },
-  "selfUri": "/api/v2/flows/datatables/d90f1f51-dda7-4b07-8d9b-444a9833c11c"
+  "selfUri": "/api/v2/flows/datatables/bd72db41-7951-4c71-8882-ecc1998d3fdf"
 }

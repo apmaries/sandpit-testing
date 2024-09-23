@@ -11,7 +11,11 @@ import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
 import { generateDatatableSchema } from "./managementUtils.js";
-import { populateDomTable } from "../utils/domUtils.js";
+import {
+  populateDomTable,
+  hideTableColumn,
+  showTableColumn,
+} from "../utils/domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -78,6 +82,33 @@ export async function enableManagementToolsEventListeners() {
         console.error(
           `Function ${functionName} is not defined or not a function`
         );
+      }
+    });
+  });
+}
+
+// Enable event listeners for DOM table checkboxes
+export async function enableDomTableCheckboxEventListeners() {
+  // Select all checkboxes with the name 'column-group-checkbox'
+  const checkboxes = document.querySelectorAll(
+    'input[name="column-group-checkbox"]'
+  );
+
+  // Iterate over the NodeList and add event listeners
+  checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", (event) => {
+      const checked = event.target.checked;
+      const value = event.target.value;
+      const tableId = event.target.getAttribute("data-table-id");
+
+      console.log(
+        `[TIL] Checkbox on ${tableId} with value ${value} is: ${checked}`
+      );
+
+      if (checked) {
+        showTableColumn(tableId, value);
+      } else {
+        hideTableColumn(tableId, value);
       }
     });
   });

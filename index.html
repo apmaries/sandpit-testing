@@ -39,119 +39,287 @@
 
           <!-- Tab 1 - Good interactions -->
           <gux-tab-panel tab-id="1">
-            <div id="add-to-good-div" class="add-to-divs admin-hidden">
-              <gux-form-field-text-like label-position="screenreader">
-                <label slot="label">Screenreader</label>
-                <input
-                  slot="input"
-                  type="text"
-                  placeholder="Enter interaction id"
-                />
-              </gux-form-field-text-like>
-              <gux-button
-                name="add-to-library"
-                id="add-to-good-btn"
-                accent="primary"
-                >Add</gux-button
-              >
-            </div>
-            <div id="good-table-div">
-              <gux-table-beta id="good-table">
-                <table slot="data">
-                  <thead>
-                    <tr>
-                      <th data-column-name="conversation-id">
-                        Conversation ID
-                      </th>
-                      <th data-column-name="division-name">Division Name</th>
-                      <th data-colum-name="conversation-start">
-                        Conversation Start
-                      </th>
-                      <th data-column-name="conversation-end">
-                        Conversation End
-                      </th>
-                      <th data-colum-name="queue-name">Queue Name</th>
-                      <th data-column-name="media-type">Media Type</th>
-                      <th data-column-name="evaluation-score">
-                        Evaluation Score
-                      </th>
-                      <th data-column-name="sentiment-score">
-                        Sentiment Score
-                      </th>
-                      <th data-column-name="sentiment-trend">
-                        Sentiment Trend
-                      </th>
-                      <th data-column-name="empathy-score">Empathy Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr></tr>
-                  </tbody>
-                </table>
-              </gux-table-beta>
-            </div>
+            <container id="good-table-container">
+              <div id="add-to-good-library" class="management-tools-container">
+                <h3>Add to Good</h3>
+                <p>Add to good library by entering a conversation id</p>
+                <div class="add-to-divs admin-hidden">
+                  <gux-form-field-text-like label-position="screenreader">
+                    <label slot="label">Screenreader</label>
+                    <input
+                      slot="input"
+                      type="text"
+                      placeholder="Enter interaction id"
+                      class="add-to-input"
+                    />
+                  </gux-form-field-text-like>
+                  <gux-button
+                    name="add-to-library"
+                    id="add-to-good-btn"
+                    accent="primary"
+                    >Add</gux-button
+                  >
+                </div>
+              </div>
+              <div id="good-table-checkbox-div">
+                <gux-form-field-checkbox-group-beta
+                  class="horizontal-checkbox-group"
+                >
+                  <label slot="group-label">Column groups</label>
+
+                  <div class="checkbox-container">
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="conversation"
+                        checked
+                      />
+                      <label slot="label">Conversation</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="metrics"
+                      />
+                      <label slot="label">Metrics</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="evaluation"
+                      />
+                      <label slot="label">Evaluations</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="sta"
+                      />
+                      <label slot="label">Speech & Text Analytics</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="survey"
+                      />
+                      <label slot="label">Survey</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="good-table"
+                        value="recording"
+                      />
+                      <label slot="label">Recordings</label>
+                    </gux-form-field-checkbox>
+                  </div>
+                </gux-form-field-checkbox-group-beta>
+              </div>
+              <div id="good-table-div" data-table-id="good-table">
+                <gux-table-beta id="good-table">
+                  <table slot="data">
+                    <thead>
+                      <tr></tr>
+                    </thead>
+                    <tbody>
+                      <tr></tr>
+                    </tbody>
+                  </table>
+                </gux-table-beta>
+              </div>
+            </container>
           </gux-tab-panel>
 
           <!-- Tab 2 - Bad interactions -->
           <gux-tab-panel tab-id="2">
-            <div id="add-to-bad-div" class="add-to-divs admin">
-              <gux-form-field-text-like label-position="screenreader">
-                <label slot="label">Screenreader</label>
-                <input
-                  slot="input"
-                  type="text"
-                  placeholder="Enter interaction id"
-                />
-              </gux-form-field-text-like>
-              <gux-button
-                name="add-to-library"
-                id="add-to-bad-btn"
-                accent="primary"
-                >Add</gux-button
-              >
+            <div id="add-to-bad-library" class="management-tools-container">
+              <h3>Add to Bad</h3>
+              <p>Add to bad library by entering a conversation id</p>
+              <div class="add-to-divs admin-hidden">
+                <gux-form-field-text-like label-position="screenreader">
+                  <label slot="label">Screenreader</label>
+                  <input
+                    slot="input"
+                    type="text"
+                    placeholder="Enter interaction id"
+                    class="add-to-input"
+                  />
+                </gux-form-field-text-like>
+                <gux-button
+                  name="add-to-library"
+                  id="add-to-good-btn"
+                  accent="primary"
+                  >Add</gux-button
+                >
+              </div>
             </div>
-            <div id="bad-table-div">
-              <gux-table-beta id="bad-table">
-                <table slot="data">
-                  <thead>
-                    <tr>
-                      <th data-column-name="conversation-id">
-                        Conversation ID
-                      </th>
-                      <th data-column-name="division-name">Division Name</th>
-                      <th data-colum-name="conversation-start">
-                        Conversation Start
-                      </th>
-                      <th data-column-name="conversation-end">
-                        Conversation End
-                      </th>
-                      <th data-colum-name="queue-name">Queue Name</th>
-                      <th data-column-name="media-type">Media Type</th>
-                      <th data-column-name="evaluation-score">
-                        Evaluation Score
-                      </th>
-                      <th data-column-name="sentiment-score">
-                        Sentiment Score
-                      </th>
-                      <th data-column-name="sentiment-trend">
-                        Sentiment Trend
-                      </th>
-                      <th data-column-name="empathy-score">Empathy Score</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr></tr>
-                  </tbody>
-                </table>
-              </gux-table-beta>
-            </div>
+            <container id="bad-table-container">
+              <div id="bad-table-checkbox-div">
+                <gux-form-field-checkbox-group-beta
+                  class="horizontal-checkbox-group"
+                >
+                  <label slot="group-label">Column groups</label>
+
+                  <div class="checkbox-container">
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="conversation"
+                        checked
+                      />
+                      <label slot="label">Conversation</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="metrics"
+                      />
+                      <label slot="label">Metrics</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="evaluation"
+                      />
+                      <label slot="label">Evaluations</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="sta"
+                      />
+                      <label slot="label">Speech & Text Analytics</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="survey"
+                      />
+                      <label slot="label">Survey</label>
+                    </gux-form-field-checkbox>
+
+                    <gux-form-field-checkbox>
+                      <input
+                        slot="input"
+                        type="checkbox"
+                        name="column-group-checkbox"
+                        data-table-id="bad-table"
+                        value="recording"
+                      />
+                      <label slot="label">Recordings</label>
+                    </gux-form-field-checkbox>
+                  </div>
+                </gux-form-field-checkbox-group-beta>
+              </div>
+              <div id="bad-table-div" data-table-id="bad-table">
+                <gux-table-beta id="bad-table">
+                  <table slot="data">
+                    <thead>
+                      <tr></tr>
+                    </thead>
+                    <tbody>
+                      <tr></tr>
+                    </tbody>
+                  </table>
+                </gux-table-beta>
+              </div>
+            </container>
           </gux-tab-panel>
 
           <!-- Tab 3 - Admin management -->
           <gux-tab-panel tab-id="3">
             <div id="management-tools-div">
               <fieldset>
-                <legend>Management tools</legend>
+                <legend>Add to library</legend>
+                <div
+                  id="add-to-good-library"
+                  class="management-tools-container"
+                >
+                  <h3>Good</h3>
+                  <p>Add to good library by entering a conversation id</p>
+                  <div class="add-to-divs admin-hidden">
+                    <gux-form-field-text-like label-position="screenreader">
+                      <label slot="label">Screenreader</label>
+                      <input
+                        slot="input"
+                        type="text"
+                        placeholder="Enter interaction id"
+                        class="add-to-input"
+                      />
+                    </gux-form-field-text-like>
+                    <gux-button
+                      name="add-to-library"
+                      id="add-to-good-btn"
+                      accent="primary"
+                      >Add</gux-button
+                    >
+                  </div>
+                </div>
+                <div id="add-to-bad-library" class="management-tools-container">
+                  <h3>Bad</h3>
+                  <p>Add to bad library by entering a conversation id</p>
+                  <div class="add-to-divs admin-hidden">
+                    <gux-form-field-text-like label-position="screenreader">
+                      <label slot="label">Screenreader</label>
+                      <input
+                        slot="input"
+                        type="text"
+                        placeholder="Enter interaction id"
+                        class="add-to-input"
+                      />
+                    </gux-form-field-text-like>
+                    <gux-button
+                      name="add-to-library"
+                      id="add-to-good-btn"
+                      accent="primary"
+                      >Add</gux-button
+                    >
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                <legend>Tools</legend>
 
                 <div class="management-tools-container">
                   <h3>Generate datatable schema</h3>

@@ -13,9 +13,14 @@ import { getUser } from "./modules/users.js";
 
 // Utility modules
 import { validateDatatableSchema } from "./utils/datatableUtils.js";
-import { populateDomTable } from "./utils/domUtils.js";
+import {
+  makeDomTables,
+  populateDomTable,
+  resetCheckboxes,
+} from "./utils/domUtils.js";
 import {
   enableAddButtonEventListeners,
+  enableDomTableCheckboxEventListeners,
   enableManagementToolsEventListeners,
 } from "./utils/eventUtils.js";
 
@@ -125,6 +130,12 @@ async function runApp() {
 
   const isAdmin = applicationConfig.mode.isAdmin;
 
+  // Create tables in DOM
+  makeDomTables();
+  resetCheckboxes();
+  enableDomTableCheckboxEventListeners();
+
+  // Enable admin features if user is an admin
   if (isAdmin) {
     // Find all elements with the 'admin-hidden' class
     const adminHiddenElements = document.querySelectorAll(".admin-hidden");

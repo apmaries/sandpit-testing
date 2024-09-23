@@ -3,6 +3,10 @@ gux-button {
   padding: 0px 5px;
 }
 
+gux-card-beta h3 {
+  margin: 0;
+}
+
 .align-right {
   margin-left: auto;
 }
@@ -12,9 +16,12 @@ gux-button {
 }
 
 .add-to-divs {
-  padding: 10px;
   display: flex;
   align-items: center;
+}
+
+.add-to-input {
+  width: 300px;
 }
 
 .admin-hidden {
@@ -26,9 +33,27 @@ gux-button {
 }
 
 .add-to-divs.admin-visible {
-  padding: 10px;
   display: flex;
   align-items: center;
+}
+
+.horizontal-checkbox-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkbox-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.hidden-column {
+  display: none;
+}
+
+.checkbox-container gux-form-field-checkbox {
+  margin-right: 10px; /* Adjust the spacing between checkboxes as needed */
 }
 
 /* Management tools */
@@ -37,8 +62,15 @@ gux-button[management-button="true"] {
   padding: 10px;
 }
 
+#management-tools-div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Adjust the gap between containers as needed */
+}
+
 .management-tools-container {
   width: 400px;
+  height: 160px;
   margin: 20px;
   padding: 10px;
   border: 1px solid #ccc;
