@@ -40,10 +40,13 @@
           <!-- Tab 1 - Good interactions -->
           <gux-tab-panel tab-id="1">
             <container id="good-table-container">
-              <div id="add-to-good-library" class="management-tools-container">
+              <div
+                id="add-to-good-library"
+                class="management-tools-container admin-hidden"
+              >
                 <h3>Add to Good</h3>
                 <p>Add to good library by entering a conversation id</p>
-                <div class="add-to-divs admin-hidden">
+                <div class="add-to-divs">
                   <gux-form-field-text-like label-position="screenreader">
                     <label slot="label">Screenreader</label>
                     <input
@@ -154,10 +157,13 @@
 
           <!-- Tab 2 - Bad interactions -->
           <gux-tab-panel tab-id="2">
-            <div id="add-to-bad-library" class="management-tools-container">
+            <div
+              id="add-to-bad-library"
+              class="management-tools-container admin-hidden"
+            >
               <h3>Add to Bad</h3>
               <p>Add to bad library by entering a conversation id</p>
-              <div class="add-to-divs admin-hidden">
+              <div class="add-to-divs">
                 <gux-form-field-text-like label-position="screenreader">
                   <label slot="label">Screenreader</label>
                   <input

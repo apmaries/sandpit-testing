@@ -49,8 +49,8 @@ export function makeDomTables() {
         th.setAttribute("data-group-name", column.groupName);
         th.textContent = column.name;
 
-        // Apply hidden-column class to all groups except "conversation"
-        if (column.groupName !== "conversation") {
+        // Apply hidden-column class to all groups except "conversation" and "key"
+        if (column.groupName !== "conversation" && column.groupName !== "key") {
           th.classList.add("hidden-column");
         }
 

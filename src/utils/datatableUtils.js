@@ -5,7 +5,7 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { getDatatable, updateDatatableSchema } from "../modules/architect.js";
+import { getDatatable } from "../modules/architect.js";
 
 // Utility modules
 import { updateManagementToolsResponse } from "./domUtils.js";
@@ -28,6 +28,7 @@ export async function validateDatatableSchema() {
   // Define the current schema
   const datatable = await getDatatable();
   const currentSchema = datatable.schema.properties;
+  applicationConfig.datatable.currentSchema = datatable; // store in app config for updating later (if needed)
 
   // Validate the schema
   const mismatches = [];

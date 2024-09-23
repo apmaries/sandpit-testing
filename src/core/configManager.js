@@ -9,6 +9,7 @@ let applicationConfig = {
   datatable: {
     name: "",
     id: "",
+    divisionId: "",
     datatableColumns: {
       key: {
         key: {
@@ -103,16 +104,10 @@ let applicationConfig = {
           displayOrder: 13,
           hidden: false,
         },
-        min_empathy_score: {
-          name: "Min Empathy Score",
+        empathy_score: {
+          name: "Empathy Score",
           type: "number",
           displayOrder: 14,
-          hidden: false,
-        },
-        max_empathy_score: {
-          name: "Max Empathy Score",
-          type: "number",
-          displayOrder: 15,
           hidden: false,
         },
       },
@@ -120,13 +115,13 @@ let applicationConfig = {
         survey_total_score: {
           name: "Survey Total Score",
           type: "integer",
-          displayOrder: 16,
+          displayOrder: 15,
           hidden: false,
         },
         survey_promoter_score: {
           name: "Survey Promoter Score",
           type: "integer",
-          displayOrder: 17,
+          displayOrder: 16,
           hidden: false,
         },
       },
@@ -134,23 +129,24 @@ let applicationConfig = {
         file_state: {
           name: "File State",
           type: "string",
-          displayOrder: 18,
+          displayOrder: 17,
           hidden: false,
         },
         archive_date: {
           name: "Archive Date",
           type: "string",
-          displayOrder: 19,
+          displayOrder: 18,
           hidden: false,
         },
         delete_date: {
           name: "Delete Date",
           type: "string",
-          displayOrder: 20,
+          displayOrder: 19,
           hidden: false,
         },
       },
     },
+    currentSchema: {},
   },
   // Add more configuration options as needed
 };

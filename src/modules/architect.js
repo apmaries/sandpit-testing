@@ -39,6 +39,7 @@ export async function getDatatable() {
   // Update application config with datatable specifics
   applicationConfig.datatable.name = datatable.name;
   applicationConfig.datatable.id = datatable.id;
+  applicationConfig.datatable.divisionId = datatable.division.id;
   console.log("[TIL] Datatable returned", datatable);
   console.log(
     `[TIL] Updated application config with datatable: ${applicationConfig.datatable.name} (${applicationConfig.datatable.id})`
@@ -48,12 +49,10 @@ export async function getDatatable() {
 }
 
 // Udpate datatable schema
-export async function updateDatatableSchema(schema) {
+export async function updateDatatable(datatableId, schema) {
   if (testMode) {
     return "Datatable schema updated";
   }
-
-  let datatableId = sessionStorage.getItem("gc_datatable");
 
   try {
     await architectApi.putFlowsDatatable(datatableId, schema);
@@ -61,6 +60,22 @@ export async function updateDatatableSchema(schema) {
     return "Datatable schema updated";
   } catch (error) {
     console.error("[TIL] Error updating datatable schema. ", error);
+    return error;
+  }
+}
+
+// Create a datatable
+export async function createDatatable(body) {
+  if (testMode) {
+    return "Datatable created";
+  }
+
+  try {
+    const datatable = await architectApi.postFlowsDatatables(body);
+    console.log("[TIL] Datatable created");
+    return datatable;
+  } catch (error) {
+    console.error("[TIL] Error creating datatable. ", error);
     return error;
   }
 }

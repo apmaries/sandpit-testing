@@ -5,6 +5,7 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
+import { updateDatatable, createDatatable } from "../modules/architect.js";
 
 // Utility modules
 
@@ -26,7 +27,7 @@ export async function flattenSchema(schema) {
   return flatSchema;
 }
 
-//
+// Function to generate datatable schema
 export async function generateDatatableSchema() {
   console.log("[TIL] Generating datatable schema");
 
@@ -51,10 +52,10 @@ export async function generateDatatableSchema() {
     } else if (field.type === "integer") {
       properties[key].maximum = 999999999999999;
       properties[key].minimum = -999999999999999;
-    } else if (field.type === "decimal") {
+    } else if (field.type === "number") {
       properties[key].default = 0;
-      properties[key].maximum = 1e40;
-      properties[key].minimum = -1e40;
+      properties[key].maximum = 9e39;
+      properties[key].minimum = -9e39;
     }
   }
 
@@ -75,58 +76,38 @@ export async function generateDatatableSchema() {
   downloadObjectAsJson(datatable, "datatable-schema");
 }
 
+// Function to make datatable
 export async function makeDatatable() {
   console.log("[TIL] Making datatable");
-  let managementToolsEle = document.getElementById(
-    "build-fix-datatable-response"
-  );
 
-  const config = applicationConfig.datatable;
+  // Get current time in milliseconds
+  const now = new Date().getTime();
 
-  const dtName = config.name;
-  const dtFields = await flattenSchema(config.datatableColumns);
+  // Define the datatable config
+  const datatableConfig = applicationConfig.datatable;
+  const datatableName = datatableConfig.name;
+  const divisionId = datatableConfig.divisionId;
 
-  const properties = {};
+  // Define current / old datatable info
+  const oldId = sessionStorage.getItem("gc_datatable");
+  const currentSchema = datatableConfig.currentSchema;
 
-  for (const [key, field] of Object.entries(dtFields)) {
-    properties[key] = {
-      "title": key === "key" ? "conversation_id" : key,
-      "type": field.type,
-      "$id": `/properties/${key === "key" ? "conversation_id" : key}`,
-      "displayOrder": field.displayOrder,
-    };
+  // Generate the new datatable schema
+  const schema = await generateDatatableSchema();
 
-    // Add specific attributes based on the field type
-    if (field.type === "string") {
-      properties[key].maxLength = 256;
-      properties[key].minLength = 1;
-    } else if (field.type === "integer") {
-      properties[key].maximum = 999999999999999;
-      properties[key].minimum = -999999999999999;
-    } else if (field.type === "decimal") {
-      properties[key].default = 0;
-      properties[key].maximum = 1e40;
-      properties[key].minimum = -1e40;
-    }
-  }
+  // Update the schema with the name and division ID
+  schema.name = `${datatableName} (new-${now})`;
+  schema.division.id = divisionId;
 
-  const datatable = {
-    "name": dtName,
-    "schema": {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": properties,
-      "required": ["key"],
-    },
-  };
+  // Update the name of the old datatable
+  await updateDatatable(oldId, { name: `${datatableName} (old-${now})` });
 
-  console.debug("[TIL] Datatable schema created", datatable);
-  let response = await updateDatatableSchema(datatable);
-  updateManagementToolsResponse(managementToolsEle, response);
-  console.log(`[TIL] ${response}`);
+  // Create a new datatable
+  const newDatatable = await createDatatable(schema);
 
-  return datatable;
+  // Update the application config with the new datatable info and save it
+
+  // Update the integration URL with the new datatable ID
 }
 
 // Function to download an object as a JSON file
