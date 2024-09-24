@@ -12,7 +12,10 @@ import { initializeTestMode } from "./core/testManager.js";
 import { getUser } from "./modules/users.js";
 
 // Utility modules
-import { validateDatatableSchema } from "./utils/datatableUtils.js";
+import {
+  validateDatatableSchema,
+  makeDatatable,
+} from "./utils/datatableUtils.js";
 import {
   makeDomTables,
   populateDomTable,
@@ -128,6 +131,7 @@ async function runApp() {
     console.error("[TIL] Datatable is not set. Creating new datatable");
 
     // Create datatable
+    let newDatatable = await makeDatatable();
   }
 
   // Check if datatable is valid
@@ -140,7 +144,8 @@ async function runApp() {
         "[TIL] Datatable schema is not valid. Migrating to new datatable"
       );
 
-      // Create datatable
+      // Migrate datatable
+      let newDatatable = await makeDatatable();
     }
   }
 

@@ -146,7 +146,7 @@ let applicationConfig = {
         },
       },
     },
-    currentSchema: {},
+    currentBody: {},
   },
   // Add more configuration options as needed
 };

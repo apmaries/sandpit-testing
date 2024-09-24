@@ -47,14 +47,15 @@ export async function getDatatable() {
   return datatable;
 }
 
-// Udpate datatable schema
-export async function updateDatatable(datatableId, schema) {
+// Udpate datatable
+export async function updateDatatable(datatableId, body) {
+  console.log("[TIL] Updating datatable");
   if (testMode) {
     return "Datatable schema updated";
   }
 
   try {
-    await architectApi.putFlowsDatatable(datatableId, schema);
+    await architectApi.putFlowsDatatable(datatableId, body);
     console.log("[TIL] Datatable schema updated");
     return "Datatable schema updated";
   } catch (error) {
@@ -64,8 +65,21 @@ export async function updateDatatable(datatableId, schema) {
 
 // Create a datatable
 export async function createDatatable(body) {
+  console.log("[TIL] Creating datatable");
+
   if (testMode) {
-    return "Datatable created";
+    return {
+      "id": "16653eb4-2940-44f9-aaa7-31907ee537ab",
+      "name": "TIL Datatable (new-1727144957329)",
+      "division": {
+        "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+        "name": "Bluth Company",
+        "selfUri":
+          "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+      },
+      "selfUri":
+        "/api/v2/flows/datatables/16653eb4-2940-44f9-aaa7-31907ee537ab",
+    };
   }
 
   try {

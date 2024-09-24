@@ -5,15 +5,32 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { getDatatable } from "../modules/architect.js";
+import {
+  getDatatable,
+  createDatatable,
+  updateDatatable,
+} from "../modules/architect.js";
 
 // Utility modules
 import { updateManagementToolsResponse } from "./domUtils.js";
-import { flattenSchema } from "./managementUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
 ("use strict");
+
+// Flatten the expected schema
+async function flattenSchema(schema) {
+  const flatSchema = {};
+  for (const category in schema) {
+    for (const key in schema[category]) {
+      flatSchema[key] = {
+        type: schema[category][key].type,
+        displayOrder: schema[category][key].displayOrder,
+      };
+    }
+  }
+  return flatSchema;
+}
 
 // Function to validate datatable schema
 export async function validateDatatableSchema() {
@@ -36,7 +53,7 @@ export async function validateDatatableSchema() {
 
   // Define the current schema
   const currentSchema = datatable.schema.properties;
-  applicationConfig.datatable.currentSchema = datatable; // store in app config for updating later (if needed)
+  applicationConfig.datatable.currentBody = datatable; // store in app config for updating later (if needed)
 
   // Validate the schema
   const mismatches = [];
@@ -68,4 +85,98 @@ export async function validateDatatableSchema() {
 
   console.log("[TIL] Schema validation passed");
   return true;
+}
+
+// Function to generate datatable schema
+export async function generateDatatableSchema() {
+  console.log("[TIL] Generating datatable schema");
+
+  const config = applicationConfig.datatable;
+
+  const dtFields = await flattenSchema(config.datatableColumns);
+
+  const properties = {};
+
+  for (const [key, field] of Object.entries(dtFields)) {
+    properties[key] = {
+      "title": key === "key" ? "conversation_id" : key,
+      "type": field.type,
+      "$id": `/properties/${key === "key" ? "conversation_id" : key}`,
+      "displayOrder": field.displayOrder,
+    };
+
+    // Add specific attributes based on the field type
+    if (field.type === "string") {
+      properties[key].maxLength = 256;
+      properties[key].minLength = 1;
+    } else if (field.type === "integer") {
+      properties[key].maximum = 999999999999999;
+      properties[key].minimum = -999999999999999;
+    } else if (field.type === "number") {
+      properties[key].default = 0;
+      properties[key].maximum = 9e39;
+      properties[key].minimum = -9e39;
+    }
+  }
+
+  const datatable = {
+    "schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": properties,
+      "required": ["key"],
+    },
+  };
+
+  console.debug("[TIL] Datatable schema created", datatable);
+
+  return datatable;
+}
+
+// Function to make datatable
+export async function makeDatatable() {
+  console.log("[TIL] Making datatable");
+
+  // Get current time in milliseconds
+  const now = new Date().getTime();
+
+  // Define the datatable config
+  const datatableConfig = applicationConfig.datatable;
+  const datatableName = datatableConfig.name;
+  const divisionId = datatableConfig.divisionId;
+
+  // Define current / old datatable info
+  const oldId = sessionStorage.getItem("gc_datatable");
+  let currentBody = datatableConfig.currentBody;
+
+  // Update name in old datatable body
+  currentBody.name = `${datatableName} (old-${now})`;
+
+  // Generate the new datatable schema
+  let schema = await generateDatatableSchema();
+
+  // Create the new datatable body
+  let newBody = {
+    name: `${datatableName} (new-${now})`,
+    division: { id: divisionId },
+    schema: schema.schema,
+  };
+
+  // Update the old datatable
+  console.debug("[TIL] Updating old datatable with body", currentBody);
+  await updateDatatable(oldId, currentBody);
+
+  // Create a new datatable
+  console.debug("[TIL] Creating new datatable with body", newBody);
+  const newDatatableResponse = await createDatatable(newBody);
+  console.log("[TIL] New datatable created", newDatatableResponse);
+  const newId = newDatatableResponse.id;
+  const newName = newDatatableResponse.name;
+
+  // Update the application config with the new datatable info and save it
+  applicationConfig.datatable.name = newName;
+  applicationConfig.datatable.id = newId;
+
+  // Update the integration URL with the new datatable ID
 }

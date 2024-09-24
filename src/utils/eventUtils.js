@@ -10,7 +10,7 @@ import { processStaData } from "../modules/sta.js";
 import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
-import { generateDatatableSchema } from "./managementUtils.js";
+import { downloadDatatableSchema } from "./managementUtils.js";
 import {
   populateDomTable,
   hideTableColumn,
@@ -19,7 +19,7 @@ import {
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
-window.generateDatatableSchema = generateDatatableSchema;
+window.generateDatatableSchema = downloadDatatableSchema;
 ("use strict");
 
 // Enable event listeners for add to library buttons
