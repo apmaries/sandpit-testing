@@ -47,6 +47,8 @@ export async function getUser() {
     user.groups.some((group) => group.id === adminsGroup)
   ) {
     isAdmin = true;
+  } else {
+    isAdmin = false;
   }
   console.log("[TIL] User is admin: ", isAdmin);
   applicationConfig.mode.isAdmin = isAdmin;

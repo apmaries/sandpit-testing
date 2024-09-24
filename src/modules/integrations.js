@@ -50,6 +50,7 @@ export async function updateIntegration() {
   delete integrationConfig.selfUri;
   delete integrationConfig.id;
   console.debug("[TIL] Integration config", integrationConfig);
+
   // Update datatable id in the integration url
   let integrationUrl = new URL(integrationConfig.properties.url);
   integrationUrl.searchParams.set("gc_datatable", newDatatableId);
@@ -59,7 +60,7 @@ export async function updateIntegration() {
   // Set the updated url in the integration config
   integrationConfig.properties.url = integrationUrl.toString();
 
-  let integrationId = integrationConfig.id; // String | Integration Id
+  let integrationId = sessionStorage.getItem("gc_integration"); // String | Integration Id
   let body = integrationConfig; // Object | Integration Configuration
   let opts = {
     "body": body, // Object | Integration Configuration
