@@ -46,6 +46,7 @@ let til_adminsIds = url.searchParams.get("til_adminsIds");
 
 let redirect_url = window.location.origin + window.location.pathname;
 
+// Temporary logging - need to get the GC URL to get the integration id
 console.warn("[TIL] parent window referrer", document.referrer);
 console.warn("[TIL] window location", window.location);
 console.warn("[TIL] window location href", window.location.href);
