@@ -15,9 +15,10 @@ import { t_integrationsApi } from "../core/testManager.js";
 const testMode = applicationConfig.mode.isTest;
 
 // Get integration current config by id
-export async function getIntegration(integration) {
-  console.log(`[TIL] Getting integration config '${integration}'`);
+export async function getIntegration() {
+  console.log(`[TIL] Getting integration config`);
   let integrationConfig;
+  let integration = applicationConfig.integration.id;
 
   try {
     if (testMode) {
