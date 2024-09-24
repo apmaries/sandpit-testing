@@ -18,6 +18,7 @@ const testMode = applicationConfig.mode.isTest;
 // Function to validate datatable schema
 export async function validateDatatableSchema() {
   console.log("[TIL] Validating datatable schema");
+  let datatable;
 
   // Define the expected schema
   const expectedSchema = await flattenSchema(
@@ -25,8 +26,15 @@ export async function validateDatatableSchema() {
   );
   console.debug("[TIL] Expected schema", expectedSchema);
 
+  // Get the datatable
+  try {
+    datatable = await getDatatable();
+  } catch (error) {
+    console.error("[TIL] Error getting datatable", error);
+    throw error;
+  }
+
   // Define the current schema
-  const datatable = await getDatatable();
   const currentSchema = datatable.schema.properties;
   applicationConfig.datatable.currentSchema = datatable; // store in app config for updating later (if needed)
 

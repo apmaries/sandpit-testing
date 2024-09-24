@@ -49,6 +49,8 @@ let redirect_url = window.location.origin + window.location.pathname;
 console.warn("[TIL] parent window referrer", document.referrer);
 console.warn("[TIL] window location", window.location);
 console.warn("[TIL] window location href", window.location.href);
+console.warn("[TIL] window parent", window.parent);
+console.warn("[TIL] window parent location", window.parent.location);
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region = gc_region || sessionStorage.getItem("gc_region");
@@ -128,16 +130,23 @@ async function runApp() {
 
   // Check if datatable is null
   if (!gc_datatable) {
-    console.error("[TIL] Datatable is not set");
-    return;
-  } else {
-    console.log(`[TIL] Datatable ID = '${gc_datatable}'`);
+    console.error("[TIL] Datatable is not set. Creating new datatable");
+
+    // Create datatable
   }
 
-  // Validate datatable schema
-  const isValidTable = await validateDatatableSchema();
-  if (!isValidTable) {
-    console.error("[TIL] Datatable schema is not valid");
+  // Check if datatable is valid
+  else {
+    console.log(`[TIL] Datatable ID = '${gc_datatable}'`);
+    // Validate datatable schema
+    const isValidTable = await validateDatatableSchema();
+    if (!isValidTable) {
+      console.error(
+        "[TIL] Datatable schema is not valid. Migrating to new datatable"
+      );
+
+      // Create datatable
+    }
   }
 
   const isAdmin = applicationConfig.mode.isAdmin;
