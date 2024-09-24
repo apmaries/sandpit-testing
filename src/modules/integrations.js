@@ -19,6 +19,10 @@ export async function getIntegration() {
   console.log(`[TIL] Getting integration config`);
   let integrationConfig;
   let integration = applicationConfig.integration.id;
+  console.log(
+    "[TIL] applicationConfig.integration",
+    applicationConfig.integration
+  );
 
   try {
     if (testMode) {
