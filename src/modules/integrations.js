@@ -18,7 +18,7 @@ const testMode = applicationConfig.mode.isTest;
 export async function getIntegration() {
   console.log(`[TIL] Getting integration config`);
   let integrationConfig;
-  let integration = applicationConfig.integration.id;
+  let integration = sessionStorage.getItem("gc_integration");
   console.log(
     "[TIL] applicationConfig.integration",
     applicationConfig.integration
