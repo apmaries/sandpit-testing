@@ -32,7 +32,7 @@ export async function getDatatable() {
       datatable = await architectApi.getFlowsDatatable(datatableId, opts);
     }
   } catch (error) {
-    return error;
+    throw error;
   }
 
   // Update application config with datatable specifics
