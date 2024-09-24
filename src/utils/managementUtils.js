@@ -8,7 +8,7 @@ import { applicationConfig } from "../core/configManager.js";
 import { updateDatatable, createDatatable } from "../modules/architect.js";
 
 // Utility modules
-import { generateDatatableSchema } from "./datatableUtils.js";
+import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -34,4 +34,21 @@ export async function downloadDatatableSchema() {
 
   const schema = await generateDatatableSchema();
   downloadObjectAsJson(schema);
+}
+
+// Function to migrate the datatable
+export async function migrateDatatable() {
+  console.log("[TIL] Migrating datatable");
+
+  try {
+    if (testMode) {
+      return "Datatable schema updated";
+    }
+
+    await makeDatatable();
+    console.log("[TIL] Datatable migrated");
+    return "Datatable schema updated";
+  } catch (error) {
+    return error;
+  }
 }

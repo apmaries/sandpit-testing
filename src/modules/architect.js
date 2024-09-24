@@ -86,7 +86,7 @@ export async function createDatatable(body) {
 }
 
 // Return datatable rows
-export async function getDatatableRows(brief) {
+export async function getDatatableRows() {
   console.log("[TIL] Getting datatable rows");
   let rows = [];
 
@@ -102,7 +102,7 @@ export async function getDatatableRows(brief) {
   let opts = {
     "pageNumber": 1, // Number | Page number
     "pageSize": 500, // Number | Page size
-    "showbrief": brief, // Boolean | If true returns just the key value of the row
+    "showbrief": false, // Boolean | If true returns just the key value of the row
   };
 
   try {
@@ -114,6 +114,23 @@ export async function getDatatableRows(brief) {
   }
 
   return rows;
+}
+
+// Create datatable row
+export async function createDatatableRow(datatableId, row) {
+  console.log("[TIL] Creating datatable row");
+
+  if (testMode) {
+    return "Datatable row created";
+  }
+
+  try {
+    await architectApi.postFlowsDatatableRows(datatableId, row);
+    console.log("[TIL] Datatable row created");
+    return;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Update datatable row

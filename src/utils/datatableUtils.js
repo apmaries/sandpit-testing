@@ -9,6 +9,8 @@ import {
   getDatatable,
   createDatatable,
   updateDatatable,
+  getDatatableRows,
+  createDatatableRow,
 } from "../modules/architect.js";
 import { updateIntegration } from "../modules/integrations.js";
 
@@ -147,6 +149,7 @@ export async function generateDatatableSchema() {
 export async function makeDatatable() {
   console.log("[TIL] Making datatable");
   const datatableConfig = applicationConfig.datatable.datatable;
+  let rows;
 
   // Get current time in milliseconds
   const now = new Date().getTime();
@@ -171,6 +174,9 @@ export async function makeDatatable() {
     datatableName = datatableConfig.name;
     const divisionId = datatableConfig.divisionId;
 
+    // Get the current datatable rows
+    rows = await getDatatableRows();
+
     // Update name in old datatable body
     datatableConfig.name = `${datatableName} (old-${now})`;
 
@@ -186,6 +192,15 @@ export async function makeDatatable() {
   console.debug("[TIL] Creating new datatable with body", newBody);
   const newDatatableResponse = await createDatatable(newBody);
   console.log("[TIL] New datatable created", newDatatableResponse);
+
+  // Import the rows from the old datatable
+  if (rows) {
+    console.log("[TIL] Importing rows from old datatable");
+    for (const row of rows) {
+      console.debug("[TIL] Importing row", row);
+      await createDatatableRow(newDatatableResponse.id, row);
+    }
+  }
 
   // Update application config with the new datatable info
   applicationConfig.datatable.datatable = newDatatableResponse;
