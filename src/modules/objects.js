@@ -46,8 +46,7 @@ export async function getDivisions(divisionIds) {
     divisions = response.entities;
     console.debug("[TIL] Divisions returned", divisions);
   } catch (error) {
-    console.error("[TIL] Error getting divisions. ", error);
-    throw error;
+    return error;
   }
 
   // Map to return only division id and name

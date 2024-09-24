@@ -32,8 +32,7 @@ async function getStaData(conversationId) {
     );
     console.debug("[TIL] STA data returned", response);
   } catch (error) {
-    console.error("[TIL] Error getting STA data. ", error);
-    throw error;
+    return error;
   }
 
   return response;

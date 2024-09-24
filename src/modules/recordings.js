@@ -32,8 +32,7 @@ async function getRecordingData(conversationId) {
     );
     console.debug("[TIL] Recording data returned", response);
   } catch (error) {
-    console.error("[TIL] Error getting recording data. ", error);
-    throw error;
+    return error;
   }
 
   return response;
