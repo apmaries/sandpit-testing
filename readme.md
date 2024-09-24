@@ -28,7 +28,7 @@ Single data table to store interaction details with a type field to flag with su
    1. Note the datatable id (can be retrieved from the URL e.g. https://apps.region/directory/#/admin/routing/datatables/0c91184a-93b9-4e8b-ae10-xxxxxxxxxxxx)
 1. Configure Integration
    1. URL
-      - Syntax = <url>?&<gc_client>&<gc_integration>[&<gc_datatable>][&<til_admins_group_id> : <til_admins_ids>]
+      - Syntax = <url>?<gc_region>&<gc_client>&<gc_integration>[&<gc_datatable>][&<til_admins_group_id> : <til_admins_ids>]
       - If no datatable id provided, app will create one
       - Supports either using a group for admins or comma separated list of admin ids (not mutually exclusive)
    1. Add to Iframe Sandbox Options
