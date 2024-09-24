@@ -52,9 +52,6 @@ let gc_datatable = url.searchParams.get("gc_datatable");
 let til_adminsGroupId = url.searchParams.get("til_adminsGroupId");
 let til_adminsIds = url.searchParams.get("til_adminsIds");
 
-// Clear previous session storage
-sessionStorage.clear();
-
 // Setting the values in sessionStorage if they are provided
 if (redirect_url) sessionStorage.setItem("redirect_url", redirect_url);
 if (gc_region) sessionStorage.setItem("gc_region", gc_region);
