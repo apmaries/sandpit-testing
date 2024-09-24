@@ -9,6 +9,7 @@ import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
 // Api modules
+import { getIntegration } from "./modules/integrations.js";
 import { getUser } from "./modules/users.js";
 
 // Utility modules
@@ -34,6 +35,7 @@ const platformClient = require("platformClient");
 const client = platformClient.ApiClient.instance;
 const architectApi = new platformClient.ArchitectApi();
 const conversationsApi = new platformClient.ConversationsApi();
+const integrationsApi = new platformClient.IntegrationsApi();
 const objectsApi = new platformClient.ObjectsApi();
 const recordingApi = new platformClient.RecordingApi();
 const staApi = new platformClient.SpeechTextAnalyticsApi();
@@ -112,6 +114,7 @@ export async function startApp() {
 export {
   architectApi,
   conversationsApi,
+  integrationsApi,
   objectsApi,
   recordingApi,
   staApi,
@@ -121,58 +124,68 @@ export {
 async function runApp() {
   console.log("[TIL] Application started");
 
-  // Get user details
-  const appUser = await getUser();
-  document.getElementById("welcome-div").innerText =
-    "Welcome, " + appUser.name + "!";
+  try {
+    // Run getIntegration and getUser in parallel
+    const [integrationConfig, appUser] = await Promise.all([
+      getIntegration(gc_integration),
+      getUser(),
+    ]);
 
-  // Check if datatable is null
-  if (!gc_datatable) {
-    console.warn("[TIL] Datatable is not set. Creating new datatable");
+    // Use the results
+    document.getElementById("welcome-div").innerText =
+      "Welcome, " + appUser.name + "!";
+    applicationConfig.integration = integrationConfig;
 
-    // Create datatable
-    await makeDatatable();
-  }
+    console.log("[TIL] Application config:", applicationConfig);
 
-  // Check if datatable is valid
-  else {
-    console.log(`[TIL] Datatable ID = '${gc_datatable}'`);
-    // Validate datatable schema
-    const isValidTable = await validateDatatableSchema();
-    if (!isValidTable) {
-      console.warn(
-        "[TIL] Datatable schema is not valid. Migrating to new datatable"
-      );
+    // Check if datatable is null
+    if (!gc_datatable) {
+      console.warn("[TIL] Datatable is not set. Creating new datatable");
 
-      // Migrate datatable
+      // Create datatable
       await makeDatatable();
+    } else {
+      // Validate datatable schema
+      const isValidTable = await validateDatatableSchema();
+      if (!isValidTable) {
+        console.warn(
+          "[TIL] Datatable schema is not valid. Migrating to new datatable"
+        );
+
+        // Migrate datatable
+        await makeDatatable();
+      }
     }
-  }
 
-  const isAdmin = applicationConfig.mode.isAdmin;
+    const isAdmin = applicationConfig.mode.isAdmin;
 
-  // Create tables in DOM
-  makeDomTables();
-  resetCheckboxes();
-  enableDomTableCheckboxEventListeners();
+    // Create tables in DOM
+    makeDomTables();
+    resetCheckboxes();
+    enableDomTableCheckboxEventListeners();
 
-  // Enable admin features if user is an admin
-  if (isAdmin) {
-    // Find all elements with the 'admin-hidden' class
-    const adminHiddenElements = document.querySelectorAll(".admin-hidden");
+    // Enable admin features if user is an admin
+    if (isAdmin) {
+      // Find all elements with the 'admin-hidden' class
+      const adminHiddenElements = document.querySelectorAll(".admin-hidden");
 
-    // Update each element to replace 'admin-hidden' with 'admin-visible'
-    adminHiddenElements.forEach((element) => {
-      element.classList.remove("admin-hidden");
-      element.classList.add("admin-visible");
-    });
+      // Update each element to replace 'admin-hidden' with 'admin-visible'
+      adminHiddenElements.forEach((element) => {
+        element.classList.remove("admin-hidden");
+        element.classList.add("admin-visible");
+      });
 
-    // Enable admin features
-    await enableAddButtonEventListeners();
-    await enableManagementToolsEventListeners();
+      // Enable admin features
+      await enableAddButtonEventListeners();
+      await enableManagementToolsEventListeners();
 
-    console.log("[TIL] Admin features enabled");
-  } else {
-    console.log("[TIL] User is not admin");
+      console.log("[TIL] Admin features enabled");
+    } else {
+      console.log("[TIL] User is not admin");
+    }
+  } catch (error) {
+    console.error("[TIL] An error occurred:", error);
+    // Stop the application if either getIntegration or getUser fails
+    return;
   }
 }

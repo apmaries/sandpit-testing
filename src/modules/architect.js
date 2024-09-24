@@ -36,13 +36,7 @@ export async function getDatatable() {
     throw error;
   }
 
-  // Update application config with datatable specifics
-  applicationConfig.datatable.name = datatable.name;
-  applicationConfig.datatable.divisionId = datatable.division.id;
-  console.log("[TIL] Datatable returned", datatable);
-  console.log(
-    `[TIL] Updated application config with datatable: ${applicationConfig.datatable.name}`
-  );
+  console.debug("[TIL] Datatable returned", datatable);
 
   return datatable;
 }
@@ -100,7 +94,7 @@ export async function getDatatableRows() {
     // Get datatable rows using test API
     let t_response = await t_architectApi.getFlowsDatatableRows();
     rows = t_response.entities;
-    console.log("[TIL] Datatable rows returned", rows);
+    console.debug("[TIL] Datatable rows returned", rows);
     return rows;
   }
 

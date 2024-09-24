@@ -1,0 +1,17 @@
+{
+  "id": "current",
+  "name": "TIL",
+  "version": 8,
+  "properties": {
+    "sandbox": "allow-scripts,allow-same-origin,allow-forms,allow-modals,allow-popups,allow-downloads",
+    "groups": ["6120c8ee-1344-4bf1-9473-362adc8272a9"],
+    "displayType": "standalone",
+    "featureCategory": null,
+    "url": "https://apmaries.github.io/sandpit-testing/index.html?gc_client=98e56d77-dcf9-43e3-907d-2d28113c0ee7&gc_integration=b2178f38-21f0-4129-bd90-50789c14a74d&gc_datatable=bd72db41-7951-4c71-8882-ecc1998d3fdf&til_adminsIds=be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+    "permissions": null
+  },
+  "advanced": {},
+  "notes": "",
+  "credentials": {},
+  "selfUri": "/api/v2/integrations/b2178f38-21f0-4129-bd90-50789c14a74d/config/current"
+}

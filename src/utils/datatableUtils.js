@@ -10,6 +10,7 @@ import {
   createDatatable,
   updateDatatable,
 } from "../modules/architect.js";
+import { updateIntegration } from "../modules/integrations.js";
 
 // Utility modules
 import { updateManagementToolsResponse } from "./domUtils.js";
@@ -46,13 +47,13 @@ export async function validateDatatableSchema() {
   // Get the datatable
   try {
     datatable = await getDatatable();
+    applicationConfig.datatable.datatable = datatable;
   } catch (error) {
     if (error.status === 404) {
       console.log("[TIL] Datatable not found!");
 
       // Update application config to remove datatable specifics
-      applicationConfig.datatable.name = null;
-      applicationConfig.datatable.divisionId = null;
+      applicationConfig.datatable.datatable = "";
       sessionStorage.removeItem("gc_datatable");
     } else {
       throw new Error("[TIL] Fatal error getting datatable :(");
@@ -62,7 +63,6 @@ export async function validateDatatableSchema() {
 
   // Define the current schema
   const currentSchema = datatable.schema.properties;
-  applicationConfig.datatable.currentBody = datatable; // store in app config for updating later (if needed)
 
   // Validate the schema
   const mismatches = [];
@@ -146,7 +146,7 @@ export async function generateDatatableSchema() {
 // Function to make datatable
 export async function makeDatatable() {
   console.log("[TIL] Making datatable");
-  const datatableConfig = applicationConfig.datatable;
+  const datatableConfig = applicationConfig.datatable.datatable;
 
   // Get current time in milliseconds
   const now = new Date().getTime();
@@ -165,18 +165,18 @@ export async function makeDatatable() {
   };
 
   // If there is an old datatable, update it
-  if (oldId === null) {
+  if (oldId) {
+    console.log("[TIL] Old datatable found", oldId);
     // Define the datatable config
     datatableName = datatableConfig.name;
     const divisionId = datatableConfig.divisionId;
-    let currentBody = datatableConfig.currentBody;
 
     // Update name in old datatable body
-    currentBody.name = `${datatableName} (old-${now})`;
+    datatableConfig.name = `${datatableName} (old-${now})`;
 
     // Update the old datatable
-    console.debug("[TIL] Updating old datatable with body", currentBody);
-    await updateDatatable(oldId, currentBody);
+    console.debug("[TIL] Updating old datatable with body", datatableConfig);
+    await updateDatatable(oldId, datatableConfig);
 
     // Update the new datatable body with the division ID
     newBody.division = { id: divisionId };
@@ -187,10 +187,9 @@ export async function makeDatatable() {
   const newDatatableResponse = await createDatatable(newBody);
   console.log("[TIL] New datatable created", newDatatableResponse);
 
-  // Update the session storage and application config with the new datatable info
-  sessionStorage.setItem("gc_datatable", newDatatableResponse.id);
-  applicationConfig.datatable.name = newDatatableResponse.name;
-  applicationConfig.datatable.divisionId = newDatatableResponse.division.id;
+  // Update application config with the new datatable info
+  applicationConfig.datatable.datatable = newDatatableResponse;
 
   // Update the integration URL with the new datatable ID
+  await updateIntegration();
 }

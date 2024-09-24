@@ -18,21 +18,23 @@ export async function getUser() {
   console.log("[TIL] Getting user");
   let user;
 
-  if (testMode) {
-    // Return test user
-    user = await t_usersApi.getUsersMe();
-  } else {
-    // Get user using production API
-    try {
-      let opts = {
-        "expand": ["groups"], // [String] | Which fields, if any, to expand.
-      };
+  let opts = {
+    "expand": ["groups"], // [String] | Which fields, if any, to expand.
+  };
+
+  try {
+    if (testMode) {
+      // Get integration using test API
+      user = await t_usersApi.getUsersMe();
+    } else {
       user = await usersApi.getUsersMe(opts);
-      console.debug("[TIL] User returned", user);
-    } catch (error) {
-      throw error;
     }
+  } catch (error) {
+    console.error("[TIL] Error getting user", error);
+    throw error;
   }
+
+  console.debug("[TIL] User returned", user);
 
   // Check if user is an admin
   let isAdmin;

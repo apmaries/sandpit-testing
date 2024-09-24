@@ -9,6 +9,7 @@ import { applicationConfig } from "./configManager.js";
 
 let t_architectApi = null;
 let t_conversationsApi = null;
+let t_integrationsApi = null;
 let t_objectsApi = null;
 let t_recordingApi = null;
 let t_staApi = null;
@@ -34,6 +35,7 @@ export async function initializeTestMode() {
     datatableSchemaUrl: "../test/datatable_schema.json",
     datatableRowsUrl: "../test/datatable_rows.json",
     divisionsUrl: "../test/divisions.json",
+    integrationCurrentUrl: "../test/integration_current.json",
     recordingUrl: "../test/conversation_recording.json",
     staUrl: "../test/conversation_sta.json",
     userUrl: "../test/user.json",
@@ -44,6 +46,7 @@ export async function initializeTestMode() {
   const flowsDatatableRowsPromise = fetchData(testData.datatableRowsUrl);
   const conversationsPromise = fetchData(testData.conversationsUrl);
   const divisionsPromise = fetchData(testData.divisionsUrl);
+  const integrationCurrentPromise = fetchData(testData.integrationCurrentUrl);
   const recordingPromise = fetchData(testData.recordingUrl);
   const staPromise = fetchData(testData.staUrl);
   const usersPromise = fetchData(testData.userUrl);
@@ -60,6 +63,11 @@ export async function initializeTestMode() {
   t_conversationsApi = {
     getAnalyticsConversationsDetails: function () {
       return conversationsPromise;
+    },
+  };
+  t_integrationsApi = {
+    getIntegrationConfigCurrent: function () {
+      return integrationCurrentPromise;
     },
   };
   t_objectsApi = {
@@ -87,6 +95,7 @@ export async function initializeTestMode() {
 export {
   t_architectApi,
   t_conversationsApi,
+  t_integrationsApi,
   t_objectsApi,
   t_recordingApi,
   t_staApi,

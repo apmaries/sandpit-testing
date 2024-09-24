@@ -7,8 +7,7 @@ let applicationConfig = {
     isTest: window.location.protocol !== "https:",
   },
   datatable: {
-    name: "",
-    divisionId: "",
+    datatable: "",
     datatableColumns: {
       key: {
         key: {
@@ -145,8 +144,8 @@ let applicationConfig = {
         },
       },
     },
-    currentBody: {},
   },
+  integration: "",
   // Add more configuration options as needed
 };
 
