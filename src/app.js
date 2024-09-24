@@ -47,6 +47,8 @@ let til_adminsIds = url.searchParams.get("til_adminsIds");
 let redirect_url = window.location.origin + window.location.pathname;
 
 console.warn("[TIL] parent window referrer", document.referrer);
+console.warn("[TIL] window location", window.location);
+console.warn("[TIL] window location href", window.location.href);
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region = gc_region || sessionStorage.getItem("gc_region");
