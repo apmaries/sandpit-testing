@@ -43,15 +43,9 @@ const usersApi = new platformClient.UsersApi();
 // Redirect URL
 const redirect_url = window.location.origin + window.location.pathname;
 
-// Extract gc_region from document.referrer
-const referrerUrl = document.referrer;
-console.log(`[TIL] Referrer URL: ${referrerUrl}`);
-
-const gc_region = referrerUrl.slice(13, -1);
-console.log(`[TIL] Genesys Cloud region: ${gc_region}`);
-
 // URL parameters
 let url = new URL(document.location.href);
+let gc_region = url.searchParams.get("gc_region");
 let gc_client = url.searchParams.get("gc_client");
 let gc_integration = url.searchParams.get("gc_integration");
 let gc_datatable = url.searchParams.get("gc_datatable");
@@ -72,10 +66,6 @@ if (til_adminsGroupId)
 if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
 
 export async function startApp() {
-  if (sessionStorage.getItem("til_init")) {
-    console.log("[TIL] Application already initialized");
-    runApp();
-  }
   console.log("[TIL] Starting application");
 
   if (testMode) {
@@ -110,7 +100,6 @@ export async function startApp() {
 
   // Start session
   try {
-    sessionStorage.setItem("til_init", true);
     runApp();
   } catch (err) {
     console.log("[TIL] Error: ", err);
