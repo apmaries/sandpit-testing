@@ -72,6 +72,10 @@ if (til_adminsGroupId)
 if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
 
 export async function startApp() {
+  if (sessionStorage.getItem("til_init")) {
+    console.log("[TIL] Application already initialized");
+    runApp();
+  }
   console.log("[TIL] Starting application");
 
   if (testMode) {
@@ -106,6 +110,7 @@ export async function startApp() {
 
   // Start session
   try {
+    sessionStorage.setItem("til_init", true);
     runApp();
   } catch (err) {
     console.log("[TIL] Error: ", err);
