@@ -92,6 +92,7 @@ export async function startApp() {
       client.config.logger.log_request_body = true;
       client.config.logger.log_response_body = true;
       client.config.logger.log_to_console = true;
+      client.config.logger.log_file_path = "/logs/genesys_cloud_sdk.log";
       client.config.logger.setLogger(); // To apply above changes
 
       console.log("%c[TIL] Logging in to Genesys Cloud", "color: green");

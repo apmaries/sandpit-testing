@@ -19,10 +19,6 @@ export async function getIntegration() {
   console.log(`[TIL] Getting integration config`);
   let integrationConfig;
   let integration = sessionStorage.getItem("gc_integration");
-  console.log(
-    "[TIL] applicationConfig.integration",
-    applicationConfig.integration
-  );
 
   try {
     if (testMode) {
