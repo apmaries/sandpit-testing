@@ -31,7 +31,7 @@ export async function validateDatatableSchema() {
     datatable = await getDatatable();
   } catch (error) {
     console.error("[TIL] Error getting datatable", error);
-    throw error;
+    return false;
   }
 
   // Define the current schema
