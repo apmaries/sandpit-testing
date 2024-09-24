@@ -30,7 +30,7 @@ export async function getUser() {
       user = await usersApi.getUsersMe(opts);
       console.debug("[TIL] User returned", user);
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

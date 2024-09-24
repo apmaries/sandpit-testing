@@ -58,7 +58,7 @@ export async function updateDatatable(datatableId, schema) {
     console.log("[TIL] Datatable schema updated");
     return "Datatable schema updated";
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -73,7 +73,7 @@ export async function createDatatable(body) {
     console.log("[TIL] Datatable created");
     return datatable;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -102,7 +102,7 @@ export async function getDatatableRows() {
     rows = response.entities; // Access the entities array
     console.log("[TIL] Datatable rows returned", rows);
   } catch (error) {
-    return error;
+    throw error;
   }
 }
 
@@ -119,6 +119,6 @@ export async function updateDatatableRow(rowId, body) {
     await architectApi.updateFlowsDatatableRow(datatableId, rowId, body);
     console.log("[TIL] Datatable row updated", rowId);
   } catch (error) {
-    return error;
+    throw error;
   }
 }
