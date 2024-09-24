@@ -64,18 +64,12 @@ if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
 
 export async function startApp() {
   console.log("[TIL] Starting application");
-  if (sessionStorage.getItem("til_init")) {
-    console.log("[TIL] Application already initialized");
-    return;
-  }
-
   if (testMode) {
     // Initialize test mode
     console.log("%c[TIL] Test mode enabled", "color: red");
 
     await initializeTestMode();
   } else {
-    sessionStorage.setItem("til_init", true);
     // Set environment and login to Genesys Cloud
     try {
       client.setEnvironment(gc_region);
