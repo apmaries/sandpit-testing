@@ -46,10 +46,7 @@ let til_adminsIds = url.searchParams.get("til_adminsIds");
 
 let redirect_url = window.location.origin + window.location.pathname;
 
-console.warn(
-  "[TIL] parent window location origin",
-  window.parent.location.origin
-);
+console.warn("[TIL] parent window referrer", document.referrer);
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region = gc_region || sessionStorage.getItem("gc_region");
@@ -126,6 +123,14 @@ async function runApp() {
   const appUser = await getUser();
   document.getElementById("welcome-div").innerText =
     "Welcome, " + appUser.name + "!";
+
+  // Check if datatable is null
+  if (!gc_datatable) {
+    console.error("[TIL] Datatable is not set");
+    return;
+  } else {
+    console.log(`[TIL] Datatable ID = '${gc_datatable}'`);
+  }
 
   // Validate datatable schema
   const isValidTable = await validateDatatableSchema();
