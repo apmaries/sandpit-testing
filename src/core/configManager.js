@@ -8,7 +8,6 @@ let applicationConfig = {
   },
   datatable: {
     name: "",
-    id: "",
     divisionId: "",
     datatableColumns: {
       key: {

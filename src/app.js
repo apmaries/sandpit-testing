@@ -128,10 +128,10 @@ async function runApp() {
 
   // Check if datatable is null
   if (!gc_datatable) {
-    console.error("[TIL] Datatable is not set. Creating new datatable");
+    console.warn("[TIL] Datatable is not set. Creating new datatable");
 
     // Create datatable
-    let newDatatable = await makeDatatable();
+    await makeDatatable();
   }
 
   // Check if datatable is valid
@@ -140,12 +140,12 @@ async function runApp() {
     // Validate datatable schema
     const isValidTable = await validateDatatableSchema();
     if (!isValidTable) {
-      console.error(
+      console.warn(
         "[TIL] Datatable schema is not valid. Migrating to new datatable"
       );
 
       // Migrate datatable
-      let newDatatable = await makeDatatable();
+      await makeDatatable();
     }
   }
 

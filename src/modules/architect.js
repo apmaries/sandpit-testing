@@ -16,7 +16,8 @@ const testMode = applicationConfig.mode.isTest;
 
 // Get datatable schema
 export async function getDatatable() {
-  console.log("[TIL] Getting datatable");
+  let datatableId = sessionStorage.getItem("gc_datatable");
+  console.log(`[TIL] Getting datatable '${datatableId}'`);
   let datatable;
 
   let opts = {
@@ -28,20 +29,19 @@ export async function getDatatable() {
       // Get datatable using test API
       datatable = await t_architectApi.getFlowsDatatable();
     } else {
-      let datatableId = sessionStorage.getItem("gc_datatable");
       datatable = await architectApi.getFlowsDatatable(datatableId, opts);
     }
   } catch (error) {
+    console.error("[TIL] Error getting datatable", error);
     throw error;
   }
 
   // Update application config with datatable specifics
   applicationConfig.datatable.name = datatable.name;
-  applicationConfig.datatable.id = datatable.id;
   applicationConfig.datatable.divisionId = datatable.division.id;
   console.log("[TIL] Datatable returned", datatable);
   console.log(
-    `[TIL] Updated application config with datatable: ${applicationConfig.datatable.name} (${applicationConfig.datatable.id})`
+    `[TIL] Updated application config with datatable: ${applicationConfig.datatable.name}`
   );
 
   return datatable;
