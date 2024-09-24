@@ -125,7 +125,7 @@ async function runApp() {
   try {
     // Run getIntegration and getUser in parallel
     const [integrationConfig, appUser] = await Promise.all([
-      getIntegration(gc_integration),
+      getIntegration(),
       getUser(),
     ]);
 
