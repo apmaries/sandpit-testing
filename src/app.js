@@ -84,7 +84,7 @@ export async function startApp() {
       client.setPersistSettings(true, "_TIL_");
 
       // Set client logging
-      /*
+
       client.config.logger.log_level =
         client.config.logger.logLevelEnum.level.LTrace;
       client.config.logger.log_format =
@@ -93,7 +93,6 @@ export async function startApp() {
       client.config.logger.log_response_body = true;
       client.config.logger.log_to_console = true;
       client.config.logger.setLogger(); // To apply above changes
-      */
 
       console.log("%c[TIL] Logging in to Genesys Cloud", "color: green");
       await client.loginImplicitGrant(gc_client, redirect_url, {});
