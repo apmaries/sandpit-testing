@@ -38,38 +38,40 @@ const usersApi = new platformClient.UsersApi();
 
 // URL parameters
 let url = new URL(document.location.href);
-let gc_region = url.searchParams.get("gc_region");
 let gc_client = url.searchParams.get("gc_client");
+let gc_integration = url.searchParams.get("gc_integration");
 let gc_datatable = url.searchParams.get("gc_datatable");
 let til_adminsGroupId = url.searchParams.get("til_adminsGroupId");
 let til_adminsIds = url.searchParams.get("til_adminsIds");
 
+// Redirect URL
 let redirect_url = window.location.origin + window.location.pathname;
 
-// Temporary logging - need to get the GC URL to get the integration id
-console.warn("[TIL] parent window referrer", document.referrer);
-console.warn("[TIL] window location", window.location);
-console.warn("[TIL] window location href", window.location.href);
-console.warn("[TIL] window parent", window.parent);
-console.warn("[TIL] window parent location", window.parent.location);
+// Extract gc_region from document.referrer
+const referrerUrl = new URL(document.referrer);
+gc_region = referrerUrl.slice(13, -1);
+console.log(`[TIL] Genesys Cloud region: ${gc_region}`);
 
 // Getting and setting the GC details from dynamic URL and session storage
-gc_region = gc_region || sessionStorage.getItem("gc_region");
 gc_client = gc_client || sessionStorage.getItem("gc_clientId");
+gc_integration = gc_integration || sessionStorage.getItem("gc_integration");
 gc_datatable = gc_datatable || sessionStorage.getItem("gc_datatable");
 til_adminsGroupId =
   til_adminsGroupId || sessionStorage.getItem("til_adminsGroupId");
 til_adminsIds = til_adminsIds || sessionStorage.getItem("til_adminsIds");
+
 redirect_url = redirect_url || sessionStorage.getItem("redirect_url");
+gc_region = gc_region || sessionStorage.getItem("gc_region");
 
 // Setting the values in sessionStorage if they are provided
-if (gc_region) sessionStorage.setItem("gc_region", gc_region);
 if (gc_client) sessionStorage.setItem("gc_client", gc_client);
+if (gc_integration) sessionStorage.setItem("gc_integration", gc_integration);
 if (gc_datatable) sessionStorage.setItem("gc_datatable", gc_datatable);
 if (til_adminsGroupId)
   sessionStorage.setItem("til_adminsGroupId", til_adminsGroupId);
 if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
 if (redirect_url) sessionStorage.setItem("redirect_url", redirect_url);
+if (gc_region) sessionStorage.setItem("gc_region", gc_region);
 
 export async function startApp() {
   console.log("[TIL] Starting application");

@@ -16,7 +16,7 @@ Single data table to store interaction details with a type field to flag with su
    - routing:readonly (used to get queue / skill / language / wrap names)
    - speech-and-text-analytics:readonly (STA data source for silence / overtalk etc.)
    - user-basic-info
-1. Create Groups
+1. Create Groups (must be an 'official' group type)
    1. TIL Admins (can edit interactions in library and perform management tasks) \*optional
    1. TIL Users (can view / open only)
 1. Data table
