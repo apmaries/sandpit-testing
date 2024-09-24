@@ -86,7 +86,7 @@ export async function createDatatable(body) {
 }
 
 // Return datatable rows
-export async function getDatatableRows() {
+export async function getDatatableRows(brief) {
   console.log("[TIL] Getting datatable rows");
   let rows = [];
 
@@ -102,7 +102,7 @@ export async function getDatatableRows() {
   let opts = {
     "pageNumber": 1, // Number | Page number
     "pageSize": 500, // Number | Page size
-    "showbrief": false, // Boolean | If true returns just the key value of the row
+    "showbrief": brief, // Boolean | If true returns just the key value of the row
   };
 
   try {
@@ -112,6 +112,8 @@ export async function getDatatableRows() {
   } catch (error) {
     throw error;
   }
+
+  return rows;
 }
 
 // Update datatable row

@@ -5,7 +5,6 @@
 import { applicationConfig } from "./core/configManager.js";
 
 // Core modules
-import { startSession } from "./core/sessionManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
 // Api modules
@@ -46,6 +45,8 @@ const redirect_url = window.location.origin + window.location.pathname;
 
 // Extract gc_region from document.referrer
 const referrerUrl = document.referrer;
+console.log(`[TIL] Referrer URL: ${referrerUrl}`);
+
 const gc_region = referrerUrl.slice(13, -1);
 console.log(`[TIL] Genesys Cloud region: ${gc_region}`);
 
