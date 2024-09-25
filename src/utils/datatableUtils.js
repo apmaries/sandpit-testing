@@ -186,15 +186,12 @@ export async function makeDatatable() {
         }
 
         // Add new keys that are missing in the row
-        if (!row[key] && schema.schema.properties[key]) {
+        else if (!row[key] && schema.schema.properties[key]) {
           row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
         }
 
         // Add any remaining keys with default values
-        if (
-          schema.schema.properties[key] &&
-          !schema.schema.properties[key].default
-        ) {
+        else {
           row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
         }
       }
