@@ -198,8 +198,13 @@ export async function makeDatatable() {
     console.log("[TIL] Importing rows from old datatable");
     for (const row of rows) {
       console.debug("[TIL] Importing row", row);
-      await createDatatableRow(newDatatableResponse.id, row);
+
+      // Create a simple row object using id and type - other details will be refreshed
+      const simpleRow = { key: row.key, type: row.type };
+      await createDatatableRow(newDatatableResponse.id, simpleRow);
     }
+
+    // Placeholder for refresh function
   }
 
   // Update application config with the new datatable info
