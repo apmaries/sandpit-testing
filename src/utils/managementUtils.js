@@ -60,8 +60,15 @@ export async function openDatatableConfig() {
   const region = sessionStorage.getItem("gc_region");
   const datatableId = sessionStorage.getItem("gc_datatable");
 
-  const url = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}`;
-  window.open(url, "_blank");
+  const anchor = document.createElement("a");
+  anchor.href = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}`;
+  anchor.target = "_blank";
+  anchor.style.display = "none";
+
+  document.body.appendChild(anchor);
+  anchor.click();
+
+  document.body.removeChild(anchor);
 }
 
 // Function to open the datatable rows in a new tab
@@ -71,6 +78,13 @@ export async function openDatatableRows() {
   const region = sessionStorage.getItem("gc_region");
   const datatableId = sessionStorage.getItem("gc_datatable");
 
-  const url = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}/rows`;
-  window.open(url, "_blank");
+  const anchor = document.createElement("a");
+  anchor.href = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}/rows`;
+  anchor.target = "_blank";
+  anchor.style.display = "none";
+
+  document.body.appendChild(anchor);
+  anchor.click();
+
+  document.body.removeChild(anchor);
 }
