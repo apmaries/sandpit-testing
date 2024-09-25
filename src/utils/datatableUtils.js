@@ -177,6 +177,20 @@ export async function makeDatatable() {
     // Get the current datatable rows
     rows = await getDatatableRows();
 
+    // Modify existing rows to new schema
+    for (const row of rows) {
+      for (const key in row) {
+        // Remove keys that are not in the new schema
+        if (!schema.schema.properties[key]) {
+          delete row[key];
+        }
+        // Add keys that are missing in the row
+        if (!row[key] && schema.schema.properties[key]) {
+          row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
+        }
+      }
+    }
+
     // Update name in old datatable body
     datatableConfig.name = `${datatableName} (old-${now})`;
 
@@ -197,11 +211,8 @@ export async function makeDatatable() {
   if (rows) {
     console.log("[TIL] Importing rows from old datatable");
     for (const row of rows) {
-      console.debug("[TIL] Importing row", row);
-
-      // Create a simple row object using id and type - other details will be refreshed
-      const simpleRow = { key: row.key, type: row.type };
-      await createDatatableRow(newDatatableResponse.id, simpleRow);
+      console.debug("[TIL] Creating row with body", row);
+      await createDatatableRow(newDatatableResponse.id, row);
     }
 
     // Placeholder for refresh function
