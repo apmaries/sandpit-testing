@@ -3,10 +3,6 @@ gux-button {
   padding: 5px 5px;
 }
 
-gux-card-beta h3 {
-  margin: 0;
-}
-
 .align-right {
   margin-left: auto;
 }
@@ -15,26 +11,8 @@ gux-card-beta h3 {
   margin-right: auto;
 }
 
-.library-mod-divs {
-  display: flex;
-  align-items: center;
-}
-
-.add-to-input {
-  width: 250px;
-}
-
 .admin-hidden {
   display: none;
-}
-
-.admin-visible {
-  display: block;
-}
-
-.library-mod-divs.admin-visible {
-  display: flex;
-  align-items: center;
 }
 
 .horizontal-checkbox-group {
@@ -57,14 +35,8 @@ gux-card-beta h3 {
 }
 
 /* Management tools */
-gux-button[management-button="true"] {
-  width: 95%;
-  padding: 10px;
-}
-
-gux-action-button[management-button="true"] {
-  width: 95%;
-  padding: 10px;
+.admin-visible {
+  display: block;
 }
 
 #management-tools-div {
@@ -75,25 +47,53 @@ gux-action-button[management-button="true"] {
 
 .management-tools-container {
   width: 450px;
-  height: 160px;
+  height: 180px;
   margin: 20px;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }
 
-.management-tools-container > div {
+.management-tools-container h3 {
+  margin: 0;
+}
+
+.admin-action-div {
+  padding-bottom: 10px;
+  margin-top: auto; /* Pushes the div to the bottom */
+}
+
+.conversation-id-input {
+  width: 65%;
+}
+
+.admin-buttons-div {
   display: flex;
-  gap: 10px; /* Adjust the gap between buttons as needed */
+  align-items: center;
+}
+
+gux-button[management-button="true"] {
+  width: 100%;
+  padding: 0px;
+  margin: 16px 0px;
+}
+
+gux-action-button[management-button="true"] {
+  width: 35%;
+  padding-left: 10px;
+  margin: 16px 0px;
 }
 
 .response-container {
-  width: 95%; /* Match the width of the button */
-  margin-top: 10px;
-  padding: 10px;
+  height: 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  display: flex;
+  align-items: center; /* Vertically align the p element */
+  padding: 0 10px; /* Optional: Add padding for better spacing */
 }
 
 /* End of Management tools */

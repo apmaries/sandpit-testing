@@ -240,130 +240,171 @@
                   id="modify-good-library"
                   class="management-tools-container"
                 >
-                  <h3>Good</h3>
+                  <h3>Good Interactions Library</h3>
                   <p>Modify good library by entering a conversation id</p>
-                  <div class="library-mod-divs admin-hidden">
-                    <gux-form-field-text-like label-position="screenreader">
-                      <label slot="label">Screenreader</label>
-                      <input
-                        slot="input"
-                        type="text"
-                        placeholder="Enter interaction id"
-                        class="add-to-input"
-                      />
-                    </gux-form-field-text-like>
-                    <gux-action-button
-                      name="modify-library"
-                      id="modify-good-action-btn"
-                      accent="primary"
-                      text="Select Action"
-                      management-button="true"
-                    >
-                      <gux-list-item function-to-run="addInteractionToLibrary"
-                        >Add</gux-list-item
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-form-field-text-like
+                        label-position="screenreader"
+                        class="conversation-id-input"
                       >
-                      <gux-list-item
-                        function-to-run="deleteInteractionFromLibrary"
-                        >Delete</gux-list-item
-                      ></gux-action-button
-                    >
+                        <label slot="label">Screenreader</label>
+                        <input
+                          slot="input"
+                          type="text"
+                          placeholder="Enter interaction id"
+                        />
+                      </gux-form-field-text-like>
+                      <gux-action-button
+                        name="modify-library"
+                        id="modify-good-action-btn"
+                        accent="primary"
+                        text="Select Action"
+                        management-button="true"
+                      >
+                        <gux-list-item function-to-run="addInteractionToLibrary"
+                          >Add</gux-list-item
+                        >
+                        <gux-list-item
+                          function-to-run="deleteInteractionFromLibrary"
+                          >Delete</gux-list-item
+                        ></gux-action-button
+                      >
+                    </div>
+                    <div class="response-container"></div>
                   </div>
                 </div>
 
                 <div id="modify-bad-library" class="management-tools-container">
-                  <h3>Bad</h3>
+                  <h3>Bad Interactions Library</h3>
                   <p>Modify bad library by entering a conversation id</p>
-                  <div class="library-mod-divs admin-hidden">
-                    <gux-form-field-text-like label-position="screenreader">
-                      <label slot="label">Screenreader</label>
-                      <input
-                        slot="input"
-                        type="text"
-                        placeholder="Enter interaction id"
-                        class="add-to-input"
-                      />
-                    </gux-form-field-text-like>
-                    <gux-action-button
-                      name="modify-library"
-                      id="modify-good-action-btn"
-                      accent="primary"
-                      text="Select Action"
-                      management-button="true"
-                    >
-                      <gux-list-item function-to-run="addInteractionToLibrary"
-                        >Add</gux-list-item
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-form-field-text-like
+                        label-position="screenreader"
+                        class="conversation-id-input"
                       >
-                      <gux-list-item
-                        function-to-run="deleteInteractionFromLibrary"
-                        >Delete</gux-list-item
-                      ></gux-action-button
-                    >
+                        <label slot="label">Screenreader</label>
+                        <input
+                          slot="input"
+                          type="text"
+                          placeholder="Enter interaction id"
+                        />
+                      </gux-form-field-text-like>
+                      <gux-action-button
+                        name="modify-library"
+                        id="modify-good-action-btn"
+                        accent="primary"
+                        text="Select Action"
+                        management-button="true"
+                      >
+                        <gux-list-item function-to-run="addInteractionToLibrary"
+                          >Add</gux-list-item
+                        >
+                        <gux-list-item
+                          function-to-run="deleteInteractionFromLibrary"
+                          >Delete</gux-list-item
+                        ></gux-action-button
+                      >
+                    </div>
+                    <div class="response-container"></div>
                   </div>
                 </div>
               </fieldset>
+
               <fieldset>
                 <legend>Tools</legend>
 
                 <div class="management-tools-container">
                   <h3>Generate datatable schema</h3>
+                  <p>Generates and downloads the required datatable schema</p>
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-button
+                        name="management-tools-button"
+                        id="generate-schema-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="generateDatatableSchema"
+                      >
+                        Generate schema
+                      </gux-button>
+                    </div>
+                    <div class="response-container"></div>
+                  </div>
+                </div>
+
+                <div class="management-tools-container">
+                  <h3>Validate datatable</h3>
                   <p>
-                    Generates and downloads the required datatable schema which
-                    can be imported via API
+                    Validates the datatable schema. Will print any errors to the
+                    console.
                   </p>
-                  <div>
-                    <gux-button
-                      name="management-tools-button"
-                      id="generate-schema-btn"
-                      accent="primary"
-                      management-button="true"
-                      function-to-run="generateDatatableSchema"
-                    >
-                      Generate schema
-                    </gux-button>
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-button
+                        name="management-tools-button"
+                        id="migrate-datatable-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="validateDatatable"
+                      >
+                        Validate datatable
+                      </gux-button>
+                    </div>
+                    <div class="response-container"></div>
                   </div>
                 </div>
 
                 <div class="management-tools-container">
                   <h3>Migrate to new datatable</h3>
                   <p>
-                    Creates a new datatable and migrates all data from the old.
-                    Used to repair or upgrade the datatable
+                    Creates a new datatable, migrates data and updates
+                    integration URL
                   </p>
-                  <div>
-                    <gux-button
-                      name="management-tools-button"
-                      id="migrate-datatable-btn"
-                      accent="primary"
-                      management-button="true"
-                      function-to-run="migrateDatatable"
-                    >
-                      Migrate datatable
-                    </gux-button>
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-button
+                        name="management-tools-button"
+                        id="migrate-datatable-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="migrateDatatable"
+                      >
+                        Migrate datatable
+                      </gux-button>
+                    </div>
+                    <div class="response-container"></div>
                   </div>
                 </div>
 
                 <div class="management-tools-container">
                   <h3>Open datatable</h3>
                   <p>Opens the datatable in a new tab</p>
-                  <div>
-                    <gux-button
-                      name="management-tools-button"
-                      id="open-datatable-config-btn"
-                      accent="primary"
-                      management-button="true"
-                      function-to-run="openDatatableConfig"
-                    >
-                      Open Datatable Config
-                    </gux-button>
-                    <gux-button
-                      name="management-tools-button"
-                      id="open-datatable-rows-btn"
-                      accent="primary"
-                      management-button="true"
-                      function-to-run="openDatatableRows"
-                    >
-                      Open Datatable Rows
-                    </gux-button>
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div dual-buttons">
+                      <gux-button
+                        name="management-tools-button"
+                        id="open-datatable-config-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="openDatatableConfig"
+                      >
+                        Open Datatable Config
+                      </gux-button>
+                      <gux-button
+                        name="management-tools-button"
+                        id="open-datatable-rows-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="openDatatableRows"
+                      >
+                        Open Datatable Rows
+                      </gux-button>
+                    </div>
+                    <div class="response-container">
+                      <p>This is a test</p>
+                    </div>
                   </div>
                 </div>
               </fieldset>
