@@ -358,6 +358,28 @@
                     hidden
                   ></div>
                 </div>
+
+                <div class="management-tools-container">
+                  <h3>Migrate to new datatable</h3>
+                  <p>
+                    Creates a new datatable and migrates all data from the old.
+                    Used to repair or upgrade the datatable
+                  </p>
+                  <gux-button
+                    name="management-tools-button"
+                    id="generate-schema-btn"
+                    accent="primary"
+                    management-button="true"
+                    function-to-run="migrateDatatable"
+                  >
+                    MIgrate datatable
+                  </gux-button>
+                  <div
+                    id="generate-schema-response"
+                    class="response-container"
+                    hidden
+                  ></div>
+                </div>
               </fieldset>
             </div>
           </gux-tab-panel>
