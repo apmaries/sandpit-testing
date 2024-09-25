@@ -118,7 +118,7 @@ export async function getDatatableRows() {
 
 // Create datatable row
 export async function createDatatableRow(datatableId, row) {
-  console.log("[TIL] Creating datatable row");
+  console.log("[TIL] Creating datatable row", row);
 
   if (testMode) {
     return "Datatable row created";
