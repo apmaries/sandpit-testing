@@ -5,9 +5,6 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { processConversationData } from "../modules/conversations.js";
-import { processStaData } from "../modules/sta.js";
-import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
 import {
@@ -15,11 +12,14 @@ import {
   migrateDatatable,
   openDatatableConfig,
   openDatatableRows,
+  addToLibraryHandler,
+  deleteFromLibraryHandler,
 } from "./managementUtils.js";
 import {
   populateDomTable,
   hideTableColumn,
   showTableColumn,
+  updateManagementToolsResponse,
 } from "../utils/domUtils.js";
 
 // Global variables
@@ -30,41 +30,56 @@ window.openDatatableConfig = openDatatableConfig;
 window.openDatatableRows = openDatatableRows;
 
 ("use strict");
-
-// Enable event listeners for add to library buttons
+// Enable event listeners for add and delete library buttons
 export async function enableActionButtonEventListeners() {
-  // Select all buttons with the name 'add-to-library'
-  const addButtons = document.querySelectorAll(
-    'gux-button[name="add-to-library"]'
+  // Select all gux-list-item elements inside gux-action-button with the name 'modify-library'
+  const actionItems = document.querySelectorAll(
+    'gux-action-button[name="modify-library"] gux-list-item'
   );
 
   // Iterate over the NodeList and add event listeners
-  addButtons.forEach((button) => {
-    button.addEventListener("click", (event) => {
+  actionItems.forEach((item) => {
+    item.addEventListener("click", (event) => {
       let library;
+      let action;
       let inputValue;
+      let responseEle;
 
-      if (button.id === "add-to-good-btn") {
+      if (item.id.includes("good")) {
         library = "good";
         inputValue = document.querySelector(
-          '#add-to-good-div input[slot="input"]'
+          '#modify-good-library input[slot="input"]'
         ).value;
-      } else if (button.id === "add-to-bad-btn") {
+        responseEle = document.querySelector("#modify-good-library-response");
+        responseEle.innerHTML = "";
+      } else if (item.id.includes("bad")) {
         library = "bad";
         inputValue = document.querySelector(
-          '#add-to-bad-div input[slot="input"]'
+          '#modify-bad-library input[slot="input"]'
         ).value;
+        responseEle = document.querySelector("#modify-bad-library-response");
+        responseEle.innerHTML = "";
+      }
+
+      if (item.id.includes("add")) {
+        action = "add";
+      } else if (item.id.includes("del")) {
+        action = "delete";
       }
 
       // Validate the input value for GUID syntax
       const guidPattern =
         /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
       if (!guidPattern.test(inputValue)) {
-        alert("Please enter a valid GUID.");
+        updateManagementToolsResponse(responseEle, "Invalid GUID format!");
         return;
       }
 
-      handleAddToLibraryClick(library, inputValue);
+      if (action === "add") {
+        addToLibraryHandler(library, inputValue);
+      } else if (action === "delete") {
+        deleteFromLibraryHandler(library, inputValue);
+      }
     });
   });
 }
@@ -121,30 +136,4 @@ export async function enableDomTableCheckboxEventListeners() {
       }
     });
   });
-}
-
-// Function to handle add to library button click event
-async function handleAddToLibraryClick(library, inputValue) {
-  console.log(`[TIL] Adding ${inputValue} to ${library} library`);
-  // Add to library logic here
-
-  // Check if conversation is already in library
-
-  // Get conversation details
-  let conversationDetails = await processConversationData(inputValue);
-
-  // Get STA data
-  let staDetails = await processStaData(inputValue);
-
-  // Get recording data
-  let recordingDetails = await processRecordingData(inputValue);
-
-  // Map conversation details to a new object
-  let conversationObj = {
-    conversationDetail: conversationDetails[0].conversation, // Assuming only one conversation is returned as only a single id can be supplied in input value
-    staDetail: staDetails,
-    recordingDetail: recordingDetails,
-  };
-
-  console.log("[TIL] Conversation object", conversationObj);
 }

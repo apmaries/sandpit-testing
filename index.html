@@ -262,16 +262,16 @@
                         text="Select Action"
                         management-button="true"
                       >
-                        <gux-list-item function-to-run="addInteractionToLibrary"
-                          >Add</gux-list-item
-                        >
-                        <gux-list-item
-                          function-to-run="deleteInteractionFromLibrary"
+                        <gux-list-item id="add-to-good">Add</gux-list-item>
+                        <gux-list-item id="del-to-good"
                           >Delete</gux-list-item
                         ></gux-action-button
                       >
                     </div>
-                    <div class="response-container"></div>
+                    <div
+                      id="modify-good-library-response"
+                      class="response-container"
+                    ></div>
                   </div>
                 </div>
 
@@ -298,11 +298,8 @@
                         text="Select Action"
                         management-button="true"
                       >
-                        <gux-list-item function-to-run="addInteractionToLibrary"
-                          >Add</gux-list-item
-                        >
-                        <gux-list-item
-                          function-to-run="deleteInteractionFromLibrary"
+                        <gux-list-item id="add-to-bad">Add</gux-list-item>
+                        <gux-list-item id="del-to-bad"
                           >Delete</gux-list-item
                         ></gux-action-button
                       >

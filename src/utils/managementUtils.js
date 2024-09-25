@@ -5,7 +5,9 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { updateDatatable, createDatatable } from "../modules/architect.js";
+import { processConversationData } from "../modules/conversations.js";
+import { processStaData } from "../modules/sta.js";
+import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
 import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
@@ -13,6 +15,38 @@ import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
 // Global variables
 const testMode = applicationConfig.mode.isTest;
 ("use strict");
+
+// Function to handle add to library button click event
+export async function addToLibraryHandler(library, inputValue) {
+  console.log(`[TIL] Adding ${inputValue} to ${library} library`);
+  // Add to library logic here
+
+  // Check if conversation is already in library
+
+  // Get conversation details
+  let conversationDetails = await processConversationData(inputValue);
+
+  // Get STA data
+  let staDetails = await processStaData(inputValue);
+
+  // Get recording data
+  let recordingDetails = await processRecordingData(inputValue);
+
+  // Map conversation details to a new object
+  let conversationObj = {
+    conversationDetail: conversationDetails[0].conversation, // Assuming only one conversation is returned as only a single id can be supplied in input value
+    staDetail: staDetails,
+    recordingDetail: recordingDetails,
+  };
+
+  console.log("[TIL] Conversation object", conversationObj);
+}
+
+// FUnction to handle delete from library button click event
+export async function deleteFromLibraryHandler(library, inputValue) {
+  console.log(`[TIL] Deleting ${inputValue} from ${library} library`);
+  // Delete from library logic here
+}
 
 // Function to download an object as a JSON file
 async function downloadObjectAsJson(obj) {
