@@ -32,7 +32,7 @@ window.openDatatableRows = openDatatableRows;
 ("use strict");
 
 // Enable event listeners for add to library buttons
-export async function enableAddButtonEventListeners() {
+export async function enableActionButtonEventListeners() {
   // Select all buttons with the name 'add-to-library'
   const addButtons = document.querySelectorAll(
     'gux-button[name="add-to-library"]'

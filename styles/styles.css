@@ -74,6 +74,13 @@ gux-button {
   align-items: center;
 }
 
+.dual-buttons {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Add gap between buttons */
+}
+
 gux-button[management-button="true"] {
   width: 100%;
   padding: 0px;

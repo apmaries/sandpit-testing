@@ -22,7 +22,7 @@ import {
   resetCheckboxes,
 } from "./utils/domUtils.js";
 import {
-  enableAddButtonEventListeners,
+  enableActionButtonEventListeners,
   enableDomTableCheckboxEventListeners,
   enableManagementToolsEventListeners,
 } from "./utils/eventUtils.js";
@@ -175,7 +175,7 @@ async function runApp() {
       });
 
       // Enable admin features
-      await enableAddButtonEventListeners();
+      await enableActionButtonEventListeners();
       await enableManagementToolsEventListeners();
 
       console.log("[TIL] Admin features enabled");
