@@ -45,6 +45,24 @@ gux-button {
   gap: 16px; /* Adjust the gap between containers as needed */
 }
 
+.tools-div {
+  border: #ccc 1px solid;
+  box-shadow: #172b52 5px 5px 10px; /* Optional: Add shadow for better visibility */
+}
+
+.tools-div h2 {
+  margin: 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-bottom: #ccc 1px solid;
+}
+
+.tools-div.div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Adjust the gap between containers as needed */
+}
+
 .management-tools-container {
   width: 450px;
   height: 180px;
@@ -94,7 +112,7 @@ gux-action-button[management-button="true"] {
 }
 
 .response-container {
-  height: 32px;
+  height: 40px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;

@@ -234,8 +234,8 @@
           <!-- Tab 3 - Admin management -->
           <gux-tab-panel tab-id="3">
             <div id="management-tools-div">
-              <fieldset>
-                <legend>Add to library</legend>
+              <div class="tools-div">
+                <h2>Library Tools</h2>
                 <div
                   id="modify-good-library"
                   class="management-tools-container"
@@ -307,10 +307,31 @@
                     <div class="response-container"></div>
                   </div>
                 </div>
-              </fieldset>
 
-              <fieldset>
-                <legend>Tools</legend>
+                <div class="management-tools-container">
+                  <h3>Refresh Libraries</h3>
+                  <p>
+                    Refreshes all interaction metadata and updates the libraries
+                  </p>
+                  <div class="admin-action-div">
+                    <div class="admin-buttons-div">
+                      <gux-button
+                        name="management-tools-button"
+                        id="refresh-libraries-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="refreshLibraries"
+                      >
+                        Refresh libraries
+                      </gux-button>
+                    </div>
+                    <div class="response-container"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tools-div">
+                <h2>Datatable Tools</h2>
 
                 <div class="management-tools-container">
                   <h3>Generate datatable schema</h3>
@@ -402,7 +423,7 @@
                     <div class="response-container"></div>
                   </div>
                 </div>
-              </fieldset>
+              </div>
             </div>
           </gux-tab-panel>
         </gux-tabs>
