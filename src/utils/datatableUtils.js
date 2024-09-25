@@ -119,7 +119,7 @@ export async function generateDatatableSchema() {
     // Add specific attributes based on the field type
     if (field.type === "string") {
       properties[key].maxLength = 256;
-      properties[key].minLength = 1;
+      properties[key].minLength = 0;
     } else if (field.type === "integer") {
       properties[key].maximum = 999999999999999;
       properties[key].minimum = -999999999999999;
