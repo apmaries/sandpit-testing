@@ -1,21 +1,23 @@
 {
-  "id": "bd72db41-7951-4c71-8882-ecc1998d3fdf",
-  "name": "TIL Datatable",
+  "id": "7ef6f7c5-ebc8-4136-8426-0b88c7beb98d",
+  "name": "til name",
   "division": {
-    "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
-    "name": "Bluth Company",
-    "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+    "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+    "name": "Home",
+    "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
   },
+  "description": "This has been modified again",
   "schema": {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "TIL Datatable",
+    "title": "til name",
+    "description": "This has been modified again",
     "type": "object",
     "required": ["key"],
     "properties": {
       "key": {
         "title": "conversation_id",
         "type": "string",
-        "$id": "/properties/conversation_id",
+        "$id": "/properties/key",
         "displayOrder": 0,
         "maxLength": 256,
         "minLength": 1
@@ -25,164 +27,181 @@
         "type": "string",
         "$id": "/properties/type",
         "displayOrder": 1,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "division_ids": {
-        "title": "division_ids",
+      "division_id": {
+        "title": "division_id",
         "type": "string",
-        "$id": "/properties/division_ids",
+        "$id": "/properties/division_id",
         "displayOrder": 2,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "division_names": {
-        "title": "division_names",
+      "division_name": {
+        "title": "division_name",
         "type": "string",
-        "$id": "/properties/division_names",
+        "$id": "/properties/division_name",
         "displayOrder": 3,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "start_date": {
-        "title": "start_date",
+      "conversation_start": {
+        "title": "conversation_start",
         "type": "string",
-        "$id": "/properties/start_date",
+        "$id": "/properties/conversation_start",
         "displayOrder": 4,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "end_date": {
-        "title": "end_date",
+      "conversation_end": {
+        "title": "conversation_end",
         "type": "string",
-        "$id": "/properties/end_date",
+        "$id": "/properties/conversation_end",
         "displayOrder": 5,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "queue_ids": {
-        "title": "queue_ids",
+      "queue_id": {
+        "title": "queue_id",
         "type": "string",
-        "$id": "/properties/queue_ids",
+        "$id": "/properties/queue_id",
         "displayOrder": 6,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "queue_names": {
-        "title": "queue_names",
+      "queue_name": {
+        "title": "queue_name",
         "type": "string",
-        "$id": "/properties/queue_names",
+        "$id": "/properties/queue_name",
         "displayOrder": 7,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
       "media_type": {
         "title": "media_type",
         "type": "string",
         "$id": "/properties/media_type",
         "displayOrder": 8,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "total_talk_time": {
-        "title": "total_talk_time",
-        "type": "integer",
-        "$id": "/properties/total_talk_time",
+      "evaluation_total_score": {
+        "title": "evaluation_total_score",
+        "type": "string",
+        "$id": "/properties/evaluation_total_score",
         "displayOrder": 9,
-        "maximum": 999999999999999,
-        "minimum": -999999999999999
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "evluation_total_score": {
-        "title": "evluation_total_score",
-        "type": "integer",
-        "$id": "/properties/evluation_total_score",
+      "evaluation_critical_score": {
+        "title": "evaluation_critical_score",
+        "type": "string",
+        "$id": "/properties/evaluation_critical_score",
         "displayOrder": 10,
-        "maximum": 999999999999999,
-        "minimum": -999999999999999
-      },
-      "evluation_total_critical_score": {
-        "title": "evluation_total_critical_score",
-        "type": "integer",
-        "$id": "/properties/evluation_total_critical_score",
-        "displayOrder": 11,
-        "maximum": 999999999999999,
-        "minimum": -999999999999999
+        "maxLength": 262144,
+        "minLength": 0
       },
       "sentiment_score": {
         "title": "sentiment_score",
-        "type": "number",
-        "$id": "/properties/sentiment_score",
-        "displayOrder": 12,
-        "minimum": -1e40,
-        "maximum": 1e40
-      },
-      "sentiment_trend_class": {
-        "title": "sentiment_trend_class",
         "type": "string",
-        "$id": "/properties/sentiment_trend_class",
+        "$id": "/properties/sentiment_score",
+        "displayOrder": 11,
+        "maxLength": 262144,
+        "minLength": 0
+      },
+      "sentiment_trend": {
+        "title": "sentiment_trend",
+        "type": "string",
+        "$id": "/properties/sentiment_trend",
+        "displayOrder": 12,
+        "maxLength": 262144,
+        "minLength": 0
+      },
+      "empathy_score": {
+        "title": "empathy_score",
+        "type": "string",
+        "$id": "/properties/empathy_score",
         "displayOrder": 13,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "min_empathy_score": {
-        "title": "min_empathy_score",
-        "type": "number",
-        "$id": "/properties/min_empathy_score",
+      "overtalk": {
+        "title": "overtalk",
+        "type": "string",
+        "$id": "/properties/overtalk",
         "displayOrder": 14,
-        "minimum": -1e40,
-        "maximum": 1e40
+        "maxLength": 262144,
+        "minLength": 0
       },
-      "max_empathy_score": {
-        "title": "max_empathy_score",
-        "type": "number",
-        "$id": "/properties/max_empathy_score",
+      "silence": {
+        "title": "silence",
+        "type": "string",
+        "$id": "/properties/silence",
         "displayOrder": 15,
-        "minimum": -1e40,
-        "maximum": 1e40
-      },
-      "survey_total_score": {
-        "title": "survey_total_score",
-        "type": "integer",
-        "$id": "/properties/survey_total_score",
-        "displayOrder": 16,
-        "maximum": 999999999999999,
-        "minimum": -999999999999999
-      },
-      "survey_promoter_score": {
-        "title": "survey_promoter_score",
-        "type": "integer",
-        "$id": "/properties/survey_promoter_score",
-        "displayOrder": 17,
-        "maximum": 999999999999999,
-        "minimum": -999999999999999
+        "maxLength": 262144,
+        "minLength": 0
       },
       "file_state": {
         "title": "file_state",
         "type": "string",
         "$id": "/properties/file_state",
-        "displayOrder": 18,
-        "maxLength": 256,
-        "minLength": 1
+        "displayOrder": 16,
+        "maxLength": 262144,
+        "minLength": 0
       },
       "archive_date": {
         "title": "archive_date",
         "type": "string",
         "$id": "/properties/archive_date",
-        "displayOrder": 19,
-        "maxLength": 256,
-        "minLength": 1
+        "displayOrder": 17,
+        "maxLength": 262144,
+        "minLength": 0
       },
       "delete_date": {
         "title": "delete_date",
         "type": "string",
         "$id": "/properties/delete_date",
+        "displayOrder": 18,
+        "maxLength": 262144,
+        "minLength": 0
+      },
+      "new_field": {
+        "title": "new_field",
+        "type": "string",
+        "$id": "/properties/new_field",
+        "displayOrder": 19,
+        "maxLength": 262144,
+        "minLength": 0
+      },
+      "new_field_2": {
+        "title": "new_field_2",
+        "type": "string",
+        "$id": "/properties/new_field_2",
         "displayOrder": 20,
-        "maxLength": 256,
-        "minLength": 1
+        "maxLength": 262144,
+        "minLength": 0
+      },
+      "int": {
+        "title": "int",
+        "type": "integer",
+        "$id": "/properties/int",
+        "displayOrder": 21,
+        "maximum": 999999999999999,
+        "minimum": -999
+      },
+      "decimal": {
+        "title": "decimal",
+        "type": "number",
+        "$id": "/properties/decimal",
+        "displayOrder": 22,
+        "default": 0,
+        "maximum": 999,
+        "minimum": -999
       }
     },
     "additionalProperties": false,
-    "datatableId": "bd72db41-7951-4c71-8882-ecc1998d3fdf"
+    "datatableId": "7ef6f7c5-ebc8-4136-8426-0b88c7beb98d"
   },
-  "selfUri": "/api/v2/flows/datatables/bd72db41-7951-4c71-8882-ecc1998d3fdf"
+  "selfUri": "/api/v2/flows/datatables/7ef6f7c5-ebc8-4136-8426-0b88c7beb98d"
 }

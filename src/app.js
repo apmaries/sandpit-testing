@@ -145,14 +145,12 @@ async function runApp() {
       await makeDatatable();
     } else {
       // Validate datatable schema
-      const isValidTable = await validateDatatableSchema();
-      if (!isValidTable) {
-        console.warn(
-          "[TIL] Datatable schema is not valid. Migrating to new datatable"
-        );
+      const validationResponse = await validateDatatableSchema();
+      if (!validationResponse.valid) {
+        console.log("[TIL] Migrating to new datatable");
 
         // Migrate datatable
-        await makeDatatable();
+        await makeDatatable(validationResponse);
       }
     }
 

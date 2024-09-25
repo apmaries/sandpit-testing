@@ -126,7 +126,7 @@ export async function createDatatableRow(datatableId, row) {
 
   try {
     await architectApi.postFlowsDatatableRows(datatableId, row);
-    console.log("[TIL] Datatable row created");
+    console.debug("[TIL] Datatable row created", row);
     return;
   } catch (error) {
     throw error;

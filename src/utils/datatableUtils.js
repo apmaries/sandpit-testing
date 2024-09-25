@@ -46,6 +46,12 @@ export async function validateDatatableSchema() {
   );
   console.debug("[TIL] Expected schema", expectedSchema);
 
+  // Initialize response object
+  let response = {
+    valid: false,
+    errors: { toRemove: [], toAdd: [] },
+  };
+
   // Get the datatable
   try {
     datatable = await getDatatable();
@@ -60,42 +66,53 @@ export async function validateDatatableSchema() {
     } else {
       throw new Error("[TIL] Fatal error getting datatable :(");
     }
-    return false;
+    response.valid = false;
+    return response;
   }
 
   // Define the current schema
   const currentSchema = datatable.schema.properties;
+  console.debug("[TIL] Current schema", currentSchema);
 
   // Validate the schema
-  const mismatches = [];
-
   for (const key in currentSchema) {
     if (!expectedSchema[key]) {
-      mismatches.push(`Unexpected key: ${key}`);
+      console.warn("[TIL] Unexpected key found in schema", key);
+      response.errors.toRemove.push({
+        title: key,
+        type: currentSchema[key].type,
+      });
     } else if (currentSchema[key].type !== expectedSchema[key].type) {
-      mismatches.push(
-        `Type mismatch for key ${key}: expected ${expectedSchema[key].type}, got ${currentSchema[key].type}`
-      );
+      response.errors.toRemove.push({
+        title: key,
+        type: currentSchema[key].type,
+      });
     }
   }
 
   for (const key in expectedSchema) {
     if (!currentSchema[key]) {
-      mismatches.push(`Missing key: ${key}`);
+      response.errors.toAdd.push({
+        title: key,
+        type: expectedSchema[key].type,
+      });
     }
   }
 
-  if (mismatches.length > 0) {
-    console.log(
-      "[TIL] Schema validation failed with the following mismatches:"
+  if (response.errors.toRemove.length > 0 || response.errors.toAdd.length > 0) {
+    console.warn("[TIL] Schema validation failed with errors");
+    response.errors.toRemove.forEach((mismatch) =>
+      console.debug(`[TIL] Mismatched key:`, mismatch)
     );
-    mismatches.forEach((mismatch) => console.log(`[TIL] Misatch: ${mismatch}`));
+    response.errors.toAdd.forEach((missing) =>
+      console.debug(`[TIL] Missing key:`, missing)
+    );
 
-    return false;
+    return response;
   }
 
   console.log("[TIL] Schema validation passed");
-  return true;
+  return response;
 }
 
 // Function to generate datatable schema
@@ -103,9 +120,7 @@ export async function generateDatatableSchema() {
   console.log("[TIL] Generating datatable schema");
 
   const config = applicationConfig.datatable;
-
   const dtFields = await flattenSchema(config.datatableColumns);
-
   const properties = {};
 
   for (const [key, field] of Object.entries(dtFields)) {
@@ -146,7 +161,7 @@ export async function generateDatatableSchema() {
 }
 
 // Function to make datatable
-export async function makeDatatable() {
+export async function makeDatatable(validationResponse) {
   console.log("[TIL] Making datatable");
   const datatableConfig = applicationConfig.datatable.datatable;
   let rows;
@@ -169,7 +184,7 @@ export async function makeDatatable() {
 
   // If there is an old datatable, update it
   if (oldId) {
-    console.log("[TIL] Old datatable found", oldId);
+    console.log(`[TIL] Found old datatable '${oldId}'`);
     // Define the datatable config
     datatableName = datatableConfig.name;
     const divisionId = datatableConfig.divisionId;
@@ -178,23 +193,26 @@ export async function makeDatatable() {
     rows = await getDatatableRows();
 
     // Modify existing rows to new schema
-    for (const row of rows) {
-      for (const key in row) {
-        // Remove keys that are not in the new schema
-        if (!schema.schema.properties[key]) {
-          delete row[key];
-        }
-
-        // Add new keys that are missing in the row
-        else if (!row[key] && schema.schema.properties[key]) {
-          row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
-        }
-
-        // Add any remaining keys with default values
-        else {
-          row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
-        }
+    for (let row of rows) {
+      // Add new properties to the row
+      for (const key of validationResponse.errors.toAdd) {
+        let keyTitle = key.title;
+        row[keyTitle] = "";
       }
+
+      // Remove obsolete properties from the row
+      for (const key of validationResponse.errors.toRemove) {
+        let keyTitle = key.title;
+        delete row[keyTitle];
+      }
+
+      // Update row keys with default values
+      for (const key in row) {
+        let keyType = schema.schema.properties[key].type;
+        row[key] = keyType === "string" ? "-" : 0;
+      }
+
+      console.debug("[TIL] Modified row", row);
     }
 
     // Update name in old datatable body
@@ -215,9 +233,13 @@ export async function makeDatatable() {
 
   // Import the rows from the old datatable
   if (rows) {
-    console.log("[TIL] Importing rows from old datatable");
+    console.log(`[TIL] Importing ${rows.length} rows from old datatable`);
+    let counter = 0; // Initialize counter
     for (const row of rows) {
-      console.debug("[TIL] Creating row with body", row);
+      counter++; // Increment counter
+      console.debug(
+        `[TIL] Creating row ${counter} of ${rows.length} with body`
+      );
       await createDatatableRow(newDatatableResponse.id, row);
     }
 
