@@ -149,3 +149,24 @@ export async function updateDatatableRow(rowId, body) {
     throw error;
   }
 }
+
+// Delete datatable row
+export async function deleteDatatableRow(rowId) {
+  console.log("[TIL] Deleting datatable row", rowId);
+
+  if (testMode) {
+    return "Datatable row deleted";
+  }
+
+  let datatableId = sessionStorage.getItem("gc_datatable");
+
+  try {
+    let response = await architectApi.deleteFlowsDatatableRow(
+      datatableId,
+      rowId
+    );
+    return response;
+  } catch (error) {
+    return error;
+  }
+}

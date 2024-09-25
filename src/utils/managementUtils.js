@@ -5,12 +5,14 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
+import { deleteDatatableRow } from "../modules/architect.js";
 import { processConversationData } from "../modules/conversations.js";
 import { processStaData } from "../modules/sta.js";
 import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
 import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
+import { updateManagementToolsResponse } from "./domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -46,6 +48,14 @@ export async function addToLibraryHandler(library, inputValue) {
 export async function deleteFromLibraryHandler(library, inputValue) {
   console.log(`[TIL] Deleting ${inputValue} from ${library} library`);
   // Delete from library logic here
+
+  let delResponse = await deleteDatatableRow(inputValue);
+
+  // Update DOM response
+  let responseEle = document.getElementById(
+    `modify-${library}-library-response`
+  );
+  updateManagementToolsResponse(responseEle, delResponse);
 }
 
 // Function to download an object as a JSON file
