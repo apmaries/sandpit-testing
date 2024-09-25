@@ -184,8 +184,17 @@ export async function makeDatatable() {
         if (!schema.schema.properties[key]) {
           delete row[key];
         }
-        // Add keys that are missing in the row
+
+        // Add new keys that are missing in the row
         if (!row[key] && schema.schema.properties[key]) {
+          row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
+        }
+
+        // Add any remaining keys with default values
+        if (
+          schema.schema.properties[key] &&
+          !schema.schema.properties[key].default
+        ) {
           row[key] = schema.schema.properties[key].type === "string" ? "-" : 0;
         }
       }
