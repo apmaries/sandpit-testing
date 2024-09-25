@@ -52,3 +52,25 @@ export async function migrateDatatable() {
     return error;
   }
 }
+
+// Function to open the datatable config in a new tab
+export async function openDatatableConfig() {
+  console.log("[TIL] Opening datatable config");
+
+  const region = sessionStorage.getItem("gc_region");
+  const datatableId = sessionStorage.getItem("gc_datatable");
+
+  const url = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}`;
+  window.open(url, "_blank");
+}
+
+// Function to open the datatable rows in a new tab
+export async function openDatatableRows() {
+  console.log("[TIL] Opening datatable rows");
+
+  const region = sessionStorage.getItem("gc_region");
+  const datatableId = sessionStorage.getItem("gc_datatable");
+
+  const url = `https://apps.${region}/directory/#/admin/routing/datatables/${datatableId}/rows`;
+  window.open(url, "_blank");
+}

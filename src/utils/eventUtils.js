@@ -13,6 +13,8 @@ import { processRecordingData } from "../modules/recordings.js";
 import {
   downloadDatatableSchema,
   migrateDatatable,
+  openDatatableConfig,
+  openDatatableRows,
 } from "./managementUtils.js";
 import {
   populateDomTable,
@@ -24,6 +26,9 @@ import {
 const testMode = applicationConfig.mode.isTest;
 window.generateDatatableSchema = downloadDatatableSchema;
 window.migrateDatatable = migrateDatatable;
+window.openDatatableConfig = openDatatableConfig;
+window.openDatatableRows = openDatatableRows;
+
 ("use strict");
 
 // Enable event listeners for add to library buttons
