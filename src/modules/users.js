@@ -39,19 +39,23 @@ export async function getUser() {
   // Check if user is an admin
   let isAdmin;
 
-  const adminsIds = sessionStorage.getItem("til_adminsIds");
-  const adminsGroup = sessionStorage.getItem("til_adminsGroupId");
+  try {
+    const adminsIds = sessionStorage.getItem("til_adminsIds");
+    const adminsGroup = sessionStorage.getItem("til_adminsGroupId");
 
-  if (
-    adminsIds.includes(user.id) ||
-    user.groups.some((group) => group.id === adminsGroup)
-  ) {
-    isAdmin = true;
-  } else {
-    isAdmin = false;
+    if (
+      adminsIds.includes(user.id) ||
+      user.groups.some((group) => group.id === adminsGroup)
+    ) {
+      isAdmin = true;
+    } else {
+      isAdmin = false;
+    }
+    console.log("[TIL] User is admin: ", isAdmin);
+    applicationConfig.mode.isAdmin = isAdmin;
+  } catch (error) {
+    console.error("[TIL] Error checking if user is admin", error);
   }
-  console.log("[TIL] User is admin: ", isAdmin);
-  applicationConfig.mode.isAdmin = isAdmin;
 
   return user;
 }

@@ -208,6 +208,10 @@ export async function makeDatatable(validationResponse) {
 
       // Update row keys with default values
       for (const key in row) {
+        // Skip key and type
+        if (key === "key" || key === "type") continue;
+
+        // Set default value based on type
         let keyType = schema.schema.properties[key].type;
         row[key] = keyType === "string" ? "-" : 0;
       }
