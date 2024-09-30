@@ -14,7 +14,11 @@ import { processConversations } from "../modules/conversations.js";
 
 // Utility modules
 import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
-import { populateDomTable, updateManagementToolsResponse } from "./domUtils.js";
+import {
+  populateDomTable,
+  removeDomTableRow,
+  updateManagementToolsResponse,
+} from "./domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -73,11 +77,7 @@ export async function addToLibraryHandler(library, inputValue) {
   try {
     await createDatatableRow(datatableId, flattenedConversation);
     const newRow = await getDatatableRow(inputValue, false);
-    console.debug("[TIL] FlattenedConversation", flattenedConversation);
-    console.debug("[TIL] New row added", newRow);
-
     populateDomTable(`${library}-table`, [newRow]);
-
     updateManagementToolsResponse(
       responseEle,
       `Added '${inputValue}' to ${library} library`,
@@ -85,7 +85,7 @@ export async function addToLibraryHandler(library, inputValue) {
     );
   } catch (error) {
     console.error("[TIL] Error adding to library - ", error);
-    updateManagementToolsResponse(responseEle, error);
+    updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
 }
@@ -93,15 +93,21 @@ export async function addToLibraryHandler(library, inputValue) {
 // FUnction to handle delete from library button click event
 export async function deleteFromLibraryHandler(library, inputValue) {
   console.log(`[TIL] Deleting ${inputValue} from ${library} library`);
-  // Delete from library logic here
-
-  let delResponse = await deleteDatatableRow(inputValue);
-
-  // Update DOM response
-  let responseEle = document.getElementById(
+  const datatableId = sessionStorage.getItem("gc_datatable");
+  const responseEle = document.getElementById(
     `modify-${library}-library-response`
   );
-  updateManagementToolsResponse(responseEle, delResponse);
+  // Delete from library logic here
+
+  try {
+    let delResponse = await deleteDatatableRow(datatableId, inputValue);
+    removeDomTableRow(`${library}-table`, inputValue);
+    updateManagementToolsResponse(responseEle, delResponse, true);
+  } catch (error) {
+    console.error("[TIL] Error deleting from library - ", error);
+    updateManagementToolsResponse(responseEle, error, false);
+    return error;
+  }
 }
 
 // Function to download an object as a JSON file

@@ -216,6 +216,14 @@ export function populateDomTable(t, r) {
   console.log(`[TIL] Table ${t} populated with ${r.length} rows`);
 }
 
+// Utility function to remove a table row
+export function removeDomTableRow(tableId, rowId) {
+  let table = document.getElementById(tableId);
+  let tbody = table.getElementsByTagName("tbody")[0];
+  let tr = document.getElementById(rowId);
+  tbody.removeChild(tr);
+}
+
 // Function to update management tools response
 export function updateManagementToolsResponse(ele, response, responseClass) {
   let responseDiv = ele;
