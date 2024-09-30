@@ -49,7 +49,7 @@ export async function addToLibraryHandler(library, inputValue) {
 
   // Check if conversation is already in library
   const existingRow = await getDatatableRow(inputValue, true);
-  if (existingRow.key === inputValue) {
+  if (existingRow && existingRow.key === inputValue) {
     let error = `Conversation ID '${inputValue}' already exists in ${library} library!`;
     console.error("[TIL] Error adding to library", error);
     updateManagementToolsResponse(responseEle, error, false);

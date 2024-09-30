@@ -190,8 +190,9 @@ export async function deleteDatatableRow(datatableId, row) {
 
   try {
     await architectApi.deleteFlowsDatatableRow(datatableId, row);
+    console.debug("[TIL] Datatable row deleted", row);
     return;
   } catch (error) {
-    return error;
+    throw error;
   }
 }
