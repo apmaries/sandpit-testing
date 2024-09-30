@@ -20,10 +20,10 @@
         "maxLength": 256,
         "minLength": 1
       },
-      "type": {
-        "title": "type",
+      "library_type": {
+        "title": "library_type",
         "type": "string",
-        "$id": "/properties/type",
+        "$id": "/properties/library_type",
         "displayOrder": 1,
         "maxLength": 256,
         "minLength": 1

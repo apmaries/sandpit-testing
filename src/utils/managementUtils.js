@@ -70,7 +70,7 @@ export async function addToLibraryHandler(library, inputValue) {
   const flattenedConversation = flattenConversation(conversation);
 
   // Add library to flattened conversation
-  flattenedConversation.type = library;
+  flattenedConversation.library_type = library;
 
   console.debug("[TIL] Row prepped for import", flattenedConversation);
 

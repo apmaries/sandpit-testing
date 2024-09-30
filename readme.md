@@ -55,13 +55,16 @@ Single data table to store interaction details with a type field to flag with su
    - Needs to update Integration URL
    - Allow user to nominate Division
 1. Notify admins if datatable schema broken / corrupted
-1. Add functionality to show / hide column topics (e.g. metrics, evaluations, survey etc.)
 1. Check if logged in user has permissions below permissions per division listed in table rows
    - Analytics > Agent Conversation Detail OR
    - Analytics > Conversation Detail > View
      get
      /api/v2/authorization/divisionspermitted/paged/me
      Returns which divisions the current user has the given permission in.
+1. Remove field formatting at run time and add to when table is populated
+   - Add format attribute to datatableColumns
+1. Re-jig applicationConfig
+   - Rename datatableColumns
 
 ## Completed
 
@@ -70,3 +73,4 @@ Single data table to store interaction details with a type field to flag with su
 1. Generate and download datatable schema
    - Defaults to 'TIL Datatable' name
    - Defaults to Home division (can be reassigned via UI)
+1. Add functionality to show / hide column topics (e.g. metrics, evaluations, survey etc.)

@@ -14,9 +14,9 @@ const testMode = applicationConfig.mode.isTest;
 
 // Utility function to create the table
 export function makeDomTables() {
-  // Extract the columns from the datatableColumns object
+  // Extract the columns from the parameters object
   const columns = Object.entries(
-    applicationConfig.datatable.datatableColumns
+    applicationConfig.datatable.parameters
   ).flatMap(([groupName, groupColumns]) =>
     Object.values(groupColumns).map((column) => ({
       ...column,
@@ -161,11 +161,9 @@ export function populateDomTable(t, r) {
     let tr = document.createElement("tr");
 
     // Iterate over the datatable columns from the configuration
-    Object.keys(applicationConfig.datatable.datatableColumns).forEach(
-      (group) => {
-        Object.keys(
-          applicationConfig.datatable.datatableColumns[group]
-        ).forEach((key) => {
+    Object.keys(applicationConfig.datatable.parameters).forEach((group) => {
+      Object.keys(applicationConfig.datatable.parameters[group]).forEach(
+        (key) => {
           // Always display the "key" column
           if (key === "key") {
             let td = document.createElement("td");
@@ -181,7 +179,7 @@ export function populateDomTable(t, r) {
 
             tr.appendChild(td);
           } else if (
-            key === "type" ||
+            key === "library_type" ||
             key === "division_ids" ||
             key === "queue_ids"
           ) {
@@ -207,9 +205,9 @@ export function populateDomTable(t, r) {
 
             tr.appendChild(td);
           }
-        });
-      }
-    );
+        }
+      );
+    });
 
     tbody.appendChild(tr);
   });

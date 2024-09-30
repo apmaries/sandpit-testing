@@ -27,7 +27,7 @@ async function flattenSchema(schema) {
   for (const category in schema) {
     for (const key in schema[category]) {
       flatSchema[key] = {
-        type: schema[category][key].type,
+        dataType: schema[category][key].dataType,
         displayOrder: schema[category][key].displayOrder,
       };
     }
@@ -42,7 +42,7 @@ export async function validateDatatableSchema() {
 
   // Define the expected schema
   const expectedSchema = await flattenSchema(
-    applicationConfig.datatable.datatableColumns
+    applicationConfig.datatable.parameters
   );
   console.debug("[TIL] Expected schema", expectedSchema);
 
@@ -80,12 +80,12 @@ export async function validateDatatableSchema() {
       console.warn("[TIL] Unexpected key found in schema", key);
       response.errors.toRemove.push({
         title: key,
-        type: currentSchema[key].type,
+        dataType: currentSchema[key].type,
       });
-    } else if (currentSchema[key].type !== expectedSchema[key].type) {
+    } else if (currentSchema[key].type !== expectedSchema[key].dataType) {
       response.errors.toRemove.push({
         title: key,
-        type: currentSchema[key].type,
+        dataType: currentSchema[key].type,
       });
     }
   }
@@ -94,7 +94,7 @@ export async function validateDatatableSchema() {
     if (!currentSchema[key]) {
       response.errors.toAdd.push({
         title: key,
-        type: expectedSchema[key].type,
+        dataType: expectedSchema[key].type,
       });
     }
   }
@@ -121,7 +121,7 @@ export async function generateDatatableSchema() {
   console.log("[TIL] Generating datatable schema");
 
   const config = applicationConfig.datatable;
-  const dtFields = await flattenSchema(config.datatableColumns);
+  const dtFields = await flattenSchema(config.parameters);
   const properties = {};
 
   for (const [key, field] of Object.entries(dtFields)) {
@@ -210,7 +210,7 @@ export async function makeDatatable(validationResponse) {
       // Update row keys with default values
       for (const key in row) {
         // Skip key and type
-        if (key === "key" || key === "type") continue;
+        if (key === "key" || key === "library_type") continue;
 
         // Set default value based on type
         let keyType = schema.schema.properties[key].type;
