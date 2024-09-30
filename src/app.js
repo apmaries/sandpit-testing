@@ -10,6 +10,7 @@ import { initializeTestMode } from "./core/testManager.js";
 // Api modules
 import { getIntegration } from "./modules/integrations.js";
 import { getUser } from "./modules/users.js";
+import { getDatatableRows } from "./modules/architect.js";
 
 // Utility modules
 import {
@@ -156,11 +157,6 @@ async function runApp() {
 
     const isAdmin = applicationConfig.mode.isAdmin;
 
-    // Create tables in DOM
-    makeDomTables();
-    resetCheckboxes();
-    enableDomTableCheckboxEventListeners();
-
     // Enable admin features if user is an admin
     if (isAdmin) {
       // Find all elements with the 'admin-hidden' class
@@ -180,6 +176,22 @@ async function runApp() {
     } else {
       console.log("[TIL] User is not admin");
     }
+
+    // Create tables in DOM
+    makeDomTables();
+    resetCheckboxes();
+    enableDomTableCheckboxEventListeners();
+
+    // Populate the table with data
+    let rows = await getDatatableRows();
+
+    // Split rows into two arrays based on the type property
+    let goodRows = rows.filter((row) => row.type === "good");
+    let badRows = rows.filter((row) => row.type === "bad");
+
+    // Populate the tables with the rows
+    populateDomTable("good-table", goodRows);
+    populateDomTable("bad-table", badRows);
   } catch (error) {
     console.error("[TIL] An error occurred:", error);
     // Stop the application if either getIntegration or getUser fails

@@ -43,20 +43,25 @@ export async function processStaData(conversationId) {
   let staData = await getStaData(conversationId);
 
   // Process sentiment score / sentiment trend
-  let sentimentScore = staData.sentimentScore;
-  let sentimentTrendClass = staData.sentimentTrendClass;
+  let sentiment_score = staData.sentimentScore
+    ? (staData.sentimentScore * 100).toFixed(1) + "%"
+    : "0.0%";
+  let sentiment_trend_class = staData.sentimentTrendClass
+    ? staData.sentimentTrendClass.replace(/([A-Z])/g, " $1").trim()
+    : "-";
 
   // Process empathy scores
   let empathyScores = staData.empathyScores.map((scoreObj) => scoreObj.score);
 
-  // Get min & max empathy scores
-  let minEmpathyScore = Math.min(...empathyScores);
-  let maxEmpathyScore = Math.max(...empathyScores);
+  // Get average empathy score
+  let empathy_score =
+    empathyScores.length === 0
+      ? 0
+      : empathyScores.reduce((a, b) => a + b, 0) / empathyScores.length;
 
   return {
-    sentimentScore,
-    sentimentTrendClass,
-    minEmpathyScore,
-    maxEmpathyScore,
+    sentiment_score,
+    sentiment_trend_class,
+    empathy_score,
   };
 }

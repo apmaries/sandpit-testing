@@ -61,6 +61,12 @@ export async function enableActionButtonEventListeners() {
         responseEle.innerHTML = "";
       }
 
+      // Simulate a click on the page title to close the list box
+      const pageTitle = document.querySelector("h1"); // Adjust the selector as needed
+      if (pageTitle) {
+        pageTitle.click();
+      }
+
       if (item.id.includes("add")) {
         action = "add";
       } else if (item.id.includes("del")) {
@@ -71,7 +77,11 @@ export async function enableActionButtonEventListeners() {
       const guidPattern =
         /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
       if (!guidPattern.test(inputValue)) {
-        updateManagementToolsResponse(responseEle, "Invalid GUID format!");
+        updateManagementToolsResponse(
+          responseEle,
+          "Invalid GUID format!",
+          false
+        );
         return;
       }
 

@@ -74,14 +74,16 @@ export async function processRecordingData(conversationId) {
   });
 
   // Combine file states into a single string
-  let fileState =
-    fileStates.size > 1
-      ? `Partial (${Array.from(fileStates).join(" / ")})`
-      : Array.from(fileStates)[0];
+  let file_state =
+    fileStates.size > 0 ? Array.from(fileStates).join(", ") : "-";
 
   return {
-    fileState,
-    archiveDate: minArchiveDate,
-    deleteDate: minDeleteDate,
+    file_state,
+    archive_date: minArchiveDate
+      ? new Date(minArchiveDate).toLocaleDateString()
+      : "-",
+    delete_date: minDeleteDate
+      ? new Date(minDeleteDate).toLocaleDateString()
+      : "-",
   };
 }

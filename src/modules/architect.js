@@ -86,7 +86,7 @@ export async function createDatatable(body) {
 }
 
 // Return datatable rows
-export async function getDatatableRows() {
+export async function getDatatableRows(brief) {
   console.log("[TIL] Getting datatable rows");
   let rows = [];
 
@@ -102,7 +102,7 @@ export async function getDatatableRows() {
   let opts = {
     "pageNumber": 1, // Number | Page number
     "pageSize": 500, // Number | Page size
-    "showbrief": false, // Boolean | If true returns just the key value of the row
+    "showbrief": brief, // Boolean | If true returns just the key value of the row
   };
 
   try {
@@ -114,6 +114,36 @@ export async function getDatatableRows() {
   }
 
   return rows;
+}
+
+// Return datatable row
+export async function getDatatableRow(rowId, brief) {
+  console.log("[TIL] Getting datatable row", rowId);
+
+  let opts = {
+    "showbrief": brief, // Boolean | if true returns just the key field for the row
+  };
+
+  if (testMode) {
+    // Get datatable row using test API
+    let t_response = await t_architectApi.getFlowsDatatableRow(rowId);
+    console.debug("[TIL] Datatable row returned", t_response);
+    return t_response;
+  }
+
+  let datatableId = sessionStorage.getItem("gc_datatable");
+
+  try {
+    let response = await architectApi.getFlowsDatatableRow(
+      datatableId,
+      rowId,
+      opts
+    );
+    console.debug("[TIL] Datatable row returned", response);
+    return response;
+  } catch (error) {
+    throw error;
+  }
 }
 
 // Create datatable row

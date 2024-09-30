@@ -111,7 +111,8 @@ export async function validateDatatableSchema() {
     return response;
   }
 
-  console.log("[TIL] Schema validation passed");
+  response.valid = true;
+  console.log("[TIL] Schema validation passed", response);
   return response;
 }
 
@@ -190,7 +191,7 @@ export async function makeDatatable(validationResponse) {
     const divisionId = datatableConfig.divisionId;
 
     // Get the current datatable rows
-    rows = await getDatatableRows();
+    rows = await getDatatableRows(false);
 
     // Modify existing rows to new schema
     for (let row of rows) {

@@ -5,43 +5,89 @@
 import { applicationConfig } from "../core/configManager.js";
 
 // Api modules
-import { deleteDatatableRow } from "../modules/architect.js";
-import { processConversationData } from "../modules/conversations.js";
-import { processStaData } from "../modules/sta.js";
-import { processRecordingData } from "../modules/recordings.js";
+import {
+  createDatatableRow,
+  deleteDatatableRow,
+  getDatatableRow,
+} from "../modules/architect.js";
+import { processConversations } from "../modules/conversations.js";
 
 // Utility modules
 import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
-import { updateManagementToolsResponse } from "./domUtils.js";
+import { populateDomTable, updateManagementToolsResponse } from "./domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
 ("use strict");
 
+// Function to flatten the conversation schema
+function flattenConversation(conversation) {
+  const flattened = {};
+
+  Object.keys(conversation).forEach((group) => {
+    Object.keys(conversation[group]).forEach((key) => {
+      const column = conversation[group][key];
+      flattened[`${key}`] = column;
+    });
+  });
+
+  return flattened;
+}
+
 // Function to handle add to library button click event
 export async function addToLibraryHandler(library, inputValue) {
   console.log(`[TIL] Adding ${inputValue} to ${library} library`);
+  const datatableId = sessionStorage.getItem("gc_datatable");
+  const responseEle = document.getElementById(
+    `modify-${library}-library-response`
+  );
   // Add to library logic here
 
   // Check if conversation is already in library
+  const existingRow = await getDatatableRow(inputValue, true);
+  if (existingRow.key === inputValue) {
+    let error = `Conversation ID '${inputValue}' already exists in ${library} library!`;
+    console.error("[TIL] Error adding to library", error);
+    updateManagementToolsResponse(responseEle, error, false);
+    return error;
+  }
 
   // Get conversation details
-  let conversationDetails = await processConversationData(inputValue);
+  let conversations = await processConversations(inputValue);
+  const conversation = conversations[0];
+  if (!conversation) {
+    let error = `Conversation ID '${inputValue}' not found!`;
+    console.error("[TIL] Error adding to library", error);
+    updateManagementToolsResponse(responseEle, error, false);
+    return error;
+  }
+  console.log("[TIL] Conversation processed", conversation);
 
-  // Get STA data
-  let staDetails = await processStaData(inputValue);
+  const flattenedConversation = flattenConversation(conversation);
 
-  // Get recording data
-  let recordingDetails = await processRecordingData(inputValue);
+  // Add library to flattened conversation
+  flattenedConversation.type = library;
 
-  // Map conversation details to a new object
-  let conversationObj = {
-    conversationDetail: conversationDetails[0].conversation, // Assuming only one conversation is returned as only a single id can be supplied in input value
-    staDetail: staDetails,
-    recordingDetail: recordingDetails,
-  };
+  console.debug("[TIL] Row prepped for import", flattenedConversation);
 
-  console.log("[TIL] Conversation object", conversationObj);
+  try {
+    await createDatatableRow(datatableId, flattenedConversation);
+    const newRow = await getDatatableRow(inputValue, false);
+    console.debug("[TIL] FlattenedConversation", flattenedConversation);
+    console.debug("[TIL] New row added", newRow);
+
+    populateDomTable(`${library}-table`, [newRow]);
+
+    updateManagementToolsResponse(
+      responseEle,
+      `Added '${inputValue}' to ${library} library`,
+      true
+    );
+  } catch (error) {
+    console.error("[TIL] Error adding to library - ", error);
+    updateManagementToolsResponse(responseEle, error);
+    return error;
+  }
 }
 
 // FUnction to handle delete from library button click event

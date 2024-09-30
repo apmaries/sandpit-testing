@@ -117,8 +117,18 @@ gux-action-button[management-button="true"] {
   border-radius: 5px;
   background-color: #f9f9f9;
   display: flex;
-  align-items: center; /* Vertically align the p element */
+  align-items: center; /* Vertically align the content */
   padding: 0 10px; /* Optional: Add padding for better spacing */
+}
+
+.response-text {
+  flex-grow: 1; /* Allow the text to take up remaining space */
+}
+
+.responsive-svg {
+  width: 20px; /* Set a fixed width for the SVG */
+  height: 20px; /* Set a fixed height for the SVG */
+  margin-left: auto; /* Push the SVG to the right */
 }
 
 /* End of Management tools */

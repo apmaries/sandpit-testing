@@ -10,6 +10,8 @@ import { t_conversationsApi } from "../core/testManager.js";
 
 // Api Modules
 import { getDivisions } from "./objects.js";
+import { processStaData } from "../modules/sta.js";
+import { processRecordingData } from "../modules/recordings.js";
 
 // Utility modules
 
@@ -56,18 +58,24 @@ async function getConversationsData(conversationIds) {
   return conversations;
 }
 
-export async function processConversationData(conversationIds) {
-  // Get interaction details from conversation api
-  let conversationData = await getConversationsData(conversationIds);
+export async function processConversations(conversationIds) {
+  // Get interaction details from conversation API
+  let conversationData;
+  try {
+    conversationData = await getConversationsData(conversationIds);
+    if (!conversationData || conversationData.length === 0) {
+      console.warn("[TIL] No conversation data found");
+      return [];
+    }
+  } catch (error) {
+    throw error;
+  }
 
   // Initialize an array to hold processed conversation data
   let processedConversations = [];
 
-  // Iterate over each conversation in the conversationData array
-  for (const conversation of conversationData) {
-    // Get conversation divisions
-    let conversationDivisions = await getDivisions(conversation.divisionIds);
-
+  // Function to process conversation-level info
+  async function processConversationInfo(conversation) {
     // Get conversation participants
     let conversationParticipants = conversation.participants;
 
@@ -82,6 +90,10 @@ export async function processConversationData(conversationIds) {
       name: participant.participantName,
     }));
 
+    // Extract IDs and names into separate arrays
+    let queueIds = conversationQueues.map((queue) => queue.id).join(",");
+    let queueNames = conversationQueues.map((queue) => queue.name).join(",");
+
     // Get media types
     let mediaTypes = [];
     for (let i = 0; i < acdParticipants.length; i++) {
@@ -93,6 +105,9 @@ export async function processConversationData(conversationIds) {
         }
       });
     }
+
+    // Convert mediaTypes array to a comma-separated list
+    let mediaTypesList = mediaTypes.join(",");
 
     // Get conversation agent participant data
     let agentParticipants = conversationParticipants.filter(
@@ -150,29 +165,66 @@ export async function processConversationData(conversationIds) {
       }
     }
 
+    return {
+      details: {
+        key: conversation.conversationId,
+        start_date: new Date(conversation.conversationStart).toLocaleString(),
+        end_date: new Date(conversation.conversationEnd).toLocaleString(),
+        queue_ids: queueIds,
+        queue_names: queueNames,
+        media_type: mediaTypesList,
+      },
+      metrics: {
+        total_talk_time: totalTalkTime
+          ? (totalTalkTime / 1000).toFixed(1)
+          : "0.0",
+      },
+      evaluation: {
+        evluation_total_score: averageEvalScore ? averageEvalScore : 0,
+        evluation_total_critical_score: averageEvalCriticalScore
+          ? averageEvalCriticalScore
+          : 0,
+      },
+      survey: {
+        survey_promoter_score: surveyPromoterScore ? surveyPromoterScore : 0,
+        survey_total_score: oSurveyTotalScore ? oSurveyTotalScore : 0,
+      },
+    };
+  }
+
+  // Iterate over each conversation in the conversationData array
+  for (const conversation of conversationData) {
+    // Run the four subjects in parallel
+    const [
+      conversationInfo,
+      conversationDivisions,
+      staDetails,
+      recordingDetails,
+    ] = await Promise.all([
+      processConversationInfo(conversation),
+      getDivisions(conversation.divisionIds),
+      processStaData(conversation.conversationId),
+      processRecordingData(conversation.conversationId),
+    ]);
+
+    // Extract IDs and names into separate arrays
+    let divisionIds = conversationDivisions
+      .map((division) => division.id)
+      .join(",");
+    let divisionNames = conversationDivisions
+      .map((division) => division.name)
+      .join(",");
+
     // Push the processed conversation data to the array
     processedConversations.push({
-      conversation: {
-        details: {
-          id: conversation.conversationId,
-          conversationStart: conversation.conversationStart,
-          conversationEnd: conversation.conversationEnd,
-          divisions: conversationDivisions,
-          queues: conversationQueues,
-          mediaTypes: mediaTypes,
-        },
-        metrics: {
-          totalTalkTime: totalTalkTime,
-        },
-        evaluation: {
-          averageEvalScore: averageEvalScore,
-          averageEvalCriticalScore: averageEvalCriticalScore,
-        },
-        survey: {
-          surveyPromoterScore: surveyPromoterScore,
-          surveyTotalScore: oSurveyTotalScore,
-        },
+      ...conversationInfo,
+      details: {
+        ...conversationInfo.details,
+        division_ids: divisionIds,
+        division_names: divisionNames,
       },
+      sta: staDetails,
+      recording: recordingDetails,
     });
   }
 

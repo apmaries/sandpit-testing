@@ -18,11 +18,13 @@ export async function getDivisions(divisionIds) {
   console.log(`[TIL] Getting divisions`);
   let divisions = [];
 
-  let opts = {
-    "pageSize": divisionIds.length, // Number | The total page size requested
-    "pageNumber": 1, // Number | The page number requested
-    "id": [divisionIds], // [String] | Optionally request specific divisions by their IDs
-  };
+  let opts = {};
+
+  if (divisionIds) {
+    opts["id"] = divisionIds;
+    opts["pageSize"] = divisionIds.length;
+    opts["pageNumber"] = 1;
+  }
 
   if (testMode) {
     // Get divisions using test API

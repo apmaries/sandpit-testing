@@ -1,17 +1,435 @@
 {
   "entities": [
     {
+      "id": "a22c87ae-db48-4140-8c3a-ca455c12b83b",
+      "name": "AS_WFM",
+      "description": "Amber WFM Division.",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 5,
+        "CALLROUTE": 1,
+        "FLOW": 3,
+        "USER": 19,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 3
+      },
+      "selfUri": "/api/v2/authorization/divisions/a22c87ae-db48-4140-8c3a-ca455c12b83b"
+    },
+    {
+      "id": "a318a3f7-8b3d-4bfd-853b-a2c934db057f",
+      "name": "BH_Division",
+      "description": "Belinda Test Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "USER": 5,
+        "QUEUE": 3,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/a318a3f7-8b3d-4bfd-853b-a2c934db057f"
+    },
+    {
+      "id": "bf040bf2-9821-4fdd-a8b6-2a1a112a4d03",
+      "name": "amOB",
+      "homeDivision": false,
+      "objectCounts": {
+        "CAMPAIGN": 2,
+        "QUEUE": 1,
+        "CONTACTLIST": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/bf040bf2-9821-4fdd-a8b6-2a1a112a4d03"
+    },
+    {
       "id": "e798387e-a708-40da-8486-d6877e7c7991",
       "name": "Dunder Mifflin",
       "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "TEAM": 3,
+        "FLOW": 21,
+        "USER": 13,
+        "QUEUE": 5,
+        "BUSINESSUNIT": 1
+      },
       "selfUri": "/api/v2/authorization/divisions/e798387e-a708-40da-8486-d6877e7c7991"
+    },
+    {
+      "id": "73047263-9342-455b-b5b8-d7ed5eab2976",
+      "name": "AS_WFM2",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "USER": 1,
+        "QUEUE": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/73047263-9342-455b-b5b8-d7ed5eab2976"
+    },
+    {
+      "id": "e3719f80-ab1b-4add-995c-29f56fed5e73",
+      "name": "Area 51",
+      "homeDivision": false,
+      "objectCounts": {
+        "ROUTINGSCHEDULES": 3,
+        "QUEUE": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/e3719f80-ab1b-4add-995c-29f56fed5e73"
+    },
+    {
+      "id": "b5f30a24-4c42-4fc3-8daf-964ab5d31b78",
+      "name": "CJ_Division",
+      "description": "CJ test Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "USER": 35,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/b5f30a24-4c42-4fc3-8daf-964ab5d31b78"
+    },
+    {
+      "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+      "name": "Bluth Company",
+      "homeDivision": false,
+      "objectCounts": {
+        "SKILLGROUP": 1,
+        "MANAGEMENTUNIT": 2,
+        "TEAM": 5,
+        "FLOW": 5,
+        "USER": 70,
+        "CAMPAIGN": 1,
+        "QUEUE": 3,
+        "CONTACTLIST": 1,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
+    },
+    {
+      "id": "789435a3-7b5a-47fa-a72d-60739cc44f12",
+      "name": "Operation Blackbriar",
+      "description": "Outsourcer - BPO sim",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 2,
+        "USER": 6,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/789435a3-7b5a-47fa-a72d-60739cc44f12"
+    },
+    {
+      "id": "df1ba606-7ff9-444d-947f-946cbf72a83c",
+      "name": "NG_Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "CALLROUTE": 1,
+        "FLOW": 4,
+        "USER": 4,
+        "QUEUE": 4
+      },
+      "selfUri": "/api/v2/authorization/divisions/df1ba606-7ff9-444d-947f-946cbf72a83c"
+    },
+    {
+      "id": "7e565a87-71c6-4f6e-bd40-ffbcb02a0a41",
+      "name": "KarateDo",
+      "description": "",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "CALLROUTE": 1,
+        "TEAM": 1,
+        "FLOW": 5,
+        "USER": 20,
+        "QUEUE": 4,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/7e565a87-71c6-4f6e-bd40-ffbcb02a0a41"
+    },
+    {
+      "id": "7ecf834e-c7fc-4ad0-b9f2-f8e7873506ca",
+      "name": "WW_Division",
+      "description": "for Demo purposes",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "USER": 20,
+        "QUEUE": 3,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/7ecf834e-c7fc-4ad0-b9f2-f8e7873506ca"
+    },
+    {
+      "id": "b3ca891f-dbc8-4880-8017-ce1afcb73c82",
+      "name": "Genesys Eyewear",
+      "description": "Improving division",
+      "homeDivision": false,
+      "objectCounts": {
+        "SKILLGROUP": 1,
+        "MANAGEMENTUNIT": 2,
+        "ROUTINGSCHEDULEGROUPS": 2,
+        "CALLROUTE": 1,
+        "TEAM": 2,
+        "FLOW": 73,
+        "USER": 12,
+        "ROUTINGSCHEDULES": 6,
+        "QUEUE": 13,
+        "BUSINESSUNIT": 1,
+        "DATATABLES": 14
+      },
+      "selfUri": "/api/v2/authorization/divisions/b3ca891f-dbc8-4880-8017-ce1afcb73c82"
+    },
+    {
+      "id": "182673b4-9607-4f98-9deb-fe2e295f6f0c",
+      "name": "Operation Treadstone",
+      "description": "The Bourne Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "SKILLGROUP": 3,
+        "MANAGEMENTUNIT": 3,
+        "CALLROUTE": 1,
+        "TEAM": 2,
+        "FLOW": 14,
+        "USER": 58,
+        "QUEUE": 5,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/182673b4-9607-4f98-9deb-fe2e295f6f0c"
+    },
+    {
+      "id": "99e9c382-b3d8-4762-b139-5d6a5281b0ae",
+      "name": "Sharla's",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 5,
+        "FLOW": 1,
+        "USER": 3,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/99e9c382-b3d8-4762-b139-5d6a5281b0ae"
+    },
+    {
+      "id": "52b1635e-e923-40ed-b683-f6b5b14338e2",
+      "name": "Operation Outcome",
+      "description": "Outsourcer - BPO sim",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 4,
+        "USER": 17,
+        "QUEUE": 4,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/52b1635e-e923-40ed-b683-f6b5b14338e2"
+    },
+    {
+      "id": "877586eb-934f-47bf-84d4-03136c3c1b8e",
+      "name": "KH_Division",
+      "description": "Kari Hammond's division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 1,
+        "FLOW": 5,
+        "USER": 10,
+        "CAMPAIGN": 1,
+        "QUEUE": 2,
+        "CONTACTLIST": 1,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/877586eb-934f-47bf-84d4-03136c3c1b8e"
+    },
+    {
+      "id": "7eea3cd1-7443-42d7-9265-9971742c4579",
+      "name": "testing",
+      "homeDivision": false,
+      "objectCounts": {},
+      "selfUri": "/api/v2/authorization/divisions/7eea3cd1-7443-42d7-9265-9971742c4579"
+    },
+    {
+      "id": "3ead8f77-1b43-4f66-82bb-dea2d5dd5db6",
+      "name": "LoadsheetExample",
+      "homeDivision": false,
+      "objectCounts": {
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/3ead8f77-1b43-4f66-82bb-dea2d5dd5db6"
+    },
+    {
+      "id": "ec444566-1269-4367-8512-8d42af410458",
+      "name": "LS_Division",
+      "description": "Lonnys Testing Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 4,
+        "ROUTINGSCHEDULEGROUPS": 4,
+        "CALLROUTE": 1,
+        "TEAM": 1,
+        "FLOW": 63,
+        "USER": 24,
+        "FLOWOUTCOME": 1,
+        "ROUTINGSCHEDULES": 2,
+        "QUEUE": 8,
+        "CONTACTLIST": 1,
+        "BUSINESSUNIT": 2,
+        "DATATABLES": 24
+      },
+      "selfUri": "/api/v2/authorization/divisions/ec444566-1269-4367-8512-8d42af410458"
+    },
+    {
+      "id": "d718226f-fd58-483d-8f5d-79587c53f87c",
+      "name": "KS Division",
+      "description": "This is a test environment for KS",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 6,
+        "CALLROUTE": 1,
+        "TEAM": 3,
+        "FLOW": 6,
+        "USER": 101,
+        "QUEUE": 17,
+        "BUSINESSUNIT": 3,
+        "DATATABLES": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/d718226f-fd58-483d-8f5d-79587c53f87c"
+    },
+    {
+      "id": "30618621-8a13-451a-9afb-b4a417d0514f",
+      "name": "Joy's Division",
+      "description": "For Philomen Joy to use",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 2,
+        "TEAM": 2,
+        "FLOW": 1,
+        "USER": 15,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 4
+      },
+      "selfUri": "/api/v2/authorization/divisions/30618621-8a13-451a-9afb-b4a417d0514f"
+    },
+    {
+      "id": "8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6",
+      "name": "SL_Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 4,
+        "TEAM": 5,
+        "USER": 26,
+        "QUEUE": 7,
+        "BUSINESSUNIT": 5
+      },
+      "selfUri": "/api/v2/authorization/divisions/8bc25fe2-5511-4b8d-a7a5-13a30db6a0a6"
+    },
+    {
+      "id": "e36636e2-6b2a-40fe-8178-33e173d66a8a",
+      "name": "Joy Test",
+      "description": "rtjdtu,d567k",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/e36636e2-6b2a-40fe-8178-33e173d66a8a"
+    },
+    {
+      "id": "07ddf5da-d6cb-4604-9c03-093f64c6d4d6",
+      "name": "RB_Top_Secret_Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 4,
+        "TEAM": 3,
+        "USER": 5,
+        "QUEUE": 5,
+        "BUSINESSUNIT": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/07ddf5da-d6cb-4604-9c03-093f64c6d4d6"
+    },
+    {
+      "id": "9330845a-b076-4c6d-8577-978fdec92553",
+      "name": "RT_Division",
+      "description": "Division created by RT for RT to filter own \"experiments\" from the rest of the world.",
+      "homeDivision": false,
+      "objectCounts": {
+        "SKILLGROUP": 2,
+        "MANAGEMENTUNIT": 6,
+        "ROUTINGSCHEDULEGROUPS": 1,
+        "CALLROUTE": 1,
+        "TEAM": 6,
+        "FLOW": 13,
+        "USER": 30,
+        "ROUTINGSCHEDULES": 4,
+        "QUEUE": 3,
+        "BUSINESSUNIT": 3,
+        "DATATABLES": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/9330845a-b076-4c6d-8577-978fdec92553"
+    },
+    {
+      "id": "d86d7999-1241-46da-a3fd-694e376235a8",
+      "name": "PS Division",
+      "homeDivision": false,
+      "objectCounts": {
+        "FLOW": 1,
+        "USER": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/d86d7999-1241-46da-a3fd-694e376235a8"
+    },
+    {
+      "id": "cf61bc54-eb40-4702-a8ea-1d52c85f6b0b",
+      "name": "JKC_WFM",
+      "homeDivision": false,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 3,
+        "ROUTINGSCHEDULEGROUPS": 1,
+        "CALLROUTE": 1,
+        "FLOW": 1,
+        "USER": 24,
+        "ROUTINGSCHEDULES": 1,
+        "QUEUE": 3,
+        "BUSINESSUNIT": 2
+      },
+      "selfUri": "/api/v2/authorization/divisions/cf61bc54-eb40-4702-a8ea-1d52c85f6b0b"
+    },
+    {
+      "id": "c7cc47a4-a0e5-4fa1-b4c3-52c0a76e7ede",
+      "name": "He_Man_Division",
+      "description": "Test Division by Hemant Mohan",
+      "homeDivision": false,
+      "objectCounts": {
+        "SKILLGROUP": 1,
+        "MANAGEMENTUNIT": 2,
+        "CALLROUTE": 1,
+        "TEAM": 4,
+        "FLOW": 1,
+        "USER": 26,
+        "QUEUE": 2,
+        "BUSINESSUNIT": 1
+      },
+      "selfUri": "/api/v2/authorization/divisions/c7cc47a4-a0e5-4fa1-b4c3-52c0a76e7ede"
+    },
+    {
+      "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
+      "name": "Home",
+      "homeDivision": true,
+      "objectCounts": {
+        "MANAGEMENTUNIT": 13,
+        "ROUTINGSCHEDULEGROUPS": 1,
+        "CALLROUTE": 3,
+        "TEAM": 9,
+        "FLOW": 29,
+        "SCRIPT": 10,
+        "USER": 94,
+        "ROUTINGSCHEDULES": 7,
+        "QUEUE": 18,
+        "BUSINESSUNIT": 11,
+        "DATATABLES": 8
+      },
+      "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
     }
   ],
-  "pageSize": 25,
+  "pageSize": 100,
   "pageNumber": 1,
-  "total": 1,
-  "lastUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
-  "firstUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
-  "selfUri": "/api/v2/authorization/divisions?pageSize=25&pageNumber=1",
+  "total": 30,
+  "lastUri": "/api/v2/authorization/divisions?pageSize=100&pageNumber=1",
+  "firstUri": "/api/v2/authorization/divisions?pageSize=100&pageNumber=1",
+  "selfUri": "/api/v2/authorization/divisions?pageSize=100&pageNumber=1",
   "pageCount": 1
 }

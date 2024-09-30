@@ -69,7 +69,7 @@ let applicationConfig = {
       },
       metrics: {
         total_talk_time: {
-          name: "Total Talk Time",
+          name: "Total Talk Time (s)",
           type: "integer",
           displayOrder: 9,
           hidden: false,
