@@ -129,15 +129,18 @@ export async function downloadDatatableSchema() {
 // Function to migrate the datatable
 export async function migrateDatatable() {
   console.log("[TIL] Migrating datatable");
+  let response;
 
   try {
     if (testMode) {
-      return "Datatable schema updated";
+      response = "Datatable migrated";
+      return response;
     }
 
     await makeDatatable();
     console.log("[TIL] Datatable migrated");
-    return "Datatable schema updated";
+    response = "Datatable migrated";
+    return response;
   } catch (error) {
     return error;
   }
