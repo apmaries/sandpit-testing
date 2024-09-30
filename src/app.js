@@ -183,7 +183,7 @@ async function runApp() {
     enableDomTableCheckboxEventListeners();
 
     // Populate the table with data
-    let rows = await getDatatableRows();
+    let rows = await getDatatableRows(false);
 
     // Split rows into two arrays based on the type property
     let goodRows = rows.filter((row) => row.type === "good");
