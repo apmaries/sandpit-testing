@@ -32,7 +32,12 @@ async function getStaData(conversationId) {
     );
     console.debug("[TIL] STA data returned", response);
   } catch (error) {
-    throw error;
+    if (error.status === 404) {
+      console.warn("[TIL] STA data not found");
+      return null;
+    } else {
+      throw error;
+    }
   }
 
   return response;
@@ -40,26 +45,31 @@ async function getStaData(conversationId) {
 
 export async function processStaData(conversationId) {
   // Get STA data
-  let staData = await getStaData(conversationId);
+  try {
+    let staData = await getStaData(conversationId);
 
-  // Process sentiment score / sentiment trend
-  let sentiment_score = staData.sentimentScore ? staData.sentimentScore : 0;
-  let sentiment_trend_class = staData.sentimentTrendClass
-    ? staData.sentimentTrendClass.replace(/([A-Z])/g, " $1").trim()
-    : "-";
+    // Process sentiment score / sentiment trend
+    let sentiment_score = staData.sentimentScore ? staData.sentimentScore : 0;
+    let sentiment_trend_class = staData.sentimentTrendClass
+      ? staData.sentimentTrendClass.replace(/([A-Z])/g, " $1").trim()
+      : "-";
 
-  // Process empathy scores
-  let empathyScores = staData.empathyScores.map((scoreObj) => scoreObj.score);
+    // Process empathy scores
+    let empathyScores = staData.empathyScores.map((scoreObj) => scoreObj.score);
 
-  // Get average empathy score
-  let empathy_score =
-    empathyScores.length === 0
-      ? 0
-      : empathyScores.reduce((a, b) => a + b, 0) / empathyScores.length;
+    // Get average empathy score
+    let empathy_score =
+      empathyScores.length === 0
+        ? 0
+        : empathyScores.reduce((a, b) => a + b, 0) / empathyScores.length;
 
-  return {
-    sentiment_score,
-    sentiment_trend_class,
-    empathy_score,
-  };
+    return {
+      sentiment_score,
+      sentiment_trend_class,
+      empathy_score,
+    };
+  } catch (error) {
+    console.error("[TIL] Error processing STA data", error);
+    throw error;
+  }
 }
