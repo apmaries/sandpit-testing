@@ -52,16 +52,16 @@ export async function generateDatatableSchema() {
     };
 
     // Add specific attributes based on the field type
-    if (field.type === "string") {
+    if (field.dataType === "string") {
       properties[key].maxLength = 256;
       properties[key].minLength = 1;
-    } else if (field.type === "integer") {
+    } else if (field.dataType === "integer") {
       properties[key].maximum = 999999999999999;
-      properties[key].minimum = 0;
-    } else if (field.type === "number") {
+      properties[key].minimum = -999999999999999;
+    } else if (field.dataType === "number") {
       properties[key].default = 0;
       properties[key].maximum = 9e39;
-      properties[key].minimum = 0;
+      properties[key].minimum = -9e39;
     }
   }
 
