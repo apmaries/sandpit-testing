@@ -34,7 +34,6 @@ export async function initializeTestMode() {
     conversationsUrl: "../test/conversation_details.json",
     datatableSchemaUrl: "../test/datatable_schema.json",
     datatableRowsUrl: "../test/datatable_rows.json",
-    datatableRowUrl: "../test/datatable_row.json",
     divisionsUrl: "../test/divisions.json",
     integrationCurrentUrl: "../test/integration_current.json",
     recordingUrl: "../test/conversation_recording.json",
@@ -45,7 +44,6 @@ export async function initializeTestMode() {
   // Define mock data promises
   const flowsDatatablePromise = fetchData(testData.datatableSchemaUrl);
   const flowsDatatableRowsPromise = fetchData(testData.datatableRowsUrl);
-  const flowsDatatableRowPromise = fetchData(testData.datatableRowUrl);
   const conversationsPromise = fetchData(testData.conversationsUrl);
   const divisionsPromise = fetchData(testData.divisionsUrl);
   const integrationCurrentPromise = fetchData(testData.integrationCurrentUrl);
@@ -60,9 +58,6 @@ export async function initializeTestMode() {
     },
     getFlowsDatatableRows: function () {
       return flowsDatatableRowsPromise;
-    },
-    getFlowsDatatableRow: function () {
-      return flowsDatatableRowPromise;
     },
   };
   t_conversationsApi = {

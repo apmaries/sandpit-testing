@@ -118,30 +118,32 @@ export async function getDatatableRows(brief) {
 
 // Return datatable row
 export async function getDatatableRow(rowId, brief) {
-  console.log("[TIL] Getting datatable row", rowId);
+  console.log(`[TIL] Getting datatable row id: '${rowId}'`);
+  let response;
 
   let opts = {
     "showbrief": brief, // Boolean | if true returns just the key field for the row
   };
 
-  if (testMode) {
-    // Get datatable row using test API
-    let t_response = await t_architectApi.getFlowsDatatableRow(rowId);
-    console.debug("[TIL] Datatable row returned", t_response);
-    return t_response;
-  }
-
   let datatableId = sessionStorage.getItem("gc_datatable");
 
   try {
-    let response = await architectApi.getFlowsDatatableRow(
-      datatableId,
-      rowId,
-      opts
-    );
+    if (testMode) {
+      // Get datatable row using test API
+      let rowsResponse = await t_architectApi.getFlowsDatatableRows();
+      let entities = rowsResponse.entities;
+      response = entities.find((row) => row.key === rowId);
+    } else {
+      response = await architectApi.getFlowsDatatableRow(
+        datatableId,
+        rowId,
+        opts
+      );
+    }
     console.debug("[TIL] Datatable row returned", response);
     return response;
   } catch (error) {
+    console.error("[TIL] Error getting datatable row:", error);
     throw error;
   }
 }

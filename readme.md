@@ -61,8 +61,6 @@ Single data table to store interaction details with a type field to flag with su
      get
      /api/v2/authorization/divisionspermitted/paged/me
      Returns which divisions the current user has the given permission in.
-1. Remove field formatting at run time and add to when table is populated
-   - Add format attribute to datatableColumns
 
 ## Completed
 
@@ -75,3 +73,5 @@ Single data table to store interaction details with a type field to flag with su
 1. Re-jig applicationConfig
    - Rename datatableColumns to parameters
    - Update generic type to dataType
+1. Remove field formatting at run time and add to when table is populated
+   - Add format attribute to datatableColumns

@@ -63,6 +63,7 @@ export async function processConversations(conversationIds) {
   let conversationData;
   try {
     conversationData = await getConversationsData(conversationIds);
+    console.warn("[TIL] Conversation data returned", conversationData);
     if (!conversationData || conversationData.length === 0) {
       console.warn("[TIL] No conversation data found");
       return [];
@@ -76,8 +77,11 @@ export async function processConversations(conversationIds) {
 
   // Function to process conversation-level info
   async function processConversationInfo(conversation) {
+    console.warn("[TIL] Processing conversation info", conversation);
     // Get conversation participants
     let conversationParticipants = conversation.participants;
+    let conversationEvaluations = conversation.evaluations;
+    let conversationSurveys = conversation.surveys;
 
     // Get conversation ACD participant info
     let acdParticipants = conversationParticipants.filter(
@@ -133,13 +137,12 @@ export async function processConversations(conversationIds) {
     let averageEvalCriticalScore;
 
     // Iterate through evaluations and average oTotalScore and oTotalCriticalScore values
-    if (conversation.evaluations) {
+    if (conversationEvaluations) {
       let totalScore = 0;
       let totalCriticalScore = 0;
-      let evaluations = conversation.evaluations;
-      let evaluationCount = evaluations.length;
+      let evaluationCount = conversationEvaluations.length;
 
-      evaluations.forEach((evaluation) => {
+      conversationEvaluations.forEach((evaluation) => {
         totalScore += evaluation.oTotalScore;
         totalCriticalScore += evaluation.oTotalCriticalScore;
       });
@@ -148,21 +151,31 @@ export async function processConversations(conversationIds) {
       averageEvalCriticalScore = totalCriticalScore / evaluationCount;
     }
 
-    // Get conversation survey data
+    // Iterate through surveys and average oSurveyTotalScore and surveyPromoterScore values
     let surveyPromoterScore;
     let oSurveyTotalScore;
+    if (conversationSurveys) {
+      let totalPromoterScore = 0;
+      let totalSurveyScore = 0;
+      let promoterScoreCount = 0;
+      let surveyScoreCount = 0;
 
-    if (conversation.surveys && conversation.surveys.length > 0) {
-      // Assuming we are interested in the first survey if multiple surveys exist
-      let survey = conversation.surveys[0];
+      conversationSurveys.forEach((survey) => {
+        console.log(survey);
+        if (survey.surveyPromoterScore !== undefined) {
+          totalPromoterScore += survey.surveyPromoterScore;
+          promoterScoreCount++;
+        }
+        if (survey.oSurveyTotalScore !== undefined) {
+          totalSurveyScore += survey.oSurveyTotalScore;
+          surveyScoreCount++;
+        }
+      });
 
-      if (survey.surveyPromoterScore !== undefined) {
-        surveyPromoterScore = survey.surveyPromoterScore;
-      }
-
-      if (survey.oSurveyTotalScore !== undefined) {
-        oSurveyTotalScore = survey.oSurveyTotalScore;
-      }
+      surveyPromoterScore =
+        promoterScoreCount > 0 ? totalPromoterScore / promoterScoreCount : 0;
+      oSurveyTotalScore =
+        surveyScoreCount > 0 ? totalSurveyScore / surveyScoreCount : 0;
     }
 
     return {
@@ -226,5 +239,6 @@ export async function processConversations(conversationIds) {
     });
   }
 
+  console.warn("[TIL] Processed conversation data", processedConversations);
   return processedConversations;
 }

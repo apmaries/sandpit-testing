@@ -150,7 +150,6 @@ export function resetCheckboxes() {
 export function populateDomTable(t, r) {
   let table = document.getElementById(t);
   let tbody = table.getElementsByTagName("tbody")[0];
-  //tbody.innerHTML = ""; // Clear existing rows
 
   // Get the state of the checkboxes
   const checkboxes = document.querySelectorAll(
@@ -161,43 +160,74 @@ export function populateDomTable(t, r) {
     let tr = document.createElement("tr");
 
     // Iterate over the datatable columns from the configuration
-    Object.keys(applicationConfig.datatable.parameters).forEach((group) => {
-      Object.keys(applicationConfig.datatable.parameters[group]).forEach(
-        (key) => {
+    Object.keys(applicationConfig.datatable.parameters).forEach(
+      (parameterGroup) => {
+        Object.keys(
+          applicationConfig.datatable.parameters[parameterGroup]
+        ).forEach((parameterKey) => {
+          const parameter =
+            applicationConfig.datatable.parameters[parameterGroup][
+              parameterKey
+            ];
+
+          const keyFormat = parameter.format;
+          //console.log(`[TIL] Key '${parameterKey}' format: ${keyFormat}`);
+
           // Always display the "key" column
-          if (key === "key") {
+          if (parameterKey === "key") {
             let td = document.createElement("td");
-            td.setAttribute("data-group-name", group);
-            td.setAttribute("data-column-name", key);
+            td.setAttribute("data-group-name", parameterGroup);
+            td.setAttribute("data-column-name", parameterKey);
 
             let region = sessionStorage.getItem("gc_region");
             let a = document.createElement("a");
             a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
             a.target = "_blank";
-            a.appendChild(document.createTextNode(row[key] || ""));
+            a.appendChild(document.createTextNode(row[parameterKey] || ""));
             td.appendChild(a);
 
             tr.appendChild(td);
           } else if (
-            key === "library_type" ||
-            key === "division_ids" ||
-            key === "queue_ids"
+            parameterKey === "library_type" ||
+            parameterKey === "division_ids" ||
+            parameterKey === "queue_ids"
           ) {
             // Skip these columns
             return;
           } else {
-            // Find the corresponding checkbox for the group
+            // Find the corresponding checkbox for the parameterGroup
             const checkbox = Array.from(checkboxes).find(
-              (cb) => cb.value === group
+              (cb) => cb.value === parameterGroup
             );
 
             // Create a td element for the column
             let td = document.createElement("td");
-            td.setAttribute("data-group-name", group);
-            td.setAttribute("data-column-name", key);
+            td.setAttribute("data-group-name", parameterGroup);
+            td.setAttribute("data-column-name", parameterKey);
 
             // Set the text content of the td element
-            let columnValue = String(row[key]);
+            let columnValue = String(row[parameterKey]);
+
+            // Format the column value based on the format type
+            if (keyFormat === "date" && columnValue !== "-") {
+              columnValue = new Date(columnValue).toLocaleDateString();
+            } else if (keyFormat === "datetime" && columnValue !== "-") {
+              columnValue = new Date(columnValue).toLocaleString();
+            } else if (keyFormat === "seconds" && columnValue !== "-") {
+              columnValue = (columnValue / 1000).toFixed(1) + "s";
+            } else if (keyFormat === "percentage" && columnValue !== "-") {
+              columnValue =
+                columnValue > 1
+                  ? (columnValue * 1).toFixed(1) + "%"
+                  : (columnValue * 100).toFixed(1) + "%";
+            }
+
+            // Format the column value based on the column name
+            if (parameterKey === "sentiment_trend_class") {
+              // Add a space between capital letters
+              columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
+            }
+
             td.appendChild(document.createTextNode(columnValue || "!"));
             if (checkbox && !checkbox.checked) {
               td.classList.add("hidden-column");
@@ -205,9 +235,9 @@ export function populateDomTable(t, r) {
 
             tr.appendChild(td);
           }
-        }
-      );
-    });
+        });
+      }
+    );
 
     tbody.appendChild(tr);
   });

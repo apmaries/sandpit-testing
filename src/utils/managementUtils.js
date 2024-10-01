@@ -40,7 +40,7 @@ function flattenConversation(conversation) {
 
 // Function to handle add to library button click event
 export async function addToLibraryHandler(library, inputValue) {
-  console.log(`[TIL] Adding ${inputValue} to ${library} library`);
+  console.info(`[TIL] Adding ${inputValue} to ${library} library`);
   const datatableId = sessionStorage.getItem("gc_datatable");
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
@@ -48,14 +48,16 @@ export async function addToLibraryHandler(library, inputValue) {
   // Add to library logic here
 
   // Check if conversation is already in library
+  console.info("[TIL] Checking if conversation is already in library");
   const existingRow = await getDatatableRow(inputValue, true);
   if (existingRow && existingRow.key === inputValue) {
-    let error = `Conversation ID '${inputValue}' already exists in ${library} library!`;
+    let error = `Conversation ID '${inputValue}' already exists in ${existingRow.library_type} library!`;
     console.error("[TIL] Error adding to library", error);
     updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
 
+  console.info("[TIL] Conversation not in library, proceeding to add");
   // Get conversation details
   let conversations = await processConversations(inputValue);
   const conversation = conversations[0];
@@ -77,7 +79,10 @@ export async function addToLibraryHandler(library, inputValue) {
   try {
     await createDatatableRow(datatableId, flattenedConversation);
     const newRow = await getDatatableRow(inputValue, false);
-    populateDomTable(`${library}-table`, [newRow]);
+    populateDomTable(
+      `${library}-table`,
+      testMode ? [flattenedConversation] : [newRow]
+    );
     updateManagementToolsResponse(
       responseEle,
       `Added '${inputValue}' to ${library} library`,
