@@ -143,8 +143,13 @@ export async function getDatatableRow(rowId, brief) {
     console.debug("[TIL] Datatable row returned", response);
     return response;
   } catch (error) {
-    console.error("[TIL] Error getting datatable row:", error);
-    throw error;
+    if (error.status === 404) {
+      console.warn(`[TIL] Datatable row not found: '${rowId}'`);
+      return null;
+    } else {
+      console.error("[TIL] Error getting datatable row:", error);
+      throw error;
+    }
   }
 }
 
