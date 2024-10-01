@@ -127,7 +127,7 @@ export async function generateDatatableSchema() {
   for (const [key, field] of Object.entries(dtFields)) {
     properties[key] = {
       "title": key === "key" ? "conversation_id" : key,
-      "type": field.type,
+      "type": field.dataType,
       "$id": `/properties/${key === "key" ? "conversation_id" : key}`,
       "displayOrder": field.displayOrder,
     };
