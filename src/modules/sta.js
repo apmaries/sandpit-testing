@@ -33,7 +33,6 @@ async function getStaData(conversationId) {
     console.debug("[TIL] STA data returned", response);
   } catch (error) {
     if (error.status === 404) {
-      console.warn("[TIL] STA data not found");
       return null;
     } else {
       throw error;
