@@ -24,7 +24,7 @@ import {
 const testMode = applicationConfig.mode.isTest;
 ("use strict");
 
-// Function to flatten the conversation schema
+// Helper function to flatten the conversation schema
 function flattenConversation(conversation) {
   const flattened = {};
 
@@ -38,6 +38,36 @@ function flattenConversation(conversation) {
   return flattened;
 }
 
+// Helper function to download an object as a JSON file
+async function downloadObjectAsJson(obj) {
+  const json = JSON.stringify(obj, null, 2);
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "datatable-schema.json";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// Helper function to check if a conversation is in the specified library
+async function checkConversationInLibrary(inputValue, library) {
+  const existingRow = await getDatatableRow(inputValue, true);
+  if (existingRow && existingRow.key === inputValue) {
+    if (existingRow.library_type === library) {
+      return { exists: true, error: null };
+    } else {
+      return {
+        exists: false,
+        error: `Conversation ID '${inputValue}' already exists in ${existingRow.library_type} library!`,
+      };
+    }
+  }
+  return { exists: false, error: null };
+}
+
 // Function to handle add to library button click event
 export async function addToLibraryHandler(library, inputValue) {
   console.info(`[TIL] Adding ${inputValue} to ${library} library`);
@@ -45,27 +75,32 @@ export async function addToLibraryHandler(library, inputValue) {
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
   );
-  // Add to library logic here
 
   // Check if conversation is already in library
-  console.info("[TIL] Checking if conversation is already in library");
-  const existingRow = await getDatatableRow(inputValue, true);
-  if (existingRow && existingRow.key === inputValue) {
-    let error = `Conversation ID '${inputValue}' already exists in ${existingRow.library_type} library!`;
+  const { exists, error } = await checkConversationInLibrary(
+    inputValue,
+    library
+  );
+  if (exists) {
+    let errorMsg = `Conversation ID '${inputValue}' already exists in ${library} library!`;
+    console.error("[TIL] Error adding to library", errorMsg);
+    updateManagementToolsResponse(responseEle, errorMsg, false);
+    return errorMsg;
+  } else if (error) {
     console.error("[TIL] Error adding to library", error);
     updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
-
   console.info("[TIL] Conversation not in library, proceeding to add");
+
   // Get conversation details
   let conversations = await processConversations(inputValue);
   const conversation = conversations[0];
   if (!conversation) {
-    let error = `Conversation ID '${inputValue}' not found!`;
-    console.error("[TIL] Error adding to library", error);
-    updateManagementToolsResponse(responseEle, error, false);
-    return error;
+    let errorMsg = `Conversation ID '${inputValue}' not found!`;
+    console.error("[TIL] Error adding to library", errorMsg);
+    updateManagementToolsResponse(responseEle, errorMsg, false);
+    return errorMsg;
   }
   console.log("[TIL] Conversation processed", conversation);
 
@@ -95,38 +130,57 @@ export async function addToLibraryHandler(library, inputValue) {
   }
 }
 
-// FUnction to handle delete from library button click event
+// Function to handle delete from library button click event
 export async function deleteFromLibraryHandler(library, inputValue) {
   console.log(`[TIL] Deleting ${inputValue} from ${library} library`);
   const datatableId = sessionStorage.getItem("gc_datatable");
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
   );
-  // Delete from library logic here
 
   try {
-    let delResponse = await deleteDatatableRow(datatableId, inputValue);
+    if (testMode) {
+      // Don't check on test mode
+      await deleteDatatableRow(datatableId, inputValue);
+      removeDomTableRow(`${library}-table`, inputValue);
+      updateManagementToolsResponse(
+        responseEle,
+        `Deleted '${inputValue}' from ${library} library`,
+        true
+      );
+      return;
+    }
+
+    // Check if conversation is already in the library
+    const { exists, error } = await checkConversationInLibrary(
+      inputValue,
+      library
+    );
+    if (!exists) {
+      let errorMsg = `Conversation ID '${inputValue}' does not exist in ${library} library!`;
+      console.error("[TIL] Error deleting from library", errorMsg);
+      updateManagementToolsResponse(responseEle, errorMsg, false);
+      return errorMsg;
+    } else if (error) {
+      console.error("[TIL] Error deleting from library", error);
+      updateManagementToolsResponse(responseEle, error, false);
+      return error;
+    }
+    console.info("[TIL] Conversation found in library, proceeding to delete");
+
+    // Delete from library logic here
+    await deleteDatatableRow(datatableId, inputValue);
     removeDomTableRow(`${library}-table`, inputValue);
-    updateManagementToolsResponse(responseEle, delResponse, true);
+    updateManagementToolsResponse(
+      responseEle,
+      `Deleted '${inputValue}' from ${library} library`,
+      true
+    );
   } catch (error) {
     console.error("[TIL] Error deleting from library - ", error);
     updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
-}
-
-// Function to download an object as a JSON file
-async function downloadObjectAsJson(obj) {
-  const json = JSON.stringify(obj, null, 2);
-  const blob = new Blob([json], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "datatable-schema.json";
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
 }
 
 // Function to download the datatable schema as a JSON file

@@ -186,12 +186,13 @@ export async function updateDatatableRow(rowId, body) {
 export async function deleteDatatableRow(datatableId, row) {
   console.log("[TIL] Deleting datatable row", row);
 
-  if (testMode) {
-    return "Datatable row deleted";
-  }
-
   try {
-    await architectApi.deleteFlowsDatatableRow(datatableId, row);
+    if (testMode) {
+      return;
+    } else {
+      await architectApi.deleteFlowsDatatableRow(datatableId, row);
+    }
+
     console.debug("[TIL] Datatable row deleted", row);
     return;
   } catch (error) {

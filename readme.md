@@ -75,3 +75,4 @@ Single data table to store interaction details with a type field to flag with su
    - Update generic type to dataType
 1. Remove field formatting at run time and add to when table is populated
    - Add format attribute to datatableColumns
+1. Added checks to add / delete from library to ensure conversation id entered exists in library

@@ -248,8 +248,20 @@ export function populateDomTable(t, r) {
 export function removeDomTableRow(tableId, rowId) {
   let table = document.getElementById(tableId);
   let tbody = table.getElementsByTagName("tbody")[0];
-  let tr = document.getElementById(rowId);
-  tbody.removeChild(tr);
+  let rows = tbody.getElementsByTagName("tr");
+
+  for (let row of rows) {
+    let cells = row.getElementsByTagName("td");
+    for (let cell of cells) {
+      if (
+        cell.getAttribute("data-column-name") === "key" &&
+        cell.textContent === rowId
+      ) {
+        tbody.removeChild(row);
+        return;
+      }
+    }
+  }
 }
 
 // Function to update management tools response
