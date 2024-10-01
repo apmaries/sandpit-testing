@@ -44,9 +44,21 @@ async function getStaData(conversationId) {
 }
 
 export async function processStaData(conversationId) {
-  // Get STA data
   try {
+    // Get STA data
     let staData = await getStaData(conversationId);
+
+    if (!staData) {
+      console.warn(
+        "[TIL] No STA data found for conversation ID:",
+        conversationId
+      );
+      return {
+        sentiment_score: 0,
+        sentiment_trend_class: "-",
+        empathy_score: 0,
+      };
+    }
 
     // Process sentiment score / sentiment trend
     let sentiment_score = staData.sentimentScore ? staData.sentimentScore : 0;
@@ -70,6 +82,10 @@ export async function processStaData(conversationId) {
     };
   } catch (error) {
     console.error("[TIL] Error processing STA data", error);
-    throw error;
+    return {
+      sentiment_score: 0,
+      sentiment_trend_class: "-",
+      empathy_score: 0,
+    };
   }
 }
