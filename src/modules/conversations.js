@@ -168,16 +168,14 @@ export async function processConversations(conversationIds) {
     return {
       details: {
         key: conversation.conversationId,
-        start_date: new Date(conversation.conversationStart).toLocaleString(),
-        end_date: new Date(conversation.conversationEnd).toLocaleString(),
+        start_date: conversation.conversationStart,
+        end_date: conversation.conversationEnd,
         queue_ids: queueIds,
         queue_names: queueNames,
         media_type: mediaTypesList,
       },
       metrics: {
-        total_talk_time: totalTalkTime
-          ? (totalTalkTime / 1000).toFixed(1)
-          : "0.0",
+        total_talk_time: totalTalkTime ? totalTalkTime : 0,
       },
       evaluation: {
         evluation_total_score: averageEvalScore ? averageEvalScore : 0,

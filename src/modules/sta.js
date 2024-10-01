@@ -43,9 +43,7 @@ export async function processStaData(conversationId) {
   let staData = await getStaData(conversationId);
 
   // Process sentiment score / sentiment trend
-  let sentiment_score = staData.sentimentScore
-    ? (staData.sentimentScore * 100).toFixed(1) + "%"
-    : "0.0%";
+  let sentiment_score = staData.sentimentScore ? staData.sentimentScore : 0;
   let sentiment_trend_class = staData.sentimentTrendClass
     ? staData.sentimentTrendClass.replace(/([A-Z])/g, " $1").trim()
     : "-";

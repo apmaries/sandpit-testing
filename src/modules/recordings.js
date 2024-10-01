@@ -79,11 +79,7 @@ export async function processRecordingData(conversationId) {
 
   return {
     file_state,
-    archive_date: minArchiveDate
-      ? new Date(minArchiveDate).toLocaleDateString()
-      : "-",
-    delete_date: minDeleteDate
-      ? new Date(minDeleteDate).toLocaleDateString()
-      : "-",
+    archive_date: minArchiveDate ? minArchiveDate : "-",
+    delete_date: minDeleteDate ? minDeleteDate : "-",
   };
 }

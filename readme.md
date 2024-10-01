@@ -63,8 +63,6 @@ Single data table to store interaction details with a type field to flag with su
      Returns which divisions the current user has the given permission in.
 1. Remove field formatting at run time and add to when table is populated
    - Add format attribute to datatableColumns
-1. Re-jig applicationConfig
-   - Rename datatableColumns
 
 ## Completed
 
@@ -74,3 +72,6 @@ Single data table to store interaction details with a type field to flag with su
    - Defaults to 'TIL Datatable' name
    - Defaults to Home division (can be reassigned via UI)
 1. Add functionality to show / hide column topics (e.g. metrics, evaluations, survey etc.)
+1. Re-jig applicationConfig
+   - Rename datatableColumns to parameters
+   - Update generic type to dataType
