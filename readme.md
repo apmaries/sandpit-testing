@@ -51,9 +51,7 @@ Single data table to store interaction details with a type field to flag with su
    - transfers across divisions
 1. Any additional metrics?
 1. Migrate datatable (management tool)
-   - Needs to retain records
-   - Needs to update Integration URL
-   - Allow user to nominate Division
+   - Allow user to nominate Division?
 1. Notify admins if datatable schema broken / corrupted
 1. Check if logged in user has permissions below permissions per division listed in table rows
    - Analytics > Agent Conversation Detail OR
@@ -76,3 +74,6 @@ Single data table to store interaction details with a type field to flag with su
 1. Remove field formatting at run time and add to when table is populated
    - Add format attribute to datatableColumns
 1. Added checks to add / delete from library to ensure conversation id entered exists in library
+1. Migrate datatable (management tool)
+   - Needs to retain records
+   - Needs to update Integration URL

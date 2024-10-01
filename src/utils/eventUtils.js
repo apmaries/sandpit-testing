@@ -8,15 +8,15 @@ import { applicationConfig } from "../core/configManager.js";
 
 // Utility modules
 import {
+  addToLibraryHandler,
+  deleteFromLibraryHandler,
   downloadDatatableSchema,
+  validateDatatable,
   migrateDatatable,
   openDatatableConfig,
   openDatatableRows,
-  addToLibraryHandler,
-  deleteFromLibraryHandler,
 } from "./managementUtils.js";
 import {
-  populateDomTable,
   hideTableColumn,
   showTableColumn,
   updateManagementToolsResponse,
@@ -25,6 +25,7 @@ import {
 // Global variables
 const testMode = applicationConfig.mode.isTest;
 window.generateDatatableSchema = downloadDatatableSchema;
+window.validateDatatable = validateDatatable;
 window.migrateDatatable = migrateDatatable;
 window.openDatatableConfig = openDatatableConfig;
 window.openDatatableRows = openDatatableRows;

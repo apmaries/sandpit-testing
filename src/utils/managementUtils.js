@@ -13,7 +13,11 @@ import {
 import { processConversations } from "../modules/conversations.js";
 
 // Utility modules
-import { generateDatatableSchema, makeDatatable } from "./datatableUtils.js";
+import {
+  generateDatatableSchema,
+  validateDatatableSchema,
+  makeDatatable,
+} from "./datatableUtils.js";
 import {
   populateDomTable,
   removeDomTableRow,
@@ -39,13 +43,13 @@ function flattenConversation(conversation) {
 }
 
 // Helper function to download an object as a JSON file
-async function downloadObjectAsJson(obj) {
+async function downloadObjectAsJson(obj, name) {
   const json = JSON.stringify(obj, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "datatable-schema.json";
+  a.download = `${name}.json`;
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -132,7 +136,7 @@ export async function addToLibraryHandler(library, inputValue) {
 
 // Function to handle delete from library button click event
 export async function deleteFromLibraryHandler(library, inputValue) {
-  console.log(`[TIL] Deleting ${inputValue} from ${library} library`);
+  console.info(`[TIL] Deleting ${inputValue} from ${library} library`);
   const datatableId = sessionStorage.getItem("gc_datatable");
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
@@ -185,35 +189,67 @@ export async function deleteFromLibraryHandler(library, inputValue) {
 
 // Function to download the datatable schema as a JSON file
 export async function downloadDatatableSchema() {
-  console.log("[TIL] Downloading datatable schema");
+  console.info("[TIL] Downloading datatable schema");
 
   const schema = await generateDatatableSchema();
-  downloadObjectAsJson(schema);
+  downloadObjectAsJson(schema, "datatable-schema");
+}
+
+// Function to validate the datatable schema
+export async function validateDatatable() {
+  console.info("[TIL] Validating datatable");
+  const responseEle = document.getElementById("validate-datatable-response");
+
+  try {
+    const validationResponse = await validateDatatableSchema();
+    console.log("[TIL] Datatable schema validated");
+
+    if (!validationResponse.valid) {
+      updateManagementToolsResponse(
+        responseEle,
+        "Datatable schema invalid - check console for details",
+        false
+      );
+      downloadObjectAsJson(validationResponse, "datatable-validation");
+    }
+
+    updateManagementToolsResponse(responseEle, "Datatable schema valid", true);
+  } catch (error) {
+    console.error("[TIL] Error validating datatable schema - ", error);
+    updateManagementToolsResponse(responseEle, error, false);
+    return error;
+  }
 }
 
 // Function to migrate the datatable
 export async function migrateDatatable() {
-  console.log("[TIL] Migrating datatable");
-  let response;
+  console.info("[TIL] Migrating datatable");
+  const responseEle = document.getElementById("migrate-datatable-response");
 
   try {
-    if (testMode) {
-      response = "Datatable migrated";
-      return response;
-    }
+    // Validate datatable schema
+    updateManagementToolsResponse(
+      responseEle,
+      "Validating datatable schema",
+      null
+    );
+    const validationResponse = await validateDatatableSchema();
 
-    await makeDatatable();
+    updateManagementToolsResponse(responseEle, "Making datatable", null);
+    await makeDatatable(validationResponse);
     console.log("[TIL] Datatable migrated");
-    response = "Datatable migrated";
-    return response;
+
+    updateManagementToolsResponse(responseEle, "Datatable migrated", true);
   } catch (error) {
+    console.error("[TIL] Error migrating datatable - ", error);
+    updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
 }
 
 // Function to open the datatable config in a new tab
 export async function openDatatableConfig() {
-  console.log("[TIL] Opening datatable config");
+  console.info("[TIL] Opening datatable config");
 
   const region = sessionStorage.getItem("gc_region");
   const datatableId = sessionStorage.getItem("gc_datatable");
@@ -231,7 +267,7 @@ export async function openDatatableConfig() {
 
 // Function to open the datatable rows in a new tab
 export async function openDatatableRows() {
-  console.log("[TIL] Opening datatable rows");
+  console.info("[TIL] Opening datatable rows");
 
   const region = sessionStorage.getItem("gc_region");
   const datatableId = sessionStorage.getItem("gc_datatable");

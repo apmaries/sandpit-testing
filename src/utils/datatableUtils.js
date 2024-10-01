@@ -35,6 +35,51 @@ async function flattenSchema(schema) {
   return flatSchema;
 }
 
+// Function to generate datatable schema
+export async function generateDatatableSchema() {
+  console.log("[TIL] Generating datatable schema");
+
+  const config = applicationConfig.datatable;
+  const dtFields = await flattenSchema(config.parameters);
+  const properties = {};
+
+  for (const [key, field] of Object.entries(dtFields)) {
+    properties[key] = {
+      "title": key === "key" ? "conversation_id" : key,
+      "type": field.dataType,
+      "$id": `/properties/${key === "key" ? "conversation_id" : key}`,
+      "displayOrder": field.displayOrder,
+    };
+
+    // Add specific attributes based on the field type
+    if (field.type === "string") {
+      properties[key].maxLength = 256;
+      properties[key].minLength = 1;
+    } else if (field.type === "integer") {
+      properties[key].maximum = 999999999999999;
+      properties[key].minimum = -999999999999999;
+    } else if (field.type === "number") {
+      properties[key].default = 0;
+      properties[key].maximum = 9e39;
+      properties[key].minimum = -9e39;
+    }
+  }
+
+  const datatable = {
+    "schema": {
+      "$schema": "http://json-schema.org/draft-04/schema#",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": properties,
+      "required": ["key"],
+    },
+  };
+
+  console.debug("[TIL] Datatable schema created", datatable);
+
+  return datatable;
+}
+
 // Function to validate datatable schema
 export async function validateDatatableSchema() {
   console.log("[TIL] Validating datatable schema");
@@ -114,51 +159,6 @@ export async function validateDatatableSchema() {
   response.valid = true;
   console.log("[TIL] Schema validation passed", response);
   return response;
-}
-
-// Function to generate datatable schema
-export async function generateDatatableSchema() {
-  console.log("[TIL] Generating datatable schema");
-
-  const config = applicationConfig.datatable;
-  const dtFields = await flattenSchema(config.parameters);
-  const properties = {};
-
-  for (const [key, field] of Object.entries(dtFields)) {
-    properties[key] = {
-      "title": key === "key" ? "conversation_id" : key,
-      "type": field.dataType,
-      "$id": `/properties/${key === "key" ? "conversation_id" : key}`,
-      "displayOrder": field.displayOrder,
-    };
-
-    // Add specific attributes based on the field type
-    if (field.type === "string") {
-      properties[key].maxLength = 256;
-      properties[key].minLength = 1;
-    } else if (field.type === "integer") {
-      properties[key].maximum = 999999999999999;
-      properties[key].minimum = -999999999999999;
-    } else if (field.type === "number") {
-      properties[key].default = 0;
-      properties[key].maximum = 9e39;
-      properties[key].minimum = -9e39;
-    }
-  }
-
-  const datatable = {
-    "schema": {
-      "$schema": "http://json-schema.org/draft-04/schema#",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": properties,
-      "required": ["key"],
-    },
-  };
-
-  console.debug("[TIL] Datatable schema created", datatable);
-
-  return datatable;
 }
 
 // Function to make datatable
