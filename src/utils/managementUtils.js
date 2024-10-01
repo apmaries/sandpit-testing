@@ -58,18 +58,23 @@ async function downloadObjectAsJson(obj, name) {
 
 // Helper function to check if a conversation is in the specified library
 async function checkConversationInLibrary(inputValue, library) {
-  const existingRow = await getDatatableRow(inputValue, true);
-  if (existingRow && existingRow.key === inputValue) {
-    if (existingRow.library_type === library) {
-      return { exists: true, error: null };
-    } else {
-      return {
-        exists: false,
-        error: `Conversation ID '${inputValue}' already exists in ${existingRow.library_type} library!`,
-      };
+  try {
+    const existingRow = await getDatatableRow(inputValue, true);
+
+    if (existingRow && existingRow.key === inputValue) {
+      if (existingRow.library_type === library) {
+        return { exists: true, error: null };
+      } else {
+        return {
+          exists: false,
+          error: `Conversation ID '${inputValue}' already exists in ${existingRow.library_type} library!`,
+        };
+      }
     }
+    return { exists: false, error: null };
+  } catch (error) {
+    return { exists: false, error: error.message || error };
   }
-  return { exists: false, error: null };
 }
 
 // Function to handle add to library button click event
