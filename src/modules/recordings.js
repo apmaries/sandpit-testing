@@ -32,54 +32,79 @@ async function getRecordingData(conversationId) {
     );
     console.debug("[TIL] Recording data returned", response);
   } catch (error) {
-    throw error;
+    if (error.status === 404) {
+      return null;
+    } else {
+      throw error;
+    }
   }
 
   return response;
 }
 
 export async function processRecordingData(conversationId) {
-  // Get recording data
-  let recordingData = await getRecordingData(conversationId);
+  try {
+    // Get recording data
+    let recordingData = await getRecordingData(conversationId);
 
-  // Initialize variables to hold the minimum dates and combined file state
-  let minArchiveDate = null;
-  let minDeleteDate = null;
-  let fileStates = new Set();
+    // Initialize variables to hold the minimum dates and combined file state
+    let minArchiveDate = null;
+    let minDeleteDate = null;
+    let fileStates = new Set();
 
-  // Process each recording in the array
-  recordingData.forEach((recording) => {
-    // Add the file state to the set
-    fileStates.add(recording.fileState);
-
-    // Update the minimum archive date
-    if (recording.archiveDate) {
-      if (
-        !minArchiveDate ||
-        new Date(recording.archiveDate) < new Date(minArchiveDate)
-      ) {
-        minArchiveDate = recording.archiveDate;
-      }
+    if (!recordingData) {
+      console.warn(
+        "[TIL] No recording data found for conversation ID:",
+        conversationId
+      );
+      return {
+        file_state: "-",
+        archive_date: "-",
+        delete_date: "-",
+      };
     }
 
-    // Update the minimum delete date
-    if (recording.deleteDate) {
-      if (
-        !minDeleteDate ||
-        new Date(recording.deleteDate) < new Date(minDeleteDate)
-      ) {
-        minDeleteDate = recording.deleteDate;
+    // Process each recording in the array
+    recordingData.forEach((recording) => {
+      // Add the file state to the set
+      fileStates.add(recording.fileState);
+
+      // Update the minimum archive date
+      if (recording.archiveDate) {
+        if (
+          !minArchiveDate ||
+          new Date(recording.archiveDate) < new Date(minArchiveDate)
+        ) {
+          minArchiveDate = recording.archiveDate;
+        }
       }
-    }
-  });
 
-  // Combine file states into a single string
-  let file_state =
-    fileStates.size > 0 ? Array.from(fileStates).join(", ") : "-";
+      // Update the minimum delete date
+      if (recording.deleteDate) {
+        if (
+          !minDeleteDate ||
+          new Date(recording.deleteDate) < new Date(minDeleteDate)
+        ) {
+          minDeleteDate = recording.deleteDate;
+        }
+      }
+    });
 
-  return {
-    file_state,
-    archive_date: minArchiveDate ? minArchiveDate : "-",
-    delete_date: minDeleteDate ? minDeleteDate : "-",
-  };
+    // Combine file states into a single string
+    let file_state =
+      fileStates.size > 0 ? Array.from(fileStates).join(", ") : "-";
+
+    return {
+      file_state,
+      archive_date: minArchiveDate ? minArchiveDate : "-",
+      delete_date: minDeleteDate ? minDeleteDate : "-",
+    };
+  } catch (error) {
+    console.error("[TIL] Error processing recording data", error);
+    return {
+      file_state: "-",
+      archive_date: "-",
+      delete_date: "-",
+    };
+  }
 }
