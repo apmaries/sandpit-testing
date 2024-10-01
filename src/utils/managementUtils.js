@@ -242,8 +242,7 @@ export async function migrateDatatable() {
     updateManagementToolsResponse(responseEle, "Datatable migrated", true);
   } catch (error) {
     console.error("[TIL] Error migrating datatable - ", error);
-    updateManagementToolsResponse(responseEle, error, false);
-    return error;
+    updateManagementToolsResponse(responseEle, error.message || error, false);
   }
 }
 

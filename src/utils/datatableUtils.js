@@ -57,11 +57,11 @@ export async function generateDatatableSchema() {
       properties[key].minLength = 1;
     } else if (field.type === "integer") {
       properties[key].maximum = 999999999999999;
-      properties[key].minimum = -999999999999999;
+      properties[key].minimum = 0;
     } else if (field.type === "number") {
       properties[key].default = 0;
       properties[key].maximum = 9e39;
-      properties[key].minimum = -9e39;
+      properties[key].minimum = 0;
     }
   }
 
