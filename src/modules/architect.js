@@ -173,6 +173,7 @@ export async function createDatatableRow(datatableId, row) {
 // Update datatable row
 export async function updateDatatableRow(rowId, body) {
   console.log("[TIL] Updating datatable row", rowId);
+  console.warn("Update datatable row", body);
   if (testMode) {
     console.debug("[TIL] Datatable row updated", rowId);
     return;
@@ -184,6 +185,7 @@ export async function updateDatatableRow(rowId, body) {
     await architectApi.putFlowsDatatableRow(datatableId, rowId, body);
     console.debug("[TIL] Datatable row updated", rowId);
   } catch (error) {
+    console.error("[TIL] Error updating datatable row", error);
     throw error;
   }
 }
