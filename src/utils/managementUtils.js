@@ -10,6 +10,7 @@ import {
   deleteDatatableRow,
   getDatatableRow,
   getDatatableRows,
+  updateDatatableRow,
 } from "../modules/architect.js";
 import { processConversations } from "../modules/conversations.js";
 
@@ -211,6 +212,7 @@ export async function refreshLibraries() {
   // Initialize variables
   let rows;
   let conversations;
+  let response = {};
 
   // Get all rows from the datatable and process them
   try {
@@ -226,17 +228,68 @@ export async function refreshLibraries() {
   }
 
   // Match processed conversations to the datatable rows
+  response.errors = [];
+  response.refreshedConversations = [];
+
   if (rows && rows.length > 0) {
     rows.forEach((row) => {
+      console.debug("[TIL] Matching conversation to row", row);
       const conversationRow = conversations.find(
-        (conv) => conv.details.key === row.key
+        (conv) => conv.conversation_id === row.key
       );
       if (conversationRow) {
         const flattenedConversation = flattenConversation(conversationRow);
-        row.library_type = flattenedConversation.library_type;
+        flattenedConversation.library_type = row.library_type;
+        console.debug("[TIL] Matched conversation", flattenedConversation);
+        response.refreshedConversations.push(flattenedConversation);
+      } else {
+        console.warn("[TIL] No matching conversation found for row", row);
+        response.errors.push(row);
       }
     });
   }
+
+  // Update the datatable with the refreshed conversations
+  for (const conversation of response.refreshedConversations) {
+    try {
+      await updateDatatableRow(conversation.conversation_id, conversation);
+    } catch (error) {
+      console.error(
+        "[TIL] Error updating datatable with refreshed data - ",
+        error
+      );
+      updateManagementToolsResponse(responseEle, error.message || error, false);
+      return error;
+    }
+  }
+
+  // Populate the table with refreshed data
+  let newRows = await getDatatableRows(false);
+
+  // Split rows into two arrays based on the library_type property
+  let goodRows = newRows.filter((row) => row.library_type === "good");
+  let badRows = newRows.filter((row) => row.library_type === "bad");
+
+  // Populate the tables with the rows
+  populateDomTable("good-table", goodRows);
+  populateDomTable("bad-table", badRows);
+
+  if (response.errors.length > 0) {
+    console.warn("[TIL] Errors refreshing libraries", response.errors);
+    updateManagementToolsResponse(
+      responseEle,
+      "Errors while refreshing libraries - see JSON download for details",
+      false
+    );
+  } else {
+    updateManagementToolsResponse(
+      responseEle,
+      "Libraries refreshed successfully!",
+      true
+    );
+  }
+  downloadObjectAsJson(response, "refresh-libraries");
+  console.info("[TIL] Libraries refreshed");
 }
 
 // Function to download the datatable schema as a JSON file

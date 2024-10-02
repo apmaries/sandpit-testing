@@ -264,6 +264,13 @@ export function removeDomTableRow(tableId, rowId) {
   }
 }
 
+// Utility function to update a table row
+export function updateDomTableRow(tableId, row) {
+  let table = document.getElementById(tableId);
+  let tbody = table.getElementsByTagName("tbody")[0];
+  let rows = tbody.getElementsByTagName("tr");
+}
+
 // Function to update management tools response
 export function updateManagementToolsResponse(
   ele,
