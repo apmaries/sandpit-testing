@@ -147,9 +147,14 @@ export function resetCheckboxes() {
 }
 
 // Utility function to populate the table with data
-export function populateDomTable(t, r) {
+export function populateDomTable(t, r, c) {
   let table = document.getElementById(t);
   let tbody = table.getElementsByTagName("tbody")[0];
+
+  if (c) {
+    // Clear the table
+    tbody.innerHTML = "";
+  }
 
   // Get the state of the checkboxes
   const checkboxes = document.querySelectorAll(

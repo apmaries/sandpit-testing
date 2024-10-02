@@ -190,8 +190,8 @@ async function runApp() {
     let badRows = rows.filter((row) => row.library_type === "bad");
 
     // Populate the tables with the rows
-    populateDomTable("good-table", goodRows);
-    populateDomTable("bad-table", badRows);
+    populateDomTable("good-table", goodRows, true);
+    populateDomTable("bad-table", badRows, true);
   } catch (error) {
     console.error("[TIL] An error occurred:", error);
     // Stop the application if either getIntegration or getUser fails

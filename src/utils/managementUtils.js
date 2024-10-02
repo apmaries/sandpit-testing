@@ -132,7 +132,8 @@ export async function addToLibraryHandler(library, inputValue) {
     const newRow = await getDatatableRow(inputValue, false);
     populateDomTable(
       `${library}-table`,
-      testMode ? [flattenedConversation] : [newRow]
+      testMode ? [flattenedConversation] : [newRow],
+      false
     );
     updateManagementToolsResponse(
       responseEle,
@@ -271,8 +272,8 @@ export async function refreshLibraries() {
   let badRows = newRows.filter((row) => row.library_type === "bad");
 
   // Populate the tables with the rows
-  populateDomTable("good-table", goodRows);
-  populateDomTable("bad-table", badRows);
+  populateDomTable("good-table", goodRows, true);
+  populateDomTable("bad-table", badRows, true);
 
   if (response.errors.length > 0) {
     console.warn("[TIL] Errors refreshing libraries", response.errors);
