@@ -172,7 +172,7 @@ export async function createDatatableRow(datatableId, row) {
 
 // Update datatable row
 export async function updateDatatableRow(rowId, body) {
-  console.debug("[TIL] Updating datatable row", rowId);
+  console.log("[TIL] Updating datatable row", rowId);
   if (testMode) {
     console.debug("[TIL] Datatable row updated", rowId);
     return;

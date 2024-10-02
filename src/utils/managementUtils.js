@@ -256,7 +256,7 @@ export async function refreshLibraries() {
   console.log("[TIL] Updating datatable with refreshed data");
   for (const conversation of response.refreshedConversations) {
     try {
-      await updateDatatableRow(conversation.conversation_id, conversation);
+      await updateDatatableRow(conversation.key, conversation);
     } catch (error) {
       console.error(
         "[TIL] Error updating datatable with refreshed data - ",
