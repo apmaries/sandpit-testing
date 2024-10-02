@@ -87,6 +87,7 @@ export async function processConversations(conversationIds) {
     let acdParticipants = conversationParticipants.filter(
       (participant) => participant.purpose === "acd"
     );
+    console.debug("[TIL] ACD participants", acdParticipants);
 
     // Get queue ids and names
     let conversationQueues = acdParticipants.map((participant) => ({
@@ -183,9 +184,9 @@ export async function processConversations(conversationIds) {
         key: conversation.conversationId,
         start_date: conversation.conversationStart,
         end_date: conversation.conversationEnd,
-        queue_ids: queueIds,
-        queue_names: queueNames,
-        media_type: mediaTypesList,
+        queue_ids: queueIds ? queueIds : "-",
+        queue_names: queueNames ? queueNames : "-",
+        media_type: mediaTypesList ? mediaTypesList : "-",
       },
       metrics: {
         total_talk_time: totalTalkTime ? totalTalkTime : 0,
