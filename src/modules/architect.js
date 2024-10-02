@@ -180,7 +180,7 @@ export async function updateDatatableRow(rowId, body) {
   let datatableId = sessionStorage.getItem("gc_datatable");
 
   try {
-    await architectApi.updateFlowsDatatableRow(datatableId, rowId, body);
+    await architectApi.putFlowsDatatableRow(datatableId, rowId, body);
     console.log("[TIL] Datatable row updated", rowId);
   } catch (error) {
     throw error;
