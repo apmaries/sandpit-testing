@@ -16,8 +16,6 @@ const testMode = applicationConfig.mode.isTest;
 
 // Get conversation sta data
 async function getStaData(conversationId) {
-  console.log("[TIL] Getting STA data");
-
   if (testMode) {
     // Get sta data using test API
     let t_response = await t_staApi.getSpeechandtextanalyticsConversation();

@@ -16,8 +16,6 @@ const testMode = applicationConfig.mode.isTest;
 
 // Get recording data
 async function getRecordingData(conversationId) {
-  console.log("[TIL] Getting recording data");
-
   if (testMode) {
     // Get recording data using test API
     let t_response = await t_recordingApi.getConversationRecordingmetadata();

@@ -21,7 +21,7 @@ const testMode = applicationConfig.mode.isTest;
 
 // Get conversation data
 async function getConversationsData(conversationIds) {
-  console.log(`[TIL] Getting conversation data`);
+  console.log(`[TIL] Getting conversations`);
   let conversations = [];
 
   let opts = {
@@ -59,25 +59,30 @@ async function getConversationsData(conversationIds) {
 }
 
 export async function processConversations(conversationIds) {
+  console.log("[TIL] Starting processConversations");
+
   // Get interaction details from conversation API
   let conversationData;
   try {
     conversationData = await getConversationsData(conversationIds);
-    console.warn("[TIL] Conversation data returned", conversationData);
+    console.debug("[TIL] Conversation data returned", conversationData);
     if (!conversationData || conversationData.length === 0) {
       console.warn("[TIL] No conversation data found");
       return [];
     }
   } catch (error) {
+    console.error("[TIL] Error fetching conversation data", error);
     throw error;
   }
+
+  console.log(`[TIL] Processing ${conversationData.length} conversations`);
 
   // Initialize an array to hold processed conversation data
   let processedConversations = [];
 
   // Function to process conversation-level info
-  async function processConversationInfo(conversation) {
-    console.warn("[TIL] Processing conversation info", conversation);
+  async function processConversationInfo(conversation, shortId) {
+    console.log(`[TIL] ${shortId} - Getting conversation info`);
     // Get conversation participants
     let conversationParticipants = conversation.participants;
     let conversationEvaluations = conversation.evaluations;
@@ -87,7 +92,6 @@ export async function processConversations(conversationIds) {
     let acdParticipants = conversationParticipants.filter(
       (participant) => participant.purpose === "acd"
     );
-    console.debug("[TIL] ACD participants", acdParticipants);
 
     // Get queue ids and names
     let conversationQueues = acdParticipants.map((participant) => ({
@@ -179,9 +183,9 @@ export async function processConversations(conversationIds) {
         surveyScoreCount > 0 ? totalSurveyScore / surveyScoreCount : 0;
     }
 
-    return {
+    let processedConversation = {
+      conversation_id: conversation.conversationId,
       details: {
-        key: conversation.conversationId,
         start_date: conversation.conversationStart,
         end_date: conversation.conversationEnd,
         queue_ids: queueIds ? queueIds : "-",
@@ -202,43 +206,75 @@ export async function processConversations(conversationIds) {
         survey_total_score: oSurveyTotalScore ? oSurveyTotalScore : 0,
       },
     };
+
+    console.debug(
+      `[TIL] ${shortId} - Processed conversation info`,
+      processedConversation
+    );
+    return processedConversation;
   }
 
-  // Iterate over each conversation in the conversationData array
-  for (const conversation of conversationData) {
-    // Run the four subjects in parallel
-    const [
-      conversationInfo,
-      conversationDivisions,
-      staDetails,
-      recordingDetails,
-    ] = await Promise.all([
-      processConversationInfo(conversation),
-      getDivisions(conversation.divisionIds),
-      processStaData(conversation.conversationId),
-      processRecordingData(conversation.conversationId),
-    ]);
+  // Process all conversations in parallel
+  const processedConversationsPromises = conversationData.map(
+    async (conversation, index) => {
+      const shortId = `C${String(index + 1).padStart(2, "0")}`;
+      console.log(
+        `[TIL] Processing conversation ${shortId} (${conversation.conversationId})`
+      );
 
-    // Extract IDs and names into separate arrays
-    let divisionIds = conversationDivisions
-      .map((division) => division.id)
-      .join(",");
-    let divisionNames = conversationDivisions
-      .map((division) => division.name)
-      .join(",");
+      // Run the four subjects in parallel
+      const [
+        conversationInfo,
+        conversationDivisions,
+        staDetails,
+        recordingDetails,
+      ] = await Promise.all([
+        processConversationInfo(conversation, shortId),
+        (async () => {
+          console.log(`[TIL] ${shortId} - Getting divisions`);
+          return getDivisions(conversation.divisionIds);
+        })(),
+        (async () => {
+          console.log(`[TIL] ${shortId} - Getting STA data`);
+          return processStaData(conversation.conversationId);
+        })(),
+        (async () => {
+          console.log(`[TIL] ${shortId} - Getting recording data`);
+          return processRecordingData(conversation.conversationId);
+        })(),
+      ]);
 
-    // Push the processed conversation data to the array
-    processedConversations.push({
-      ...conversationInfo,
-      details: {
-        ...conversationInfo.details,
-        division_ids: divisionIds,
-        division_names: divisionNames,
-      },
-      sta: staDetails,
-      recording: recordingDetails,
-    });
+      // Extract IDs and names into separate arrays
+      let divisionIds = conversationDivisions
+        .map((division) => division.id)
+        .join(",");
+      let divisionNames = conversationDivisions
+        .map((division) => division.name)
+        .join(",");
+
+      console.log(`[TIL] ${shortId} - Processing complete`);
+
+      // Return the processed conversation data
+      return {
+        ...conversationInfo,
+        details: {
+          ...conversationInfo.details,
+          division_ids: divisionIds,
+          division_names: divisionNames,
+        },
+        sta: staDetails,
+        recording: recordingDetails,
+      };
+    }
+  );
+
+  try {
+    // Wait for all conversations to be processed
+    processedConversations = await Promise.all(processedConversationsPromises);
+    console.log("[TIL] All conversations processed");
+  } catch (error) {
+    console.error("[TIL] Error processing conversations", error);
+    throw error;
   }
-
   return processedConversations;
 }

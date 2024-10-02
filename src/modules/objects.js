@@ -15,7 +15,6 @@ import { t_objectsApi } from "../core/testManager.js";
 const testMode = applicationConfig.mode.isTest;
 
 export async function getDivisions(divisionIds) {
-  console.log(`[TIL] Getting divisions`);
   let divisions = [];
 
   let opts = {};

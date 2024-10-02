@@ -9,6 +9,7 @@ import {
   createDatatableRow,
   deleteDatatableRow,
   getDatatableRow,
+  getDatatableRows,
 } from "../modules/architect.js";
 import { processConversations } from "../modules/conversations.js";
 
@@ -30,13 +31,17 @@ const testMode = applicationConfig.mode.isTest;
 
 // Helper function to flatten the conversation schema
 function flattenConversation(conversation) {
-  const flattened = {};
+  const flattened = {
+    key: conversation.conversation_id,
+  };
 
   Object.keys(conversation).forEach((group) => {
-    Object.keys(conversation[group]).forEach((key) => {
-      const column = conversation[group][key];
-      flattened[`${key}`] = column;
-    });
+    if (group !== "conversation_id") {
+      Object.keys(conversation[group]).forEach((key) => {
+        const column = conversation[group][key];
+        flattened[`${key}`] = column;
+      });
+    }
   });
 
   return flattened;
@@ -112,7 +117,7 @@ export async function addToLibraryHandler(library, inputValue) {
     updateManagementToolsResponse(responseEle, errorMsg, false);
     return errorMsg;
   }
-  console.log("[TIL] Conversation processed", conversation);
+  console.debug("[TIL] Conversation processed", conversation);
 
   const flattenedConversation = flattenConversation(conversation);
 
@@ -133,6 +138,7 @@ export async function addToLibraryHandler(library, inputValue) {
       `Added '${inputValue}' to ${library} library`,
       true
     );
+    console.info("[TIL] Added to library");
   } catch (error) {
     console.error("[TIL] Error adding to library - ", error);
     updateManagementToolsResponse(responseEle, error.message || error, false);
@@ -159,6 +165,7 @@ export async function deleteFromLibraryHandler(library, inputValue) {
         `Deleted '${inputValue}' from ${library} library`,
         true
       );
+      console.info("[TIL] Deleted from library");
       return;
     }
 
@@ -187,10 +194,48 @@ export async function deleteFromLibraryHandler(library, inputValue) {
       `Deleted '${inputValue}' from ${library} library`,
       true
     );
+    console.info("[TIL] Deleted from library");
   } catch (error) {
     console.error("[TIL] Error deleting from library - ", error);
     updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
+  }
+}
+
+// Function to refresh all libraries
+export async function refreshLibraries() {
+  console.info("[TIL] Refreshing libraries");
+  const responseEle = document.getElementById("refresh-libraries-response");
+  updateManagementToolsResponse(responseEle, "Processing...", null);
+
+  // Initialize variables
+  let rows;
+  let conversations;
+
+  // Get all rows from the datatable and process them
+  try {
+    rows = await getDatatableRows(false);
+    console.debug("[TIL] Rows returned", rows);
+    const conversationIds = rows.map((row) => row.key);
+    conversations = await processConversations(conversationIds.join(","));
+    console.debug("[TIL] Conversations processed", conversations);
+  } catch (error) {
+    console.error("[TIL] Error refreshing libraries - ", error);
+    updateManagementToolsResponse(responseEle, error.message || error, false);
+    return error;
+  }
+
+  // Match processed conversations to the datatable rows
+  if (rows && rows.length > 0) {
+    rows.forEach((row) => {
+      const conversationRow = conversations.find(
+        (conv) => conv.details.key === row.key
+      );
+      if (conversationRow) {
+        const flattenedConversation = flattenConversation(conversationRow);
+        row.library_type = flattenedConversation.library_type;
+      }
+    });
   }
 }
 

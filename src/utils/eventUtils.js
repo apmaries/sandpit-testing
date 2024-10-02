@@ -10,6 +10,7 @@ import { applicationConfig } from "../core/configManager.js";
 import {
   addToLibraryHandler,
   deleteFromLibraryHandler,
+  refreshLibraries,
   downloadDatatableSchema,
   validateDatatable,
   migrateDatatable,
@@ -24,6 +25,7 @@ import {
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
+window.refreshLibraries = refreshLibraries;
 window.generateDatatableSchema = downloadDatatableSchema;
 window.validateDatatable = validateDatatable;
 window.migrateDatatable = migrateDatatable;
