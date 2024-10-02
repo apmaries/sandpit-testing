@@ -59,7 +59,7 @@ async function downloadObjectAsJson(obj, name) {
 // Helper function to check if a conversation is in the specified library
 async function checkConversationInLibrary(inputValue, library) {
   try {
-    const existingRow = await getDatatableRow(inputValue, true);
+    const existingRow = await getDatatableRow(inputValue, false);
 
     if (existingRow && existingRow.key === inputValue) {
       if (existingRow.library_type === library) {
