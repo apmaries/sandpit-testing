@@ -216,6 +216,7 @@ export async function refreshLibraries() {
   let response = {};
 
   // Get all rows from the datatable and process them
+  console.log("[TIL] Processing library conversations");
   try {
     rows = await getDatatableRows(false);
     console.debug("[TIL] Rows returned", rows);
@@ -229,12 +230,13 @@ export async function refreshLibraries() {
   }
 
   // Match processed conversations to the datatable rows
+  console.log("[TIL] Matching conversations to datatable rows");
   response.errors = [];
   response.refreshedConversations = [];
 
   if (rows && rows.length > 0) {
     rows.forEach((row) => {
-      console.debug("[TIL] Matching conversation to row", row);
+      console.debug(`[TIL] Matching conversation id '${row.key}'`);
       const conversationRow = conversations.find(
         (conv) => conv.conversation_id === row.key
       );
@@ -244,13 +246,14 @@ export async function refreshLibraries() {
         console.debug("[TIL] Matched conversation", flattenedConversation);
         response.refreshedConversations.push(flattenedConversation);
       } else {
-        console.warn("[TIL] No matching conversation found for row", row);
+        console.warn("[TIL] No matching conversation found for row!", row);
         response.errors.push(row);
       }
     });
   }
 
   // Update the datatable with the refreshed conversations
+  console.log("[TIL] Updating datatable with refreshed data");
   for (const conversation of response.refreshedConversations) {
     try {
       await updateDatatableRow(conversation.conversation_id, conversation);
@@ -265,6 +268,7 @@ export async function refreshLibraries() {
   }
 
   // Populate the table with refreshed data
+  console.log("[TIL] Populating tables with refreshed data");
   let newRows = await getDatatableRows(false);
 
   // Split rows into two arrays based on the library_type property
