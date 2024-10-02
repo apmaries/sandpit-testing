@@ -84,6 +84,7 @@ export async function addToLibraryHandler(library, inputValue) {
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
   );
+  updateManagementToolsResponse(responseEle, "Processing...", null);
 
   // Check if conversation is already in library
   const { exists, error } = await checkConversationInLibrary(
@@ -97,7 +98,7 @@ export async function addToLibraryHandler(library, inputValue) {
     return errorMsg;
   } else if (error) {
     console.error("[TIL] Error adding to library", error);
-    updateManagementToolsResponse(responseEle, error, false);
+    updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
   }
   console.info("[TIL] Conversation not in library, proceeding to add");
@@ -134,7 +135,7 @@ export async function addToLibraryHandler(library, inputValue) {
     );
   } catch (error) {
     console.error("[TIL] Error adding to library - ", error);
-    updateManagementToolsResponse(responseEle, error, false);
+    updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
   }
 }
@@ -146,6 +147,7 @@ export async function deleteFromLibraryHandler(library, inputValue) {
   const responseEle = document.getElementById(
     `modify-${library}-library-response`
   );
+  updateManagementToolsResponse(responseEle, "Processing...", null);
 
   try {
     if (testMode) {
@@ -172,7 +174,7 @@ export async function deleteFromLibraryHandler(library, inputValue) {
       return errorMsg;
     } else if (error) {
       console.error("[TIL] Error deleting from library", error);
-      updateManagementToolsResponse(responseEle, error, false);
+      updateManagementToolsResponse(responseEle, error.message || error, false);
       return error;
     }
     console.info("[TIL] Conversation found in library, proceeding to delete");
@@ -187,7 +189,7 @@ export async function deleteFromLibraryHandler(library, inputValue) {
     );
   } catch (error) {
     console.error("[TIL] Error deleting from library - ", error);
-    updateManagementToolsResponse(responseEle, error, false);
+    updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
   }
 }
@@ -204,6 +206,7 @@ export async function downloadDatatableSchema() {
 export async function validateDatatable() {
   console.info("[TIL] Validating datatable");
   const responseEle = document.getElementById("validate-datatable-response");
+  updateManagementToolsResponse(responseEle, "Processing...", null);
 
   try {
     const validationResponse = await validateDatatableSchema();
@@ -230,6 +233,7 @@ export async function validateDatatable() {
 export async function migrateDatatable() {
   console.info("[TIL] Migrating datatable");
   const responseEle = document.getElementById("migrate-datatable-response");
+  updateManagementToolsResponse(responseEle, "Processing...", null);
 
   try {
     // Validate datatable schema

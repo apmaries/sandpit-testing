@@ -265,7 +265,11 @@ export function removeDomTableRow(tableId, rowId) {
 }
 
 // Function to update management tools response
-export function updateManagementToolsResponse(ele, response, responseClass) {
+export function updateManagementToolsResponse(
+  ele,
+  response,
+  responseClass = null
+) {
   let responseDiv = ele;
   responseDiv.innerHTML = ""; // Clear existing content
 
@@ -275,7 +279,7 @@ export function updateManagementToolsResponse(ele, response, responseClass) {
   responseText.innerText = response;
   responseDiv.appendChild(responseText);
 
-  // Function to create an SVG element
+  // Helper function to create an SVG element
   function createSVG(pathData) {
     let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svg.setAttribute("class", "responsive-svg");
@@ -289,7 +293,19 @@ export function updateManagementToolsResponse(ele, response, responseClass) {
     return svg;
   }
 
-  if (responseClass) {
+  // Add the success or error class based on the responseClass
+  if (responseClass === null) {
+    responseDiv.classList.remove("success-response", "error-response");
+    responseDiv.classList.add("info-response");
+
+    // Info SVG path data
+    const infoPathData =
+      "M 8 16 C 10.1217 16 12.1566 15.1571 13.6569 13.6569 C 15.1571 12.1566 16 10.1217 16 8 C 16 5.87827 15.1571 3.84344 13.6569 2.34315 C 12.1566 0.842855 10.1217 0 8 0 C 5.87827 0 3.84344 0.842855 2.34315 2.34315 C 0.842855 3.84344 0 5.87827 0 8 C 0 10.1217 0.842855 12.1566 2.34315 13.6569 C 3.84344 15.1571 5.87827 16 8 16 Z M 6.75 10.5 H 7.5 V 8.5 H 6.75 C 6.33437 8.5 6 8.16562 6 7.75 C 6 7.33437 6.33437 7 6.75 7 H 8.25 C 8.66562 7 9 7.33437 9 7.75 V 10.5 H 9.25 C 9.66562 10.5 10 10.8344 10 11.25 C 10 11.6656 9.66562 12 9.25 12 H 6.75 C 6.33437 12 6 11.6656 6 11.25 C 6 10.8344 6.33437 10.5 6.75 10.5 Z M 8 4 C 8.26522 4 8.51957 4.10536 8.70711 4.29289 C 8.89464 4.48043 9 4.73478 9 5 C 9 5.26522 8.89464 5.51957 8.70711 5.70711 C 8.51957 5.89464 8.26522 6 8 6 C 7.73478 6 7.48043 5.89464 7.29289 5.70711 C 7.10536 5.51957 7 5.26522 7 5 C 7 4.73478 7.10536 4.48043 7.29289 4.29289 C 7.48043 4.10536 7.73478 4 8 4 Z";
+
+    // Append the info SVG to the responseDiv
+    responseDiv.appendChild(createSVG(infoPathData));
+  } else if (responseClass) {
+    responseDiv.classList.remove("info-response", "error-response");
     responseDiv.classList.add("success-response");
 
     // Success SVG path data
@@ -299,6 +315,7 @@ export function updateManagementToolsResponse(ele, response, responseClass) {
     // Append the success SVG to the responseDiv
     responseDiv.appendChild(createSVG(successPathData));
   } else {
+    responseDiv.classList.remove("info-response", "success-response");
     responseDiv.classList.add("error-response");
 
     // Error SVG path data
