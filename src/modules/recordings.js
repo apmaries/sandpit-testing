@@ -31,6 +31,8 @@ async function getRecordingData(conversationId) {
       conversationId
     );
     console.debug("[TIL] Recording data returned", response);
+
+    return response;
   } catch (error) {
     if (error.status === 404) {
       return null;
@@ -38,8 +40,6 @@ async function getRecordingData(conversationId) {
       throw error;
     }
   }
-
-  return response;
 }
 
 export async function processRecordingData(conversationId) {

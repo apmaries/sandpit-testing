@@ -31,6 +31,8 @@ async function getStaData(conversationId) {
       conversationId
     );
     console.debug("[TIL] STA data returned", response);
+
+    return response;
   } catch (error) {
     if (error.status === 404) {
       return null;
@@ -38,8 +40,6 @@ async function getStaData(conversationId) {
       throw error;
     }
   }
-
-  return response;
 }
 
 export async function processStaData(conversationId) {
