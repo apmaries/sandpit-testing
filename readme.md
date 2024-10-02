@@ -46,8 +46,6 @@ Single data table to store interaction details with a type field to flag with su
 
 1. Should archived / deleted recordings still be listed (greyed out) or removed? Can retrieve archived recording but probably wouldn't want to as it's a limited number available... perhaps keep in datatable but not present in UI is best.
 1. Check behaviour for
-   - digital interactions
-   - transfers
    - transfers across divisions
 1. Any additional metrics?
 1. Migrate datatable (management tool)
@@ -77,3 +75,6 @@ Single data table to store interaction details with a type field to flag with su
 1. Migrate datatable (management tool)
    - Needs to retain records
    - Needs to update Integration URL
+1. Check behaviour for
+   - digital interactions
+   - transfers

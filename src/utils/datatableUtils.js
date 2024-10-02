@@ -15,7 +15,6 @@ import {
 import { updateIntegration } from "../modules/integrations.js";
 
 // Utility modules
-import { updateManagementToolsResponse } from "./domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -55,6 +54,7 @@ export async function generateDatatableSchema() {
     if (field.dataType === "string") {
       properties[key].maxLength = 256;
       properties[key].minLength = 1;
+      properties[key].default = "-";
     } else if (field.dataType === "integer") {
       properties[key].maximum = 999999999999999;
       properties[key].minimum = -999999999999999;
