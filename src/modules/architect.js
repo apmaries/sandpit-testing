@@ -173,16 +173,19 @@ export async function createDatatableRow(datatableId, row) {
 // Update datatable row
 export async function updateDatatableRow(rowId, body) {
   console.log("[TIL] Updating datatable row", rowId);
-  console.warn("Update datatable row", body);
+
   if (testMode) {
     console.debug("[TIL] Datatable row updated", rowId);
     return;
   }
 
   let datatableId = sessionStorage.getItem("gc_datatable");
+  let opts = {
+    body: body, // Object | The row data
+  };
 
   try {
-    await architectApi.putFlowsDatatableRow(datatableId, rowId, body);
+    await architectApi.putFlowsDatatableRow(datatableId, rowId, opts);
     console.debug("[TIL] Datatable row updated", rowId);
   } catch (error) {
     console.error("[TIL] Error updating datatable row", error);
