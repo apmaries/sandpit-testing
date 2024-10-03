@@ -254,16 +254,24 @@ export async function refreshLibraries() {
 
   // Update the datatable with the refreshed conversations
   console.log("[TIL] Updating datatable with refreshed data");
+  const updatedKeys = new Set();
   for (const conversation of response.refreshedConversations) {
-    try {
-      await updateDatatableRow(conversation.key, conversation);
-    } catch (error) {
-      console.error(
-        "[TIL] Error updating datatable with refreshed data - ",
-        error
-      );
-      updateManagementToolsResponse(responseEle, error.message || error, false);
-      return error;
+    if (!updatedKeys.has(conversation.key)) {
+      try {
+        await updateDatatableRow(conversation.key, conversation);
+        updatedKeys.add(conversation.key);
+      } catch (error) {
+        console.error(
+          "[TIL] Error updating datatable with refreshed data - ",
+          error
+        );
+        updateManagementToolsResponse(
+          responseEle,
+          error.message || error,
+          false
+        );
+        return error;
+      }
     }
   }
 
@@ -296,7 +304,6 @@ export async function refreshLibraries() {
   downloadObjectAsJson(response, "refresh-libraries");
   console.info("[TIL] Libraries refreshed");
 }
-
 // Function to download the datatable schema as a JSON file
 export async function downloadDatatableSchema() {
   console.info("[TIL] Downloading datatable schema");
