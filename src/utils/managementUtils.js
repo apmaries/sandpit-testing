@@ -21,7 +21,7 @@ import {
   makeDatatable,
 } from "./datatableUtils.js";
 import {
-  populateDomTable,
+  populateTablesAndHandleAlerts,
   removeDomTableRow,
   updateManagementToolsResponse,
 } from "./domUtils.js";
@@ -130,11 +130,11 @@ export async function addToLibraryHandler(library, inputValue) {
   try {
     await createDatatableRow(datatableId, flattenedConversation);
     const newRow = await getDatatableRow(inputValue, false);
-    populateDomTable(
-      `${library}-table`,
+    populateTablesAndHandleAlerts(
       testMode ? [flattenedConversation] : [newRow],
-      false
+      true
     );
+
     updateManagementToolsResponse(
       responseEle,
       `Added '${inputValue}' to ${library} library`,
@@ -279,13 +279,7 @@ export async function refreshLibraries() {
   console.log("[TIL] Populating tables with refreshed data");
   let newRows = await getDatatableRows(false);
 
-  // Split rows into two arrays based on the library_type property
-  let goodRows = newRows.filter((row) => row.library_type === "good");
-  let badRows = newRows.filter((row) => row.library_type === "bad");
-
-  // Populate the tables with the rows
-  populateDomTable("good-table", goodRows, true);
-  populateDomTable("bad-table", badRows, true);
+  populateTablesAndHandleAlerts(newRows, false);
 
   if (response.errors.length > 0) {
     console.warn("[TIL] Errors refreshing libraries", response.errors);

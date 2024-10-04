@@ -19,8 +19,8 @@ import {
 } from "./utils/datatableUtils.js";
 import {
   makeDomTables,
-  populateDomTable,
   resetCheckboxes,
+  populateTablesAndHandleAlerts,
 } from "./utils/domUtils.js";
 import {
   enableActionButtonEventListeners,
@@ -185,13 +185,7 @@ async function runApp() {
     // Populate the table with data
     let rows = await getDatatableRows(false);
 
-    // Split rows into two arrays based on the library_type property
-    let goodRows = rows.filter((row) => row.library_type === "good");
-    let badRows = rows.filter((row) => row.library_type === "bad");
-
-    // Populate the tables with the rows
-    populateDomTable("good-table", goodRows, true);
-    populateDomTable("bad-table", badRows, true);
+    await populateTablesAndHandleAlerts(rows, false);
   } catch (error) {
     console.error("[TIL] An error occurred:", error);
     // Stop the application if either getIntegration or getUser fails

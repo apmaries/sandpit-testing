@@ -30,13 +30,13 @@ function createSVG(type) {
 }
 
 // Helper function to add conversation warning icon
-function addConversationIconTooltip(container, type, tooltipText) {
-  let icon = createSVG(type);
-  icon.classList.add(`${type}-icon`);
+function addConversationIconTooltip(container, alert) {
+  let icon = createSVG(alert.type);
+  icon.classList.add(`${alert.type}-icon`);
 
   // Create the gux-tooltip element
   let tooltip = document.createElement("gux-tooltip");
-  tooltip.textContent = tooltipText;
+  tooltip.textContent = alert.message;
   tooltip.setAttribute("placement", "right");
 
   // Append the warning icon to the container
@@ -44,6 +44,183 @@ function addConversationIconTooltip(container, type, tooltipText) {
 
   // Append the tooltip to the container
   container.appendChild(tooltip);
+}
+
+// Helper function to populate the table with data
+function populateDomTable(t, r, a) {
+  let table = document.getElementById(t);
+  let tbody = table.getElementsByTagName("tbody")[0];
+  let rowCount = 0;
+  let adminAlerts = [];
+
+  if (!a) {
+    // Clear the table if append mode is false
+    tbody.innerHTML = "";
+  }
+
+  // Get the state of the checkboxes
+  const checkboxes = document.querySelectorAll(
+    'input[name="column-group-checkbox"]'
+  );
+
+  r.forEach((row) => {
+    let adminAlert;
+
+    // Check if record has been archived or deleted
+    if (
+      row.file_state &&
+      (row.file_state === "ARCHIVED" || row.file_state === "DELETED")
+    ) {
+      // Skip row if deleted
+      if (row.file_state === "DELETED") {
+        console.error(
+          `[TIL] Recording for ${row.key} has been deleted... skipping row`
+        );
+        return;
+      }
+
+      if (row.file_state === "ARCHIVED") {
+        let alert = {
+          type: "warning",
+          message: "This recording has been archived",
+        };
+        let conversation = { id: row.key, library: row.library_type };
+        adminAlert = { alert, conversation };
+        adminAlerts.push(adminAlert);
+      }
+    }
+
+    let tr = document.createElement("tr");
+
+    // Check if delete_date is within 30 days
+
+    if (row.delete_date && row.delete_date !== "-") {
+      let deleteDate = new Date(row.delete_date);
+      let currentDate = new Date();
+      let diffTime = deleteDate - currentDate;
+      let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      if (diffDays <= applicationConfig.general.alertDays) {
+        let alert = {
+          type: "warning",
+          message: "This recording will be deleted soon",
+        };
+        let conversation = { id: row.key, library: row.library_type };
+        adminAlert = { alert, conversation };
+        adminAlerts.push(adminAlert);
+      }
+    }
+
+    // Iterate over the datatable columns from the configuration
+    Object.keys(applicationConfig.datatable.parameters).forEach(
+      (parameterGroup) => {
+        Object.keys(
+          applicationConfig.datatable.parameters[parameterGroup]
+        ).forEach((parameterKey) => {
+          const parameter =
+            applicationConfig.datatable.parameters[parameterGroup][
+              parameterKey
+            ];
+
+          const keyFormat = parameter.format;
+
+          // Always display the "key" column
+          if (parameterKey === "key") {
+            let td = document.createElement("td");
+            td.setAttribute("data-group-name", parameterGroup);
+            td.setAttribute("data-column-name", parameterKey);
+
+            // Create a container for the ID and the warning icon
+            let container = document.createElement("div");
+            container.classList.add("id-warning-container");
+
+            // Create a link to the interaction details page
+            let region = sessionStorage.getItem("gc_region");
+            let a = document.createElement("a");
+            a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
+            a.target = "_blank";
+            a.appendChild(document.createTextNode(row[parameterKey] || ""));
+            a.classList.add("id-link");
+
+            // Append the link to the container first
+            container.appendChild(a);
+
+            // Add a warning icon if delete_date is within 30 days
+            if (adminAlert) {
+              console.warn(
+                `[TIL] Alert for conversation ID: ${row.key}`,
+                adminAlert
+              );
+
+              // Add the warning icon and tooltip
+              addConversationIconTooltip(container, adminAlert.alert);
+            }
+
+            // Append the container to the td element
+            td.appendChild(container);
+
+            tr.appendChild(td);
+          } else if (
+            parameterKey === "library_type" ||
+            parameterKey === "division_ids" ||
+            parameterKey === "queue_ids"
+          ) {
+            // Skip these columns
+            return;
+          } else {
+            // Find the corresponding checkbox for the parameterGroup
+            const checkbox = Array.from(checkboxes).find(
+              (cb) => cb.value === parameterGroup
+            );
+
+            // Create a td element for the column
+            let td = document.createElement("td");
+            td.setAttribute("data-group-name", parameterGroup);
+            td.setAttribute("data-column-name", parameterKey);
+
+            // Set the text content of the td element
+            let columnValue = String(row[parameterKey]);
+
+            // Format the column value based on the format type
+            if (keyFormat === "date" && columnValue !== "-") {
+              columnValue = new Date(columnValue).toLocaleDateString();
+            } else if (keyFormat === "datetime" && columnValue !== "-") {
+              columnValue = new Date(columnValue).toLocaleString();
+            } else if (keyFormat === "seconds" && columnValue !== "-") {
+              columnValue = (columnValue / 1000).toFixed(1) + "s";
+            } else if (keyFormat === "percentage" && columnValue !== "-") {
+              columnValue =
+                columnValue > 1
+                  ? (columnValue * 1).toFixed(1) + "%"
+                  : (columnValue * 100).toFixed(1) + "%";
+            }
+
+            // Format the column value based on the column name
+            if (parameterKey === "sentiment_trend_class") {
+              // Add a space between capital letters
+              columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
+            }
+
+            td.appendChild(document.createTextNode(columnValue || "!"));
+            if (checkbox && !checkbox.checked) {
+              td.classList.add("hidden-column");
+            }
+
+            tr.appendChild(td);
+          }
+        });
+      }
+    );
+
+    tbody.appendChild(tr);
+    rowCount++;
+  });
+
+  console.log(
+    `[TIL] Table ${t} populated with ${rowCount} of ${r.length} rows`
+  );
+
+  return adminAlerts;
 }
 
 // Utility function to create the table
@@ -180,171 +357,32 @@ export function resetCheckboxes() {
   });
 }
 
-// Utility function to populate the table with data
-export function populateDomTable(t, r, c) {
-  let table = document.getElementById(t);
-  let tbody = table.getElementsByTagName("tbody")[0];
-  let rowCount = 0;
+// Function to populate the tables and handle alerts
+export async function populateTablesAndHandleAlerts(rows, appendMode) {
+  // Split rows into two arrays based on the library_type property
+  let goodRows = rows.filter((row) => row.library_type === "good");
+  let badRows = rows.filter((row) => row.library_type === "bad");
 
-  if (c) {
-    // Clear the table
-    tbody.innerHTML = "";
+  try {
+    // Run populateDomTable calls in parallel using Promise.all
+    const [goodTableAlerts, badTableAlerts] = await Promise.all([
+      populateDomTable("good-table", goodRows, appendMode),
+      populateDomTable("bad-table", badRows, appendMode),
+    ]);
+
+    // Flatten the returned arrays of alerts into a single array
+    const allAlerts = [...goodTableAlerts, ...badTableAlerts];
+
+    // Handle the alerts (e.g., log them, display them to the user, etc.)
+    if (allAlerts.length > 0) {
+      console.warn("Alerts generated during table population:", allAlerts);
+      // Add your alert handling logic here
+    }
+  } catch (error) {
+    console.error("Error populating tables:", error);
   }
-
-  // Get the state of the checkboxes
-  const checkboxes = document.querySelectorAll(
-    'input[name="column-group-checkbox"]'
-  );
-
-  r.forEach((row) => {
-    let alert = { isAlert: false, type: "warning", message: "" };
-
-    // Check if record has been archived or deleted
-    if (
-      row.file_state &&
-      (row.file_state === "ARCHIVED" || row.file_state === "DELETED")
-    ) {
-      // Skip row if deleted
-      if (row.file_state === "DELETED") {
-        console.error(
-          `[TIL] Recording for ${row.key} has been deleted... skipping row`
-        );
-        return;
-      }
-
-      if (row.file_state === "ARCHIVED") {
-        alert.isAlert = true;
-        alert.type = "warning";
-        alert.message = "This recording has been archived";
-      }
-    }
-
-    let tr = document.createElement("tr");
-
-    // Check if delete_date is within 30 days
-
-    if (row.delete_date && row.delete_date !== "-") {
-      let deleteDate = new Date(row.delete_date);
-      let currentDate = new Date();
-      let diffTime = deleteDate - currentDate;
-      let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-      if (diffDays <= applicationConfig.general.alertDays) {
-        alert.isAlert = true;
-        alert.type = "warning";
-        alert.message = "This recording will be deleted soon";
-      }
-    }
-
-    // Iterate over the datatable columns from the configuration
-    Object.keys(applicationConfig.datatable.parameters).forEach(
-      (parameterGroup) => {
-        Object.keys(
-          applicationConfig.datatable.parameters[parameterGroup]
-        ).forEach((parameterKey) => {
-          const parameter =
-            applicationConfig.datatable.parameters[parameterGroup][
-              parameterKey
-            ];
-
-          const keyFormat = parameter.format;
-
-          // Always display the "key" column
-          if (parameterKey === "key") {
-            let td = document.createElement("td");
-            td.setAttribute("data-group-name", parameterGroup);
-            td.setAttribute("data-column-name", parameterKey);
-
-            // Create a container for the ID and the warning icon
-            let container = document.createElement("div");
-            container.classList.add("id-warning-container");
-
-            // Create a link to the interaction details page
-            let region = sessionStorage.getItem("gc_region");
-            let a = document.createElement("a");
-            a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
-            a.target = "_blank";
-            a.appendChild(document.createTextNode(row[parameterKey] || ""));
-            a.classList.add("id-link");
-
-            // Append the link to the container first
-            container.appendChild(a);
-
-            // Add a warning icon if delete_date is within 30 days
-            if (alert.isAlert) {
-              console.warn(
-                `[TIL] Alert for conversation ID: ${row.key}`,
-                alert
-              );
-
-              // Add the warning icon and tooltip
-              addConversationIconTooltip(container, alert.type, alert.message);
-            }
-
-            // Append the container to the td element
-            td.appendChild(container);
-
-            tr.appendChild(td);
-          } else if (
-            parameterKey === "library_type" ||
-            parameterKey === "division_ids" ||
-            parameterKey === "queue_ids"
-          ) {
-            // Skip these columns
-            return;
-          } else {
-            // Find the corresponding checkbox for the parameterGroup
-            const checkbox = Array.from(checkboxes).find(
-              (cb) => cb.value === parameterGroup
-            );
-
-            // Create a td element for the column
-            let td = document.createElement("td");
-            td.setAttribute("data-group-name", parameterGroup);
-            td.setAttribute("data-column-name", parameterKey);
-
-            // Set the text content of the td element
-            let columnValue = String(row[parameterKey]);
-
-            // Format the column value based on the format type
-            if (keyFormat === "date" && columnValue !== "-") {
-              columnValue = new Date(columnValue).toLocaleDateString();
-            } else if (keyFormat === "datetime" && columnValue !== "-") {
-              columnValue = new Date(columnValue).toLocaleString();
-            } else if (keyFormat === "seconds" && columnValue !== "-") {
-              columnValue = (columnValue / 1000).toFixed(1) + "s";
-            } else if (keyFormat === "percentage" && columnValue !== "-") {
-              columnValue =
-                columnValue > 1
-                  ? (columnValue * 1).toFixed(1) + "%"
-                  : (columnValue * 100).toFixed(1) + "%";
-            }
-
-            // Format the column value based on the column name
-            if (parameterKey === "sentiment_trend_class") {
-              // Add a space between capital letters
-              columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
-            }
-
-            td.appendChild(document.createTextNode(columnValue || "!"));
-            if (checkbox && !checkbox.checked) {
-              td.classList.add("hidden-column");
-            }
-
-            tr.appendChild(td);
-          }
-        });
-      }
-    );
-
-    tbody.appendChild(tr);
-    rowCount++;
-  });
-
-  console.log(
-    `[TIL] Table ${t} populated with ${rowCount} of ${r.length} rows`
-  );
 }
+
 // Utility function to remove a table row
 export function removeDomTableRow(tableId, rowId) {
   let table = document.getElementById(tableId);
