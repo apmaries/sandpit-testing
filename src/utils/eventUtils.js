@@ -138,10 +138,6 @@ export async function enableDomTableCheckboxEventListeners() {
       const value = event.target.value;
       const tableId = event.target.getAttribute("data-table-id");
 
-      console.log(
-        `[TIL] Checkbox on ${tableId} with value ${value} is: ${checked}`
-      );
-
       if (checked) {
         showTableColumn(tableId, value);
       } else {

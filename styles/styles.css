@@ -11,10 +11,7 @@ gux-button {
   margin-right: auto;
 }
 
-.admin-hidden {
-  display: none;
-}
-
+/* DOM table rules */
 .horizontal-checkbox-group {
   display: flex;
   flex-direction: column;
@@ -31,10 +28,30 @@ gux-button {
 }
 
 .checkbox-container gux-form-field-checkbox {
-  margin-right: 10px; /* Adjust the spacing between checkboxes as needed */
+  margin-right: 10px;
 }
 
+.id-warning-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.id-link {
+  flex-grow: 1;
+}
+
+.warning-icon {
+  fill: #f8c73e;
+}
+
+/* End of DOM table rules */
+
 /* Management tools */
+.admin-hidden {
+  display: none;
+}
+
 .admin-visible {
   display: block;
 }

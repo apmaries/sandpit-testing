@@ -42,9 +42,8 @@ Single data table to store interaction details with a type field to flag with su
 1. Max interactions by category? Saves on search / refresh API call complexity
 1. Conversations that span across queues?
 
-## Questions / To Work Through
+## To do
 
-1. Should archived / deleted recordings still be listed (greyed out) or removed? Can retrieve archived recording but probably wouldn't want to as it's a limited number available... perhaps keep in datatable but not present in UI is best.
 1. Check behaviour for
    - transfers across divisions
 1. Any additional metrics?
@@ -57,6 +56,9 @@ Single data table to store interaction details with a type field to flag with su
      get
      /api/v2/authorization/divisionspermitted/paged/me
      Returns which divisions the current user has the given permission in.
+1. Add tags / comments to library table
+1. User favourites
+1. Move add / deletes directly to tables
 
 ## Completed
 
@@ -78,3 +80,6 @@ Single data table to store interaction details with a type field to flag with su
 1. Check behaviour for
    - digital interactions
    - transfers
+1. Add warnning icon & tooltip to library tables for
+   - soon to be deleted recordings (within next 30 days)
+   - archived recordings

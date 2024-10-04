@@ -333,7 +333,7 @@ export async function validateDatatable() {
 
     updateManagementToolsResponse(responseEle, "Datatable schema valid", true);
   } catch (error) {
-    console.error("[TIL] Error validating datatable schema - ", error);
+    console.error("[TIL] Error validating datatable schema", error);
     updateManagementToolsResponse(responseEle, error, false);
     return error;
   }
@@ -358,9 +358,12 @@ export async function migrateDatatable() {
     await makeDatatable(validationResponse);
     console.log("[TIL] Datatable migrated");
 
+    updateDatatableRow(responseEle, "Refreshing libraries", null);
+    await refreshLibraries();
+
     updateManagementToolsResponse(responseEle, "Datatable migrated", true);
   } catch (error) {
-    console.error("[TIL] Error migrating datatable - ", error);
+    console.error("[TIL] Error migrating datatable", error);
     updateManagementToolsResponse(responseEle, error.message || error, false);
   }
 }
