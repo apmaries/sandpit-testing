@@ -21,7 +21,7 @@ let applicationConfig = {
           format: "string",
         },
       },
-      conversation: {
+      library_metadata: {
         library_type: {
           name: "Library Type",
           dataType: "string",
@@ -29,52 +29,61 @@ let applicationConfig = {
           hidden: true,
           format: "string",
         },
+        tags: {
+          name: "Tags",
+          dataType: "string",
+          displayOrder: 2,
+          hidden: false,
+          format: "string",
+        },
+      },
+      conversation: {
         division_ids: {
           name: "Division ID",
           dataType: "string",
-          displayOrder: 2,
+          displayOrder: 3,
           hidden: true,
           format: "string",
         },
         division_names: {
           name: "Division Name",
           dataType: "string",
-          displayOrder: 3,
+          displayOrder: 4,
           hidden: false,
           format: "string",
         },
         start_date: {
           name: "Start Date",
           dataType: "string",
-          displayOrder: 4,
+          displayOrder: 5,
           hidden: false,
           format: "datetime",
         },
         end_date: {
           name: "End Date",
           dataType: "string",
-          displayOrder: 5,
+          displayOrder: 6,
           hidden: false,
           format: "datetime",
         },
         queue_ids: {
           name: "Queue ID",
           dataType: "string",
-          displayOrder: 6,
+          displayOrder: 7,
           hidden: true,
           format: "string",
         },
         queue_names: {
           name: "Queue Name",
           dataType: "string",
-          displayOrder: 7,
+          displayOrder: 8,
           hidden: false,
           format: "string",
         },
         media_type: {
           name: "Media Type",
           dataType: "string",
-          displayOrder: 8,
+          displayOrder: 9,
           hidden: false,
           format: "string",
         },
@@ -83,7 +92,7 @@ let applicationConfig = {
         total_talk_time: {
           name: "Total Talk Time (s)",
           dataType: "integer",
-          displayOrder: 9,
+          displayOrder: 10,
           hidden: false,
           format: "seconds",
         },
@@ -92,14 +101,14 @@ let applicationConfig = {
         evluation_total_score: {
           name: "Average Evaluation Score",
           dataType: "integer",
-          displayOrder: 10,
+          displayOrder: 11,
           hidden: false,
           format: "percentage",
         },
         evluation_total_critical_score: {
           name: "Average Evaluation Critical Score",
           dataType: "integer",
-          displayOrder: 11,
+          displayOrder: 12,
           hidden: false,
           format: "percentage",
         },
@@ -108,21 +117,21 @@ let applicationConfig = {
         sentiment_score: {
           name: "Sentiment Score",
           dataType: "number",
-          displayOrder: 12,
+          displayOrder: 13,
           hidden: false,
           format: "percentage",
         },
         sentiment_trend_class: {
           name: "Sentiment Trend",
           dataType: "string",
-          displayOrder: 13,
+          displayOrder: 14,
           hidden: false,
           format: "string",
         },
         empathy_score: {
           name: "Empathy Score",
           dataType: "number",
-          displayOrder: 14,
+          displayOrder: 15,
           hidden: false,
           format: "number",
         },
@@ -131,14 +140,14 @@ let applicationConfig = {
         survey_total_score: {
           name: "Survey Total Score",
           dataType: "integer",
-          displayOrder: 15,
+          displayOrder: 16,
           hidden: false,
           format: "percentage",
         },
         survey_promoter_score: {
           name: "Survey Promoter Score",
           dataType: "integer",
-          displayOrder: 16,
+          displayOrder: 17,
           hidden: false,
           format: "integer",
         },
@@ -147,21 +156,21 @@ let applicationConfig = {
         file_state: {
           name: "File State",
           dataType: "string",
-          displayOrder: 17,
+          displayOrder: 18,
           hidden: false,
           format: "string",
         },
         archive_date: {
           name: "Archive Date",
           dataType: "string",
-          displayOrder: 18,
+          displayOrder: 19,
           hidden: false,
           format: "date",
         },
         delete_date: {
           name: "Delete Date",
           dataType: "string",
-          displayOrder: 19,
+          displayOrder: 20,
           hidden: false,
           format: "date",
         },
@@ -178,6 +187,7 @@ let applicationConfig = {
     success:
       "M8 16C12.4187 16 16 12.4187 16 8C16 3.58125 12.4187 0 8 0C3.58125 0 0 3.58125 0 8C0 12.4187 3.58125 16 8 16ZM11.5312 6.53125L7.53125 10.5312C7.2375 10.825 6.7625 10.825 6.47188 10.5312L4.47188 8.53125C4.17813 8.2375 4.17813 7.7625 4.47188 7.47188C4.76563 7.18125 5.24062 7.17813 5.53125 7.47188L7 8.94063L10.4688 5.46875C10.7625 5.175 11.2375 5.175 11.5281 5.46875C11.8187 5.7625 11.8219 6.2375 11.5281 6.52812L11.5312 6.53125Z",
   },
+  tags: [],
   // Add more configuration options as needed
 };
 

@@ -1,21 +1,21 @@
 {
-  "id": "f3061d52-bedc-4443-b211-98012ce549fe",
-  "name": "TIL Datatable (new-1727654676297)",
+  "id": "578f09af-95da-4a2b-ab90-7abcb281a4c8",
+  "name": "TIL - tags",
   "division": {
-    "id": "6ed1b336-d322-47b9-94b7-95f1ebe373f6",
-    "name": "Home",
-    "selfUri": "/api/v2/authorization/divisions/6ed1b336-d322-47b9-94b7-95f1ebe373f6"
+    "id": "1c328efb-fcf3-4ac3-b5c2-987ff3c92afa",
+    "name": "Bluth Company",
+    "selfUri": "/api/v2/authorization/divisions/1c328efb-fcf3-4ac3-b5c2-987ff3c92afa"
   },
   "schema": {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "title": "TIL Datatable (new-1727654676297)",
+    "title": "TIL - tags",
     "type": "object",
     "required": ["key"],
     "properties": {
       "key": {
         "title": "conversation_id",
         "type": "string",
-        "$id": "/properties/conversation_id",
+        "$id": "/properties/key",
         "displayOrder": 0,
         "maxLength": 256,
         "minLength": 1
@@ -25,6 +25,16 @@
         "type": "string",
         "$id": "/properties/library_type",
         "displayOrder": 1,
+        "default": "-",
+        "maxLength": 256,
+        "minLength": 1
+      },
+      "tags": {
+        "title": "tags",
+        "type": "string",
+        "$id": "/properties/tags",
+        "displayOrder": 2,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -32,7 +42,8 @@
         "title": "division_ids",
         "type": "string",
         "$id": "/properties/division_ids",
-        "displayOrder": 2,
+        "displayOrder": 3,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -40,7 +51,8 @@
         "title": "division_names",
         "type": "string",
         "$id": "/properties/division_names",
-        "displayOrder": 3,
+        "displayOrder": 4,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -48,7 +60,8 @@
         "title": "start_date",
         "type": "string",
         "$id": "/properties/start_date",
-        "displayOrder": 4,
+        "displayOrder": 5,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -56,7 +69,8 @@
         "title": "end_date",
         "type": "string",
         "$id": "/properties/end_date",
-        "displayOrder": 5,
+        "displayOrder": 6,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -64,7 +78,8 @@
         "title": "queue_ids",
         "type": "string",
         "$id": "/properties/queue_ids",
-        "displayOrder": 6,
+        "displayOrder": 7,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -72,7 +87,8 @@
         "title": "queue_names",
         "type": "string",
         "$id": "/properties/queue_names",
-        "displayOrder": 7,
+        "displayOrder": 8,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -80,7 +96,8 @@
         "title": "media_type",
         "type": "string",
         "$id": "/properties/media_type",
-        "displayOrder": 8,
+        "displayOrder": 9,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -88,7 +105,7 @@
         "title": "total_talk_time",
         "type": "integer",
         "$id": "/properties/total_talk_time",
-        "displayOrder": 9,
+        "displayOrder": 10,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
@@ -96,7 +113,7 @@
         "title": "evluation_total_score",
         "type": "integer",
         "$id": "/properties/evluation_total_score",
-        "displayOrder": 10,
+        "displayOrder": 11,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
@@ -104,7 +121,7 @@
         "title": "evluation_total_critical_score",
         "type": "integer",
         "$id": "/properties/evluation_total_critical_score",
-        "displayOrder": 11,
+        "displayOrder": 12,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
@@ -112,7 +129,7 @@
         "title": "sentiment_score",
         "type": "number",
         "$id": "/properties/sentiment_score",
-        "displayOrder": 12,
+        "displayOrder": 13,
         "default": 0,
         "maximum": 9e39,
         "minimum": -9e39
@@ -121,7 +138,8 @@
         "title": "sentiment_trend_class",
         "type": "string",
         "$id": "/properties/sentiment_trend_class",
-        "displayOrder": 13,
+        "displayOrder": 14,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -129,7 +147,7 @@
         "title": "empathy_score",
         "type": "number",
         "$id": "/properties/empathy_score",
-        "displayOrder": 14,
+        "displayOrder": 15,
         "default": 0,
         "maximum": 9e39,
         "minimum": -9e39
@@ -138,7 +156,7 @@
         "title": "survey_total_score",
         "type": "integer",
         "$id": "/properties/survey_total_score",
-        "displayOrder": 15,
+        "displayOrder": 16,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
@@ -146,7 +164,7 @@
         "title": "survey_promoter_score",
         "type": "integer",
         "$id": "/properties/survey_promoter_score",
-        "displayOrder": 16,
+        "displayOrder": 17,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
@@ -154,7 +172,8 @@
         "title": "file_state",
         "type": "string",
         "$id": "/properties/file_state",
-        "displayOrder": 17,
+        "displayOrder": 18,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -162,7 +181,8 @@
         "title": "archive_date",
         "type": "string",
         "$id": "/properties/archive_date",
-        "displayOrder": 18,
+        "displayOrder": 19,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       },
@@ -170,13 +190,14 @@
         "title": "delete_date",
         "type": "string",
         "$id": "/properties/delete_date",
-        "displayOrder": 19,
+        "displayOrder": 20,
+        "default": "-",
         "maxLength": 256,
         "minLength": 1
       }
     },
     "additionalProperties": false,
-    "datatableId": "f3061d52-bedc-4443-b211-98012ce549fe"
+    "datatableId": "578f09af-95da-4a2b-ab90-7abcb281a4c8"
   },
-  "selfUri": "/api/v2/flows/datatables/f3061d52-bedc-4443-b211-98012ce549fe"
+  "selfUri": "/api/v2/flows/datatables/578f09af-95da-4a2b-ab90-7abcb281a4c8"
 }

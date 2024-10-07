@@ -2,6 +2,7 @@
   "entities": [
     {
       "end_date": "-",
+      "tags": "tag1|||tag2",
       "queue_names": "-",
       "evluation_total_critical_score": 0,
       "sentiment_score": 0,
@@ -24,6 +25,7 @@
     },
     {
       "end_date": "-",
+      "tags": "-",
       "queue_names": "-",
       "evluation_total_critical_score": 0,
       "sentiment_score": 0,

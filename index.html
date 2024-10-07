@@ -236,6 +236,123 @@
             <div id="management-tools-div">
               <div class="tools-div">
                 <h2>Library Tools</h2>
+                <div id="add-to-library" class="management-tools-container">
+                  <h3>Add to Interactions Library</h3>
+                  <p>Modify library by conversation id</p>
+                  <div id="modify-library-div" class="admin-action-div">
+                    <div id="modify-library-actions">
+                      <div id="modify-library-actions-radios">
+                        <div class="dual-radios">
+                          <gux-form-field-radio-group-beta>
+                            <h4 slot="group-label">Select Library</h4>
+                            <div class="radio-container">
+                              <gux-form-field-radio>
+                                <input
+                                  slot="input"
+                                  type="radio"
+                                  name="library-radio"
+                                  value="good"
+                                  checked
+                                />
+                                <label slot="label">Good</label>
+                              </gux-form-field-radio>
+                              <gux-form-field-radio>
+                                <input
+                                  slot="input"
+                                  type="radio"
+                                  name="library-radio"
+                                  value="bad"
+                                />
+                                <label slot="label">Bad</label>
+                              </gux-form-field-radio>
+                            </div>
+                          </gux-form-field-radio-group-beta>
+                          <gux-form-field-radio-group-beta>
+                            <h4 slot="group-label">Select Action</h4>
+                            <div class="radio-container">
+                              <gux-form-field-radio>
+                                <input
+                                  slot="input"
+                                  type="radio"
+                                  name="action-radio"
+                                  value="add"
+                                  checked
+                                />
+                                <label slot="label">Add</label>
+                              </gux-form-field-radio>
+                              <gux-form-field-radio>
+                                <input
+                                  slot="input"
+                                  type="radio"
+                                  name="action-radio"
+                                  value="delete"
+                                />
+                                <label slot="label">Delete</label>
+                              </gux-form-field-radio>
+                            </div>
+                          </gux-form-field-radio-group-beta>
+                        </div>
+                      </div>
+
+                      <div id="modify-library-actions-interactions">
+                        <h4>Enter Interaction ID</h4>
+                        <gux-form-field-text-like
+                          label-position="screenreader"
+                          class="conversation-input"
+                        >
+                          <label slot="label">Enter Interaction ID</label>
+                          <input
+                            id="modify-library-interaction-id"
+                            slot="input"
+                            type="text"
+                            placeholder="Enter interaction id"
+                          />
+                        </gux-form-field-text-like>
+                      </div>
+
+                      <div
+                        id="modify-library-actions-tags"
+                        class="tag-container"
+                      >
+                        <div class="tags-input-container">
+                          <h4>Enter tags</h4>
+                          <gux-form-field-text-like
+                            label-position="screenreader"
+                            class="tags-input"
+                          >
+                            <label slot="label">Enter tags</label>
+                            <input
+                              id="autocomplete-tags-input"
+                              slot="input"
+                              type="text"
+                              placeholder="Enter tags"
+                              class="tag-input"
+                              list="suggestions"
+                              disabled
+                            />
+                          </gux-form-field-text-like>
+                        </div>
+                        <datalist id="suggestions"></datalist>
+                        <div class="tags-list"></div>
+                      </div>
+                      <gux-button
+                        name="management-tools-button"
+                        id="refresh-libraries-btn"
+                        accent="primary"
+                        management-button="true"
+                        function-to-run="modifyLibraryHandler"
+                      >
+                        Modify library
+                      </gux-button>
+                    </div>
+                    <div
+                      id="modify-library-response"
+                      class="response-container"
+                    ></div>
+                  </div>
+                </div>
+
+                <!-- 
                 <div
                   id="modify-good-library"
                   class="management-tools-container"
@@ -246,7 +363,7 @@
                     <div class="admin-buttons-div">
                       <gux-form-field-text-like
                         label-position="screenreader"
-                        class="conversation-id-input"
+                        class="management-tools-input"
                       >
                         <label slot="label">Screenreader</label>
                         <input
@@ -282,7 +399,7 @@
                     <div class="admin-buttons-div">
                       <gux-form-field-text-like
                         label-position="screenreader"
-                        class="conversation-id-input"
+                        class="management-tools-input"
                       >
                         <label slot="label">Screenreader</label>
                         <input
@@ -310,6 +427,7 @@
                     ></div>
                   </div>
                 </div>
+                -->
 
                 <div class="management-tools-container">
                   <h3>Refresh Libraries</h3>

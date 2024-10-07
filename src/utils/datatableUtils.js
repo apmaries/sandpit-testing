@@ -54,7 +54,9 @@ export async function generateDatatableSchema() {
     if (field.dataType === "string") {
       properties[key].maxLength = 256;
       properties[key].minLength = 1;
-      properties[key].default = "-";
+      if (key !== "key") {
+        properties[key].default = "-";
+      }
     } else if (field.dataType === "integer") {
       properties[key].maximum = 999999999999999;
       properties[key].minimum = -999999999999999;
@@ -139,7 +141,7 @@ export async function validateDatatableSchema() {
     if (!currentSchema[key]) {
       response.errors.toAdd.push({
         title: key,
-        dataType: expectedSchema[key].type,
+        dataType: expectedSchema[key].dataType,
       });
     }
   }

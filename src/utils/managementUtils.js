@@ -25,6 +25,7 @@ import {
   removeDomTableRow,
   updateManagementToolsResponse,
 } from "./domUtils.js";
+import { selectedTags } from "./eventUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -84,12 +85,10 @@ async function checkConversationInLibrary(inputValue, library) {
 }
 
 // Function to handle add to library button click event
-export async function addToLibraryHandler(library, inputValue) {
+async function addToLibraryHandler(library, inputValue, tags) {
   console.info(`[TIL] Adding ${inputValue} to ${library} library`);
   const datatableId = sessionStorage.getItem("gc_datatable");
-  const responseEle = document.getElementById(
-    `modify-${library}-library-response`
-  );
+  const responseEle = document.getElementById("modify-library-response");
   updateManagementToolsResponse(responseEle, "Processing...", null);
 
   // Check if conversation is already in library
@@ -149,12 +148,10 @@ export async function addToLibraryHandler(library, inputValue) {
 }
 
 // Function to handle delete from library button click event
-export async function deleteFromLibraryHandler(library, inputValue) {
+async function deleteFromLibraryHandler(library, inputValue) {
   console.info(`[TIL] Deleting ${inputValue} from ${library} library`);
   const datatableId = sessionStorage.getItem("gc_datatable");
-  const responseEle = document.getElementById(
-    `modify-${library}-library-response`
-  );
+  const responseEle = document.getElementById("modify-library-response");
   updateManagementToolsResponse(responseEle, "Processing...", null);
 
   try {
@@ -201,6 +198,42 @@ export async function deleteFromLibraryHandler(library, inputValue) {
     console.error("[TIL] Error deleting from library - ", error);
     updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
+  }
+}
+
+// Function to handle library modification button click event
+export async function modifyLibraryHandler() {
+  console.info("[TIL] Modifying library");
+
+  // Get library, action, conversation id and tags list
+  const library = document.querySelector(
+    'input[name="library-radio"]:checked'
+  ).value;
+  const action = document.querySelector(
+    'input[name="action-radio"]:checked'
+  ).value;
+  const inputValue = document.getElementById(
+    "modify-library-interaction-id"
+  ).value;
+  const tagsInput = selectedTags;
+
+  let tags;
+  if (tagsInput.length === 0) {
+    tags = "-";
+  } else {
+    tags = tagsInput.join("|||");
+  }
+
+  console.log("[TIL] Library:", library);
+  console.log("[TIL] Action:", action);
+  console.log("[TIL] Conversation ID:", inputValue);
+  console.log("[TIL] Tags:", tags);
+
+  if (action === "add") {
+    await addToLibraryHandler(library, inputValue, tags);
+  }
+  if (action === "delete") {
+    await deleteFromLibraryHandler(library, inputValue);
   }
 }
 

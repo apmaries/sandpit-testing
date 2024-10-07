@@ -23,7 +23,6 @@ import {
   populateTablesAndHandleAlerts,
 } from "./utils/domUtils.js";
 import {
-  enableActionButtonEventListeners,
   enableDomTableCheckboxEventListeners,
   enableManagementToolsEventListeners,
 } from "./utils/eventUtils.js";
@@ -169,7 +168,6 @@ async function runApp() {
       });
 
       // Enable admin features
-      await enableActionButtonEventListeners();
       await enableManagementToolsEventListeners();
 
       console.log("[TIL] Admin features enabled");

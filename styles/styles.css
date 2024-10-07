@@ -82,7 +82,7 @@ gux-button {
 
 .management-tools-container {
   width: 450px;
-  height: 180px;
+  /* height: 180px; */
   margin: 20px;
   padding: 10px;
   border: 1px solid #ccc;
@@ -100,13 +100,18 @@ gux-button {
   margin-top: auto; /* Pushes the div to the bottom */
 }
 
-.conversation-id-input {
-  width: 65%;
+.conversation--input {
+  width: 100%;
 }
 
 .admin-buttons-div {
   display: flex;
   align-items: center;
+}
+
+.dual-radios {
+  display: flex;
+  gap: 24px; /* Add gap between buttons */
 }
 
 .dual-buttons {
@@ -146,6 +151,62 @@ gux-action-button[management-button="true"] {
   width: 20px; /* Set a fixed width for the SVG */
   height: 20px; /* Set a fixed height for the SVG */
   margin-left: auto; /* Push the SVG to the right */
+}
+
+#modify-library-actions > div {
+  padding: 5px;
+  margin: 5px 0;
+  /* border: rgb(42, 96, 200) 1px solid; */
+}
+
+#modify-library-actions > div h4 {
+  margin: 0;
+}
+
+.tag-container {
+  display: flex;
+}
+
+.tags-input-container {
+  display: flex;
+  flex-direction: column;
+  width: 35%;
+  flex: 1;
+}
+
+.tags-list {
+  width: 65%;
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 10px;
+  align-items: end; /* Center tags to bottom */
+  margin-bottom: 14px;
+}
+
+.tag {
+  background-color: #e0e0e0;
+  border-radius: 3px;
+  padding: 5px;
+  margin: 2px;
+  display: flex;
+  align-items: center; /* Center content within each tag */
+}
+
+.tag span {
+  margin-right: 5px;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.tag-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  align-items: center;
 }
 
 /* End of Management tools */

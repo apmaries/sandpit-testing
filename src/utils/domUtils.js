@@ -54,8 +54,8 @@ function populateDomTable(t, r, a) {
     let rowCount = 0;
     let adminAlerts = [];
 
+    // Clear the table if append mode is false
     if (!a) {
-      // Clear the table if append mode is false
       tbody.innerHTML = "";
     }
 
@@ -63,6 +63,15 @@ function populateDomTable(t, r, a) {
     const checkboxes = document.querySelectorAll(
       'input[name="column-group-checkbox"]'
     );
+
+    // Build the tags array
+    let tags = [];
+    r.forEach((row) => {
+      if (row.tags) {
+        tags = tags.concat(row.tags.split("|||"));
+      }
+    });
+    populateTagsArray(tags);
 
     r.forEach((row) => {
       let adminAlert;
@@ -191,6 +200,12 @@ function populateDomTable(t, r, a) {
               }
 
               // Format the column value based on the column name
+              if (parameterKey === "tags") {
+                // Add a space between triple pipe delimiters
+                let tags = columnValue.split("|||");
+                columnValue = tags.join(", ");
+              }
+
               if (parameterKey === "sentiment_trend_class") {
                 // Add a space between capital letters
                 columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
@@ -217,6 +232,17 @@ function populateDomTable(t, r, a) {
 
     resolve(adminAlerts); // Resolve the promise with the alerts array
   });
+}
+
+// Function to populate tags array
+function populateTagsArray(tags) {
+  console.log("[TIL] Populating tags array");
+
+  // Ignore "-" and "" values
+  tags = tags.filter((tag) => tag !== "-" && tag !== "");
+
+  // Populate applicationConfig.tags with tags (ignore duplicates)
+  applicationConfig.tags = Array.from(new Set(tags));
 }
 
 // Utility function to create the table
@@ -257,7 +283,11 @@ export function makeDomTables() {
         th.textContent = column.name;
 
         // Apply hidden-column class to all groups except "conversation" and "key"
-        if (column.groupName !== "conversation" && column.groupName !== "key") {
+        if (
+          column.groupName !== "conversation" &&
+          column.groupName !== "key" &&
+          column.name !== "Tags"
+        ) {
           th.classList.add("hidden-column");
         }
 
