@@ -201,24 +201,30 @@ function populateDomTable(t, r, a) {
 
               // Format the column value based on the column name
               if (parameterKey === "tags") {
-                // Separate tags
-                let tags = columnValue.split("|||");
-                // Create a container with the .tags-list class
-                let tagsContainer = document.createElement("div");
-                tagsContainer.classList.add("tags-list-table");
+                // Ignore "-"
+                if (columnValue !== "-") {
+                  // Separate tags
+                  let tags = columnValue.split("|||");
+                  // Create a container with the .tags-list class
+                  let tagsContainer = document.createElement("div");
+                  tagsContainer.classList.add("tags-list-table");
 
-                // Create a span for each tag with the .tag class
-                tags.forEach((tag) => {
-                  let tagSpan = document.createElement("span");
-                  tagSpan.classList.add("tag");
-                  tagSpan.textContent = tag;
-                  tagsContainer.appendChild(tagSpan);
-                });
+                  // Create a span for each tag with the .tag class
+                  tags.forEach((tag) => {
+                    let tagSpan = document.createElement("span");
+                    tagSpan.classList.add("tag");
+                    tagSpan.textContent = tag;
+                    tagsContainer.appendChild(tagSpan);
+                  });
 
-                // Clear the existing content of the table cell
-                td.innerHTML = "";
-                // Append the tags container to the table cell
-                td.appendChild(tagsContainer);
+                  // Clear the existing content of the table cell
+                  td.innerHTML = "";
+                  // Append the tags container to the table cell
+                  td.appendChild(tagsContainer);
+                } else {
+                  // Set the text content to "-"
+                  td.textContent = "-";
+                }
               } else {
                 // For other parameter keys, set the text content directly
                 if (parameterKey === "sentiment_trend_class") {
