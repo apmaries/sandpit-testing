@@ -49,16 +49,18 @@ let gc_region = url.searchParams.get("gc_region");
 let gc_client = url.searchParams.get("gc_client");
 let gc_integration = url.searchParams.get("gc_integration");
 let gc_datatable = url.searchParams.get("gc_datatable");
-let til_adminsGroupId = url.searchParams.get("til_adminsGroupId");
-let til_adminsIds = url.searchParams.get("til_adminsIds");
+let til_LibraryAdminsGroupId = url.searchParams.get("til_library_admins_group");
+let til_integrationAdmins = url.searchParams.get("til_integration_admins");
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region = gc_region || sessionStorage.getItem("gc_region");
 gc_client = gc_client || sessionStorage.getItem("gc_clientId");
 gc_datatable = gc_datatable || sessionStorage.getItem("gc_datatable");
-til_adminsGroupId =
-  til_adminsGroupId || sessionStorage.getItem("til_adminsGroupId");
-til_adminsIds = til_adminsIds || sessionStorage.getItem("til_adminsIds");
+til_LibraryAdminsGroupId =
+  til_LibraryAdminsGroupId ||
+  sessionStorage.getItem("til_LibraryAdminsGroupId");
+til_integrationAdmins =
+  til_integrationAdmins || sessionStorage.getItem("til_integration_admins");
 
 // Setting the values in sessionStorage if they are provided
 if (redirect_url) sessionStorage.setItem("redirect_url", redirect_url);
@@ -66,9 +68,10 @@ if (gc_region) sessionStorage.setItem("gc_region", gc_region);
 if (gc_client) sessionStorage.setItem("gc_client", gc_client);
 if (gc_integration) sessionStorage.setItem("gc_integration", gc_integration);
 if (gc_datatable) sessionStorage.setItem("gc_datatable", gc_datatable);
-if (til_adminsGroupId)
-  sessionStorage.setItem("til_adminsGroupId", til_adminsGroupId);
-if (til_adminsIds) sessionStorage.setItem("til_adminsIds", til_adminsIds);
+if (til_LibraryAdminsGroupId)
+  sessionStorage.setItem("til_LibraryAdminsGroupId", til_LibraryAdminsGroupId);
+if (til_integrationAdmins)
+  sessionStorage.setItem("til_integration_admins", til_integrationAdmins);
 
 export async function startApp() {
   console.log("[TIL] Starting application");

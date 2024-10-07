@@ -17,7 +17,7 @@ Single data table to store interaction details with a type field to flag with su
    - speech-and-text-analytics:readonly (STA data source for silence / overtalk etc.)
    - user-basic-info
 1. Create Groups (must be an 'official' group type)
-   1. TIL Admins (can edit interactions in library and perform management tasks) \*optional
+   1. TIL Library Admins (can edit interactions in library and perform management tasks) \*optional
    1. TIL Users (can view / open only)
 1. Data table
    1. Create a datatable
@@ -28,13 +28,20 @@ Single data table to store interaction details with a type field to flag with su
    1. Note the datatable id (can be retrieved from the URL e.g. https://apps.region/directory/#/admin/routing/datatables/0c91184a-93b9-4e8b-ae10-xxxxxxxxxxxx)
 1. Configure Integration
    1. URL
-      - Syntax = <url>?<gc_region>&<gc_client>&<gc_integration>[&<gc_datatable>][&<til_admins_group_id> : <til_admins_ids>]
-      - If no datatable id provided, app will create one
-      - Supports either using a group for admins or comma separated list of admin ids (not mutually exclusive)
+      - Syntax = <url>?<gc_region>&<gc_client>&<gc_integration>[&<gc_datatable>]&<til_library_admins_group>&<til_integration_admins>
+      - gc_region\* = Genesys Cloud region (e.g. usw2.pure.cloud, mypurecloud.com)
+      - gc_client\* = OAuth client id
+      - gc_integration\* = Integration id for this app
+      - gc_datatable = Data table id to use for this app
+        - If no data table id provided, app will create one
+        - If data table fields do not match expected columns, app will create a new data table and migrate rows automatically
+        - 'til_integration_admins' users can validate and migrate data table in app
+      - til_library_admins_group = Group ID for users that can add and delete conversations in library
+      - til_integration_admins = Comma separated string of user ids that can perform updates to datatable and integration from within app
    1. Add to Iframe Sandbox Options
       - allow-downloads
       - allow-popups
-   1. Assign TIL Admins / TIL Users groups
+   1. Assign TIL Library Admins / TIL Users groups
 
 ## Limits
 
