@@ -146,32 +146,25 @@ async function runApp() {
     const appUser = await getUser();
     document.getElementById("welcome-div").innerText =
       "Welcome, " + appUser.name + "!";
-    //applicationConfig.integration = integrationConfig;
-
     console.log("[TIL] Application config:", applicationConfig);
 
-    // Check if datatable is null
-    if (!gc_datatable) {
-      console.warn("[TIL] Datatable is not set. Creating new datatable");
+    const admin = applicationConfig.mode.admin.isAdmin;
+    const adminType = applicationConfig.mode.admin.type;
 
-      // Create datatable
-      await makeDatatable();
-    } else {
-      // Validate datatable schema
-      const validationResponse = await validateDatatableSchema();
-      if (!validationResponse.valid) {
-        console.log("[TIL] Migrating to new datatable");
-
-        // Migrate datatable
+    // Validate datatable schema
+    const validationResponse = await validateDatatableSchema();
+    if (!validationResponse.valid) {
+      console.log("[TIL] Datatable schema is invalid");
+      if (admin && adminType === "integration") {
+        console.log("[TIL] Creating new datatable");
         await makeDatatable(validationResponse);
+      } else {
+        console.warn("[TIL] User does not have permission to create datatable");
+        // Placeholder for handling datatable schema validation failure via notification
       }
     }
 
-    const admin = applicationConfig.mode.admin.isAdmin;
-    let adminType = applicationConfig.mode.admin.type;
-
     if (admin) {
-      adminType = applicationConfig.mode.admin.type;
       console.log(`[TIL] ${appUser.name} is ${adminType} admin`);
     } else {
       console.log(`[TIL] ${appUser.name} is a user`);
@@ -179,37 +172,7 @@ async function runApp() {
 
     // Enable admin features if user is an admin
     if (admin) {
-      // Find all elements with the 'admin-hidden' class
-      const libraryAdminHiddenElements = document.querySelectorAll(
-        ".library-admin-hidden"
-      );
-      const integrationAdminHiddenElements = document.querySelectorAll(
-        ".integration-admin-hidden"
-      );
-
-      if (adminType === "library") {
-        // Update each element to replace 'library-admin-hidden' with 'library-admin-visible'
-        libraryAdminHiddenElements.forEach((element) => {
-          element.classList.remove("library-admin-hidden");
-          element.classList.add("library-admin-visible");
-        });
-      }
-      if (adminType === "integration") {
-        // Update each element to replace 'integration-admin-hidden' with 'integration-admin-visible'
-        integrationAdminHiddenElements.forEach((element) => {
-          element.classList.remove("integration-admin-hidden");
-          element.classList.add("integration-admin-visible");
-        });
-        // Update each element to replace 'library-admin-hidden' with 'library-admin-visible'
-        libraryAdminHiddenElements.forEach((element) => {
-          element.classList.remove("library-admin-hidden");
-          element.classList.add("library-admin-visible");
-        });
-      }
-
-      // Enable admin features
-      await enableManagementToolsEventListeners();
-
+      enableAdminFeatures(adminType);
       console.log("[TIL] Admin features enabled");
     } else {
       console.log("[TIL] User is not admin");
@@ -222,11 +185,38 @@ async function runApp() {
 
     // Populate the table with data
     let rows = await getDatatableRows(false);
-
     await populateTablesAndHandleAlerts(rows, false);
   } catch (error) {
     console.error("[TIL] An error occurred:", error);
-    // Stop the application if either getIntegration or getUser fails
-    return;
+  } finally {
+    // Ensure management tools are displayed and initialized
+    await enableManagementToolsEventListeners();
+  }
+}
+
+// Helper function to enable admin features
+function enableAdminFeatures(adminType) {
+  const libraryAdminHiddenElements = document.querySelectorAll(
+    ".library-admin-hidden"
+  );
+  const integrationAdminHiddenElements = document.querySelectorAll(
+    ".integration-admin-hidden"
+  );
+
+  if (adminType === "library") {
+    libraryAdminHiddenElements.forEach((element) => {
+      element.classList.remove("library-admin-hidden");
+      element.classList.add("library-admin-visible");
+    });
+  }
+  if (adminType === "integration") {
+    integrationAdminHiddenElements.forEach((element) => {
+      element.classList.remove("integration-admin-hidden");
+      element.classList.add("integration-admin-visible");
+    });
+    libraryAdminHiddenElements.forEach((element) => {
+      element.classList.remove("library-admin-hidden");
+      element.classList.add("library-admin-visible");
+    });
   }
 }

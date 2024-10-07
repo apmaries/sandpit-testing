@@ -83,6 +83,15 @@ Single data table to store interaction details with a type field to flag with su
    - recording state change
 1. User favourites
 1. Move add / deletes directly to tables
+1. Add soft delete
+   - Add status field to datatable
+   - Add deleted accordian to table tabs
+   - Add additional DOM tables
+   - Update populate function to add deleted conversations to deleted table
+   - Update modify library function:
+     - Delete changes status to deleted
+     - Adding a soft deleted conversation changes status back to active
+   - Add purge function to integration admin tools
 
 ## Completed
 
