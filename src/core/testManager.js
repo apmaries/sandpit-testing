@@ -36,6 +36,7 @@ export async function initializeTestMode() {
     datatableRowsUrl: "../test/datatable_rows.json",
     divisionsUrl: "../test/divisions.json",
     integrationCurrentUrl: "../test/integration_current.json",
+    permittedDivisionsUrl: "../test/permitted_divisions.json",
     recordingUrl: "../test/conversation_recording.json",
     staUrl: "../test/conversation_sta.json",
     userUrl: "../test/user.json",
@@ -47,6 +48,7 @@ export async function initializeTestMode() {
   const conversationsPromise = fetchData(testData.conversationsUrl);
   const divisionsPromise = fetchData(testData.divisionsUrl);
   const integrationCurrentPromise = fetchData(testData.integrationCurrentUrl);
+  const permittedDivisionsPromise = fetchData(testData.permittedDivisionsUrl);
   const recordingPromise = fetchData(testData.recordingUrl);
   const staPromise = fetchData(testData.staUrl);
   const usersPromise = fetchData(testData.userUrl);
@@ -88,6 +90,9 @@ export async function initializeTestMode() {
   t_usersApi = {
     getUsersMe: function () {
       return usersPromise;
+    },
+    getAuthorizationDivisionspermittedPagedMe: function () {
+      return permittedDivisionsPromise;
     },
   };
 }

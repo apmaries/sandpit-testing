@@ -100,7 +100,7 @@ export async function processConversations(conversationIds) {
     }));
 
     // Extract IDs and names into separate arrays
-    let queueIds = conversationQueues.map((queue) => queue.id).join(",");
+    let queueIds = conversationQueues.map((queue) => queue.id).join("|||");
     let queueNames = conversationQueues.map((queue) => queue.name).join(",");
 
     // Get media types
@@ -250,7 +250,7 @@ export async function processConversations(conversationIds) {
         .join(",");
       let divisionNames = conversationDivisions
         .map((division) => division.name)
-        .join(",");
+        .join("|||");
 
       console.log(`[TIL] ${shortId} - Processing complete`);
 

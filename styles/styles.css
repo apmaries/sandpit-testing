@@ -41,15 +41,37 @@ gux-button {
   flex-grow: 1;
 }
 
+.unpermitted-id-link {
+  color: inherit; /* Ensure color remains the same */
+  flex-grow: 1;
+}
+
+.unpermitted-id-link:hover,
+.unpermitted-id-link:focus,
+.unpermitted-id-link:active {
+  text-decoration: none; /* Ensure no underline on hover, focus, or active */
+  color: inherit; /* Ensure color remains the same on hover, focus, or active */
+  cursor: default; /* Ensure cursor remains default */
+}
+
+.icon-tooltip-container {
+  display: flex;
+  align-items: center;
+}
+
 .warning-icon {
   fill: #f8c73e;
+}
+
+.error-icon {
+  fill: #e22245;
 }
 
 .tags-list-table {
   width: 65%;
   display: flex;
   flex-wrap: wrap;
-  margin-left: 10px;
+  margin-left: 5px;
   align-items: end; /* Center tags to bottom */
 }
 
@@ -180,15 +202,20 @@ gux-action-button[management-button="true"] {
   flex-direction: column;
   width: 35%;
   flex: 1;
+  margin-bottom: 20px;
 }
 
 .tags-list {
+  border: #3e4a5b 1px solid;
+  background-color: #f9f9f9;
   width: 65%;
   display: flex;
   flex-wrap: wrap;
-  margin-left: 10px;
-  align-items: end; /* Center tags to bottom */
-  margin-bottom: 12px;
+  margin: 0 0 0 10px;
+  align-items: center; /* Center tags to center */
+  padding-left: 12px;
+  box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.13),
+    inset -2px -2px 5px rgba(255, 255, 255, 0.5);
 }
 
 .tag {
@@ -197,8 +224,8 @@ gux-action-button[management-button="true"] {
   font-size: 1em !important;
   font-weight: bolder;
   border-radius: 3px;
-  padding: 5px 7px;
-  margin: 5px 7px;
+  padding: 0px 5px;
+  margin-right: 15px;
   display: flex;
   align-items: center; /* Center content within each tag */
   position: relative; /* Required for the ::before pseudo-element */
@@ -210,8 +237,8 @@ gux-action-button[management-button="true"] {
   left: -9px; /* Adjust as needed to position the triangle */
   width: 0;
   height: 0;
-  border-top: 15px solid transparent; /* Adjust the size of the triangle */
-  border-bottom: 15px solid transparent; /* Adjust the size of the triangle */
+  border-top: 10px solid transparent; /* Adjust the size of the triangle */
+  border-bottom: 10px solid transparent; /* Adjust the size of the triangle */
   border-right: 10px solid #3e4a5b; /* Match the background color of the tag */
 }
 

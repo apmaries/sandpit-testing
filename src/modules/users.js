@@ -14,6 +14,7 @@ import { t_usersApi } from "../core/testManager.js";
 ("use strict");
 const testMode = applicationConfig.mode.isTest;
 
+// Get user
 export async function getUser() {
   console.log("[TIL] Getting user");
   let user;
@@ -57,5 +58,43 @@ export async function getUser() {
     console.error("[TIL] Error checking if user is admin", error);
   }
 
+  await getPermittedDivisions();
   return user;
+}
+
+// Get permitted divisions
+async function getPermittedDivisions() {
+  console.log("[TIL] Getting permitted divisions");
+  let divisions = [];
+
+  let permission = "analytics:conversationdetail:view";
+  let opts = {
+    "pageNumber": 1, // Number | Page number
+    "pageSize": 500, // Number | Page size
+  };
+
+  try {
+    if (testMode) {
+      // Get divisions using test API
+      let t_response =
+        await t_usersApi.getAuthorizationDivisionspermittedPagedMe();
+      divisions = t_response.entities;
+    } else {
+      let response = await usersApi.getAuthorizationDivisionspermittedPagedMe(
+        permission,
+        opts
+      );
+      divisions = response.entities;
+    }
+  } catch (error) {
+    throw error;
+  }
+
+  console.debug("[TIL] Permitted divisions returned", divisions);
+
+  // Map to save only division id and name to applicationConfig
+  applicationConfig.permittedDivisions = divisions.map((division) => ({
+    id: division.id,
+    name: division.name,
+  }));
 }

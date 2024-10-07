@@ -35,15 +35,19 @@ function addConversationIconTooltip(container, alert) {
   icon.classList.add(`${alert.type}-icon`);
 
   // Create the gux-tooltip element
+  let iconContainer = document.createElement("div");
+  iconContainer.classList.add("icon-tooltip-container");
   let tooltip = document.createElement("gux-tooltip");
   tooltip.textContent = alert.message;
   tooltip.setAttribute("placement", "right");
 
   // Append the warning icon to the container
-  container.appendChild(icon);
+  iconContainer.appendChild(icon);
 
   // Append the tooltip to the container
-  container.appendChild(tooltip);
+  iconContainer.appendChild(tooltip);
+
+  container.appendChild(iconContainer);
 }
 
 // Helper function to populate the table with data
@@ -74,7 +78,8 @@ function populateDomTable(t, r, a) {
     populateTagsArray(tags);
 
     r.forEach((row) => {
-      let adminAlert;
+      let permitted = true;
+      let rowAlerts = [];
 
       // Check if record has been archived or deleted
       if (
@@ -94,13 +99,9 @@ function populateDomTable(t, r, a) {
             type: "warning",
             message: "This recording has been archived",
           };
-          let conversation = { id: row.key, library: row.library_type };
-          adminAlert = { alert, conversation };
-          adminAlerts.push(adminAlert);
+          rowAlerts.push(alert);
         }
       }
-
-      let tr = document.createElement("tr");
 
       // Check if delete_date is within 30 days
       if (row.delete_date && row.delete_date !== "-") {
@@ -114,11 +115,45 @@ function populateDomTable(t, r, a) {
             type: "warning",
             message: "This recording will be deleted soon",
           };
-          let conversation = { id: row.key, library: row.library_type };
-          adminAlert = { alert, conversation };
-          adminAlerts.push(adminAlert);
+          rowAlerts.push(alert);
         }
       }
+
+      // Check if user is permitted to conversation division(s)
+      if (row.division_ids && row.division_ids !== "-") {
+        let permittedDivisionIds = applicationConfig.permittedDivisions.map(
+          (div) => div.id
+        );
+        console.warn("[TIL] Permitted divisions", permittedDivisionIds);
+        let divisionIds = row.division_ids.split("|||");
+
+        divisionIds.forEach((divisionId) => {
+          if (!permittedDivisionIds.includes(divisionId)) {
+            let alert = {
+              type: "error",
+              message: "User is not permitted to view this conversation",
+            };
+            rowAlerts.push(alert);
+            permitted = false;
+          }
+        });
+      }
+
+      // Add alerts to adminAlerts
+      if (rowAlerts.length > 0) {
+        let conversation = { id: row.key, library: row.library_type };
+        let existingAlert = adminAlerts.find(
+          (alert) => alert.conversation.id === conversation.id
+        );
+
+        if (existingAlert) {
+          existingAlert.rowAlerts.push(...rowAlerts);
+        } else {
+          adminAlerts.push({ rowAlerts, conversation });
+        }
+      }
+
+      let tr = document.createElement("tr");
 
       // Iterate over the datatable columns from the configuration
       Object.keys(applicationConfig.datatable.parameters).forEach(
@@ -144,20 +179,29 @@ function populateDomTable(t, r, a) {
               container.classList.add("id-warning-container");
 
               // Create a link to the interaction details page
-              let region = sessionStorage.getItem("gc_region");
-              let a = document.createElement("a");
-              a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
-              a.target = "_blank";
-              a.appendChild(document.createTextNode(row[parameterKey] || ""));
-              a.classList.add("id-link");
+              if (!permitted) {
+                let a = document.createElement("a");
+                a.href = "#";
+                a.appendChild(document.createTextNode(row[parameterKey] || ""));
+                a.classList.add("unpermitted-id-link");
+                container.appendChild(a);
+              } else {
+                let region = sessionStorage.getItem("gc_region");
+                let a = document.createElement("a");
+                a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
+                a.target = "_blank";
+                a.appendChild(document.createTextNode(row[parameterKey] || ""));
+                a.classList.add("id-link");
 
-              // Append the link to the container first
-              container.appendChild(a);
+                // Append the link to the container first
+                container.appendChild(a);
+              }
 
               // Add a warning icon if delete_date is within 30 days
-              if (adminAlert) {
-                // Add the warning icon and tooltip
-                addConversationIconTooltip(container, adminAlert.alert);
+              if (rowAlerts.length > 0) {
+                rowAlerts.forEach((alert) => {
+                  addConversationIconTooltip(container, alert);
+                });
               }
 
               // Append the container to the td element
