@@ -263,8 +263,12 @@ function populateTagsArray(tags) {
   // Ignore "-" and "" values
   tags = tags.filter((tag) => tag !== "-" && tag !== "");
 
-  // Populate applicationConfig.tags with tags (ignore duplicates)
-  applicationConfig.tags = Array.from(new Set(tags));
+  // Merge existing tags with new tags and remove duplicates
+  const existingTags = applicationConfig.tags || [];
+  const mergedTags = Array.from(new Set([...existingTags, ...tags]));
+
+  // Populate applicationConfig.tags with merged tags
+  applicationConfig.tags = mergedTags;
 }
 
 // Utility function to create the table

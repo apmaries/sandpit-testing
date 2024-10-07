@@ -58,10 +58,8 @@ Single data table to store interaction details with a type field to flag with su
      get
      /api/v2/authorization/divisionspermitted/paged/me
      Returns which divisions the current user has the given permission in.
-1. Make tag formatting in tables better!
 1. User favourites
 1. Move add / deletes directly to tables
-1. Update tag event listeners - some functions don't run
 
 ## Completed
 
@@ -87,3 +85,5 @@ Single data table to store interaction details with a type field to flag with su
    - soon to be deleted recordings (within next 30 days)
    - archived recordings
 1. Add tags / comments to library table
+1. Update tag event listeners - some functions don't run
+1. Make tag formatting in tables better!

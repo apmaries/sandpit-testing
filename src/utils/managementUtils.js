@@ -277,6 +277,7 @@ export async function refreshLibraries() {
       if (conversationRow) {
         const flattenedConversation = flattenConversation(conversationRow);
         flattenedConversation.library_type = row.library_type;
+        flattenedConversation.tags = row.tags;
         console.debug("[TIL] Matched conversation", flattenedConversation);
         response.refreshedConversations.push(flattenedConversation);
       } else {
