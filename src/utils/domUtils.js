@@ -50,253 +50,252 @@ function addConversationIconTooltip(container, alert) {
   container.appendChild(iconContainer);
 }
 
-// Helper function to populate the table with data
+// Helper function to clear the table
+function clearTable(tbody, appendMode) {
+  if (!appendMode) {
+    tbody.innerHTML = "";
+  }
+}
+
+// Helper function to get the state of checkboxes
+function getCheckboxes() {
+  return document.querySelectorAll('input[name="column-group-checkbox"]');
+}
+
+// Helper function to build the tags array
+function buildTagsArray(rows) {
+  let tags = [];
+  rows.forEach((row) => {
+    if (row.tags) {
+      tags = tags.concat(row.tags.split("|||"));
+    }
+  });
+  populateTagsArray(tags);
+}
+
+// Helper function to process a single row
+function processRow(row, adminAlerts) {
+  let permitted = true;
+  let rowAlerts = [];
+
+  // Check if record has been archived or deleted
+  if (
+    row.file_state &&
+    (row.file_state === "ARCHIVED" || row.file_state === "DELETED")
+  ) {
+    if (row.file_state === "DELETED") {
+      console.error(
+        `[TIL] Recording for ${row.key} has been deleted... skipping row`
+      );
+      return null;
+    }
+    if (row.file_state === "ARCHIVED") {
+      rowAlerts.push({
+        type: "warning",
+        message: "This recording has been archived",
+      });
+    }
+  }
+
+  // Check if delete_date is within 30 days
+  if (row.delete_date && row.delete_date !== "-") {
+    let deleteDate = new Date(row.delete_date);
+    let currentDate = new Date();
+    let diffTime = deleteDate - currentDate;
+    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= applicationConfig.general.alertDays) {
+      rowAlerts.push({
+        type: "warning",
+        message: "This recording will be deleted soon",
+      });
+    }
+  }
+
+  // Check if user is permitted to conversation division(s)
+  if (row.division_ids && row.division_ids !== "-") {
+    let permittedDivisionIds = applicationConfig.permittedDivisions.map(
+      (div) => div.id
+    );
+
+    let divisionIds = row.division_ids.split("|||");
+    divisionIds.forEach((divisionId) => {
+      if (!permittedDivisionIds.includes(divisionId)) {
+        rowAlerts.push({
+          type: "error",
+          message: "User is not permitted to view this conversation",
+        });
+        permitted = false;
+      }
+    });
+  }
+
+  // Add alerts to adminAlerts
+  if (rowAlerts.length > 0) {
+    let conversation = { id: row.key, library: row.library_type };
+    let existingAlert = adminAlerts.find(
+      (alert) => alert.conversation.id === conversation.id
+    );
+    if (existingAlert) {
+      existingAlert.rowAlerts.push(...rowAlerts);
+    } else {
+      adminAlerts.push({ rowAlerts, conversation });
+    }
+  }
+
+  return { row, permitted, rowAlerts };
+}
+
+// Helper function to create table row
+function createTableRow(row, permitted, rowAlerts, checkboxes) {
+  let tr = document.createElement("tr");
+
+  Object.keys(applicationConfig.datatable.parameters).forEach(
+    (parameterGroup) => {
+      Object.keys(
+        applicationConfig.datatable.parameters[parameterGroup]
+      ).forEach((parameterKey) => {
+        const parameter =
+          applicationConfig.datatable.parameters[parameterGroup][parameterKey];
+        const keyFormat = parameter.format;
+
+        if (parameterKey === "key") {
+          let td = document.createElement("td");
+          td.setAttribute("data-group-name", parameterGroup);
+          td.setAttribute("data-column-name", parameterKey);
+
+          let container = document.createElement("div");
+          container.classList.add("id-warning-container");
+
+          if (!permitted) {
+            let a = document.createElement("a");
+            a.href = "#";
+            a.appendChild(document.createTextNode(row[parameterKey] || ""));
+            a.classList.add("unpermitted-id-link");
+            container.appendChild(a);
+          } else {
+            let region = sessionStorage.getItem("gc_region");
+            let a = document.createElement("a");
+            a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
+            a.target = "_blank";
+            a.appendChild(document.createTextNode(row[parameterKey] || ""));
+            a.classList.add("id-link");
+            container.appendChild(a);
+          }
+
+          if (rowAlerts.length > 0) {
+            rowAlerts.forEach((alert) => {
+              addConversationIconTooltip(container, alert);
+            });
+          }
+
+          td.appendChild(container);
+          tr.appendChild(td);
+        } else if (
+          parameterKey === "library_type" ||
+          parameterKey === "division_ids" ||
+          parameterKey === "queue_ids"
+        ) {
+          return;
+        } else {
+          const checkbox = Array.from(checkboxes).find(
+            (cb) => cb.value === parameterGroup
+          );
+          let td = document.createElement("td");
+          td.setAttribute("data-group-name", parameterGroup);
+          td.setAttribute("data-column-name", parameterKey);
+
+          let columnValue = String(row[parameterKey]);
+
+          if (keyFormat === "date" && columnValue !== "-") {
+            columnValue = new Date(columnValue).toLocaleDateString();
+          } else if (keyFormat === "datetime" && columnValue !== "-") {
+            columnValue = new Date(columnValue).toLocaleString();
+          } else if (keyFormat === "seconds" && columnValue !== "-") {
+            columnValue = (columnValue / 1000).toFixed(1) + "s";
+          } else if (keyFormat === "percentage" && columnValue !== "-") {
+            columnValue =
+              columnValue > 1
+                ? (columnValue * 1).toFixed(1) + "%"
+                : (columnValue * 100).toFixed(1) + "%";
+          }
+
+          if (parameterKey === "tags") {
+            if (columnValue !== "-") {
+              let tags = columnValue.split("|||");
+              let tagsContainer = document.createElement("div");
+              tagsContainer.classList.add("tags-list-table");
+              tags.forEach((tag) => {
+                let tagSpan = document.createElement("span");
+                tagSpan.classList.add("tag");
+                tagSpan.textContent = tag;
+                tagsContainer.appendChild(tagSpan);
+              });
+              td.innerHTML = "";
+              td.appendChild(tagsContainer);
+            } else {
+              td.textContent = "-";
+            }
+          } else {
+            if (parameterKey === "sentiment_trend_class") {
+              columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
+            }
+            td.textContent = columnValue || "!";
+          }
+
+          if (checkbox && !checkbox.checked) {
+            td.classList.add("hidden-column");
+          }
+
+          tr.appendChild(td);
+        }
+      });
+    }
+  );
+
+  return tr;
+}
+
+// Main function to populate the table with data
 function populateDomTable(t, r, a) {
   return new Promise((resolve, reject) => {
     let table = document.getElementById(t);
     let tbody = table.getElementsByTagName("tbody")[0];
-    let rowCount = 0;
     let adminAlerts = [];
 
-    // Clear the table if append mode is false
-    if (!a) {
-      tbody.innerHTML = "";
-    }
+    clearTable(tbody, a);
+    const checkboxes = getCheckboxes();
+    buildTagsArray(r);
 
-    // Get the state of the checkboxes
-    const checkboxes = document.querySelectorAll(
-      'input[name="column-group-checkbox"]'
-    );
-
-    // Build the tags array
-    let tags = [];
-    r.forEach((row) => {
-      if (row.tags) {
-        tags = tags.concat(row.tags.split("|||"));
-      }
-    });
-    populateTagsArray(tags);
-
-    r.forEach((row) => {
-      let permitted = true;
-      let rowAlerts = [];
-
-      // Check if record has been archived or deleted
-      if (
-        row.file_state &&
-        (row.file_state === "ARCHIVED" || row.file_state === "DELETED")
-      ) {
-        // Skip row if deleted
-        if (row.file_state === "DELETED") {
-          console.error(
-            `[TIL] Recording for ${row.key} has been deleted... skipping row`
+    let rowPromises = r.map((row) => {
+      return new Promise((resolve) => {
+        let result = processRow(row, adminAlerts);
+        if (result) {
+          let tr = createTableRow(
+            result.row,
+            result.permitted,
+            result.rowAlerts,
+            checkboxes
           );
-          return;
-        }
-
-        if (row.file_state === "ARCHIVED") {
-          let alert = {
-            type: "warning",
-            message: "This recording has been archived",
-          };
-          rowAlerts.push(alert);
-        }
-      }
-
-      // Check if delete_date is within 30 days
-      if (row.delete_date && row.delete_date !== "-") {
-        let deleteDate = new Date(row.delete_date);
-        let currentDate = new Date();
-        let diffTime = deleteDate - currentDate;
-        let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-        if (diffDays <= applicationConfig.general.alertDays) {
-          let alert = {
-            type: "warning",
-            message: "This recording will be deleted soon",
-          };
-          rowAlerts.push(alert);
-        }
-      }
-
-      // Check if user is permitted to conversation division(s)
-      if (row.division_ids && row.division_ids !== "-") {
-        let permittedDivisionIds = applicationConfig.permittedDivisions.map(
-          (div) => div.id
-        );
-        console.warn("[TIL] Permitted divisions", permittedDivisionIds);
-        let divisionIds = row.division_ids.split("|||");
-
-        divisionIds.forEach((divisionId) => {
-          if (!permittedDivisionIds.includes(divisionId)) {
-            let alert = {
-              type: "error",
-              message: "User is not permitted to view this conversation",
-            };
-            rowAlerts.push(alert);
-            permitted = false;
-          }
-        });
-      }
-
-      // Add alerts to adminAlerts
-      if (rowAlerts.length > 0) {
-        let conversation = { id: row.key, library: row.library_type };
-        let existingAlert = adminAlerts.find(
-          (alert) => alert.conversation.id === conversation.id
-        );
-
-        if (existingAlert) {
-          existingAlert.rowAlerts.push(...rowAlerts);
+          resolve(tr);
         } else {
-          adminAlerts.push({ rowAlerts, conversation });
+          resolve(null);
         }
-      }
-
-      let tr = document.createElement("tr");
-
-      // Iterate over the datatable columns from the configuration
-      Object.keys(applicationConfig.datatable.parameters).forEach(
-        (parameterGroup) => {
-          Object.keys(
-            applicationConfig.datatable.parameters[parameterGroup]
-          ).forEach((parameterKey) => {
-            const parameter =
-              applicationConfig.datatable.parameters[parameterGroup][
-                parameterKey
-              ];
-
-            const keyFormat = parameter.format;
-
-            // Always display the "key" column
-            if (parameterKey === "key") {
-              let td = document.createElement("td");
-              td.setAttribute("data-group-name", parameterGroup);
-              td.setAttribute("data-column-name", parameterKey);
-
-              // Create a container for the ID and the warning icon
-              let container = document.createElement("div");
-              container.classList.add("id-warning-container");
-
-              // Create a link to the interaction details page
-              if (!permitted) {
-                let a = document.createElement("a");
-                a.href = "#";
-                a.appendChild(document.createTextNode(row[parameterKey] || ""));
-                a.classList.add("unpermitted-id-link");
-                container.appendChild(a);
-              } else {
-                let region = sessionStorage.getItem("gc_region");
-                let a = document.createElement("a");
-                a.href = `https://apps.${region}/directory/#/analytics/interactions/${row.key}/admin/details`;
-                a.target = "_blank";
-                a.appendChild(document.createTextNode(row[parameterKey] || ""));
-                a.classList.add("id-link");
-
-                // Append the link to the container first
-                container.appendChild(a);
-              }
-
-              // Add a warning icon if delete_date is within 30 days
-              if (rowAlerts.length > 0) {
-                rowAlerts.forEach((alert) => {
-                  addConversationIconTooltip(container, alert);
-                });
-              }
-
-              // Append the container to the td element
-              td.appendChild(container);
-
-              tr.appendChild(td);
-            } else if (
-              parameterKey === "library_type" ||
-              parameterKey === "division_ids" ||
-              parameterKey === "queue_ids"
-            ) {
-              // Skip these columns
-              return;
-            } else {
-              // Find the corresponding checkbox for the parameterGroup
-              const checkbox = Array.from(checkboxes).find(
-                (cb) => cb.value === parameterGroup
-              );
-
-              // Create a td element for the column
-              let td = document.createElement("td");
-              td.setAttribute("data-group-name", parameterGroup);
-              td.setAttribute("data-column-name", parameterKey);
-
-              // Set the text content of the td element
-              let columnValue = String(row[parameterKey]);
-
-              // Format the column value based on the format type
-              if (keyFormat === "date" && columnValue !== "-") {
-                columnValue = new Date(columnValue).toLocaleDateString();
-              } else if (keyFormat === "datetime" && columnValue !== "-") {
-                columnValue = new Date(columnValue).toLocaleString();
-              } else if (keyFormat === "seconds" && columnValue !== "-") {
-                columnValue = (columnValue / 1000).toFixed(1) + "s";
-              } else if (keyFormat === "percentage" && columnValue !== "-") {
-                columnValue =
-                  columnValue > 1
-                    ? (columnValue * 1).toFixed(1) + "%"
-                    : (columnValue * 100).toFixed(1) + "%";
-              }
-
-              // Format the column value based on the column name
-              if (parameterKey === "tags") {
-                // Ignore "-"
-                if (columnValue !== "-") {
-                  // Separate tags
-                  let tags = columnValue.split("|||");
-                  // Create a container with the .tags-list class
-                  let tagsContainer = document.createElement("div");
-                  tagsContainer.classList.add("tags-list-table");
-
-                  // Create a span for each tag with the .tag class
-                  tags.forEach((tag) => {
-                    let tagSpan = document.createElement("span");
-                    tagSpan.classList.add("tag");
-                    tagSpan.textContent = tag;
-                    tagsContainer.appendChild(tagSpan);
-                  });
-
-                  // Clear the existing content of the table cell
-                  td.innerHTML = "";
-                  // Append the tags container to the table cell
-                  td.appendChild(tagsContainer);
-                } else {
-                  // Set the text content to "-"
-                  td.textContent = "-";
-                }
-              } else {
-                // For other parameter keys, set the text content directly
-                if (parameterKey === "sentiment_trend_class") {
-                  // Add a space between capital letters
-                  columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
-                }
-                td.textContent = columnValue || "!";
-              }
-
-              if (checkbox && !checkbox.checked) {
-                td.classList.add("hidden-column");
-              }
-
-              tr.appendChild(td);
-            }
-          });
-        }
-      );
-
-      tbody.appendChild(tr);
-      rowCount++;
+      });
     });
 
-    console.log(
-      `[TIL] Table ${t} populated with ${rowCount} of ${r.length} rows`
-    );
-
-    resolve(adminAlerts); // Resolve the promise with the alerts array
+    Promise.all(rowPromises).then((rows) => {
+      rows.forEach((tr) => {
+        if (tr) {
+          tbody.appendChild(tr);
+        }
+      });
+      console.log(
+        `[TIL] Table ${t} populated with ${rows.filter((tr) => tr).length} of ${
+          r.length
+        } rows`
+      );
+      resolve(adminAlerts);
+    });
   });
 }
 
