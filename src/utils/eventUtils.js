@@ -137,7 +137,7 @@ function initializeTagsInput() {
 function addTag(tag) {
   if (!selectedTags.includes(tag) && tag.trim() !== "") {
     selectedTags.push(tag);
-    const tagsList = document.querySelector(".tags-list");
+    const tagsList = document.getElementById("tags-list-div");
     const tagElement = document.createElement("div");
     tagElement.className = "tag";
     tagElement.innerHTML = `<span>${tag}</span><button>&times;</button>`;

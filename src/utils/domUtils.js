@@ -201,17 +201,33 @@ function populateDomTable(t, r, a) {
 
               // Format the column value based on the column name
               if (parameterKey === "tags") {
-                // Add a space between triple pipe delimiters
+                // Separate tags
                 let tags = columnValue.split("|||");
-                columnValue = tags.join(", ");
+                // Create a container with the .tags-list class
+                let tagsContainer = document.createElement("div");
+                tagsContainer.classList.add("tags-list-table");
+
+                // Create a span for each tag with the .tag class
+                tags.forEach((tag) => {
+                  let tagSpan = document.createElement("span");
+                  tagSpan.classList.add("tag");
+                  tagSpan.textContent = tag;
+                  tagsContainer.appendChild(tagSpan);
+                });
+
+                // Clear the existing content of the table cell
+                td.innerHTML = "";
+                // Append the tags container to the table cell
+                td.appendChild(tagsContainer);
+              } else {
+                // For other parameter keys, set the text content directly
+                if (parameterKey === "sentiment_trend_class") {
+                  // Add a space between capital letters
+                  columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
+                }
+                td.textContent = columnValue || "!";
               }
 
-              if (parameterKey === "sentiment_trend_class") {
-                // Add a space between capital letters
-                columnValue = columnValue.replace(/([A-Z])/g, " $1").trim();
-              }
-
-              td.appendChild(document.createTextNode(columnValue || "!"));
               if (checkbox && !checkbox.checked) {
                 td.classList.add("hidden-column");
               }
@@ -390,11 +406,21 @@ export async function populateTablesAndHandleAlerts(rows, appendMode) {
   let badRows = rows.filter((row) => row.library_type === "bad");
 
   try {
-    // Run populateDomTable calls in parallel using Promise.all
-    const [goodTableAlerts, badTableAlerts] = await Promise.all([
-      populateDomTable("good-table", goodRows, appendMode),
-      populateDomTable("bad-table", badRows, appendMode),
-    ]);
+    // Initialize arrays for alerts
+    let goodTableAlerts = [];
+    let badTableAlerts = [];
+
+    // Conditionally populate tables
+    if (goodRows.length > 0) {
+      goodTableAlerts = await populateDomTable(
+        "good-table",
+        goodRows,
+        appendMode
+      );
+    }
+    if (badRows.length > 0) {
+      badTableAlerts = await populateDomTable("bad-table", badRows, appendMode);
+    }
 
     // Flatten the returned arrays of alerts into a single array
     const allAlerts = [...goodTableAlerts, ...badTableAlerts];

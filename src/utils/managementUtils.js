@@ -121,8 +121,9 @@ async function addToLibraryHandler(library, inputValue, tags) {
 
   const flattenedConversation = flattenConversation(conversation);
 
-  // Add library to flattened conversation
+  // Add library and tags to flattened conversation
   flattenedConversation.library_type = library;
+  flattenedConversation.tags = tags;
 
   console.debug("[TIL] Row prepped for import", flattenedConversation);
 
@@ -141,7 +142,7 @@ async function addToLibraryHandler(library, inputValue, tags) {
     );
     console.info("[TIL] Added to library");
   } catch (error) {
-    console.error("[TIL] Error adding to library - ", error);
+    console.error("[TIL] Error adding to library!", error);
     updateManagementToolsResponse(responseEle, error.message || error, false);
     return error;
   }
