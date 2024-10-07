@@ -52,12 +52,6 @@ Single data table to store interaction details with a type field to flag with su
 1. Notifications
    - datatable schema broken / corrupted
    - recording state change
-1. Check if logged in user has permissions below permissions per division listed in table rows
-   - Analytics > Agent Conversation Detail OR
-   - Analytics > Conversation Detail > View
-     get
-     /api/v2/authorization/divisionspermitted/paged/me
-     Returns which divisions the current user has the given permission in.
 1. User favourites
 1. Move add / deletes directly to tables
 
@@ -87,3 +81,4 @@ Single data table to store interaction details with a type field to flag with su
 1. Add tags / comments to library table
 1. Update tag event listeners - some functions don't run
 1. Make tag formatting in tables better!
+1. Check if logged in user has permissions below permissions per division listed in table rows
