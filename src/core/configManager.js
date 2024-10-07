@@ -3,7 +3,7 @@
 
 let applicationConfig = {
   mode: {
-    isAdmin: false,
+    admin: { isAdmin: false },
     isTest: window.location.protocol !== "https:",
   },
   general: {

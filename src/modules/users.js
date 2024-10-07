@@ -38,22 +38,35 @@ export async function getUser() {
   console.debug("[TIL] User returned", user);
 
   // Check if user is an admin
-  let isAdmin;
+  let admin = { isAdmin: false };
 
   try {
-    const adminsIds = sessionStorage.getItem("til_adminsIds");
-    const adminsGroup = sessionStorage.getItem("til_adminsGroupId");
+    const integrationAdminsGroup = sessionStorage.getItem(
+      "til_integrationAdmins"
+    );
+    const libraryAdminsGroup = sessionStorage.getItem(
+      "til_libraryAdminsGroupId"
+    );
+    const integrationAdminIds = sessionStorage.getItem(
+      "til_integrationAdminsIds"
+    );
 
+    // Check if user is an admin
     if (
-      adminsIds.includes(user.id) ||
-      user.groups.some((group) => group.id === adminsGroup)
+      (integrationAdminIds && integrationAdminIds.includes(user.id)) ||
+      user.groups.includes(integrationAdminsGroup)
     ) {
-      isAdmin = true;
-    } else {
-      isAdmin = false;
+      admin.isAdmin = true;
+      admin.type = "integration";
     }
-    console.log("[TIL] User is admin: ", isAdmin);
-    applicationConfig.mode.isAdmin = isAdmin;
+
+    if (libraryAdminsGroup && user.groups.includes(libraryAdminsGroup)) {
+      admin.isAdmin = true;
+      admin.type = "library";
+    }
+
+    console.log("[TIL] User is admin: ", admin);
+    applicationConfig.mode.admin = admin;
   } catch (error) {
     console.error("[TIL] Error checking if user is admin", error);
   }

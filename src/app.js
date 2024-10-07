@@ -50,7 +50,12 @@ let gc_client = url.searchParams.get("gc_client");
 let gc_integration = url.searchParams.get("gc_integration");
 let gc_datatable = url.searchParams.get("gc_datatable");
 let til_LibraryAdminsGroupId = url.searchParams.get("til_library_admins_group");
-let til_integrationAdmins = url.searchParams.get("til_integration_admins");
+let til_integrationAdminsGroupId = url.searchParams.get(
+  "til_integration_admins_group"
+);
+let til_integrationAdminsIds = url.searchParams.get(
+  "til_integration_admins_ids"
+);
 
 // Getting and setting the GC details from dynamic URL and session storage
 gc_region = gc_region || sessionStorage.getItem("gc_region");
@@ -58,9 +63,13 @@ gc_client = gc_client || sessionStorage.getItem("gc_clientId");
 gc_datatable = gc_datatable || sessionStorage.getItem("gc_datatable");
 til_LibraryAdminsGroupId =
   til_LibraryAdminsGroupId ||
-  sessionStorage.getItem("til_LibraryAdminsGroupId");
-til_integrationAdmins =
-  til_integrationAdmins || sessionStorage.getItem("til_integration_admins");
+  sessionStorage.getItem("til_libraryAdminsGroupId");
+til_integrationAdminsGroupId =
+  til_integrationAdminsGroupId ||
+  sessionStorage.getItem("til_integrationAdminsGroupId");
+til_integrationAdminsIds =
+  til_integrationAdminsIds ||
+  sessionStorage.getItem("til_integrationAdminsIds");
 
 // Setting the values in sessionStorage if they are provided
 if (redirect_url) sessionStorage.setItem("redirect_url", redirect_url);
@@ -70,8 +79,14 @@ if (gc_integration) sessionStorage.setItem("gc_integration", gc_integration);
 if (gc_datatable) sessionStorage.setItem("gc_datatable", gc_datatable);
 if (til_LibraryAdminsGroupId)
   sessionStorage.setItem("til_LibraryAdminsGroupId", til_LibraryAdminsGroupId);
-if (til_integrationAdmins)
-  sessionStorage.setItem("til_integration_admins", til_integrationAdmins);
+if (til_integrationAdminsGroupId)
+  sessionStorage.setItem(
+    "til_integrationAdminsGroupId",
+    til_integrationAdminsGroupId
+  );
+if (til_integrationAdminsIds) {
+  sessionStorage.setItem("til_integrationAdminsIds", til_integrationAdminsIds);
+}
 
 export async function startApp() {
   console.log("[TIL] Starting application");
@@ -127,16 +142,11 @@ async function runApp() {
   console.log("[TIL] Application started");
 
   try {
-    // Run getIntegration and getUser in parallel
-    const [integrationConfig, appUser] = await Promise.all([
-      getIntegration(),
-      getUser(),
-    ]);
-
-    // Use the results
+    // Get and welcome user
+    const appUser = await getUser();
     document.getElementById("welcome-div").innerText =
       "Welcome, " + appUser.name + "!";
-    applicationConfig.integration = integrationConfig;
+    //applicationConfig.integration = integrationConfig;
 
     console.log("[TIL] Application config:", applicationConfig);
 
@@ -157,18 +167,45 @@ async function runApp() {
       }
     }
 
-    const isAdmin = applicationConfig.mode.isAdmin;
+    const admin = applicationConfig.mode.admin.isAdmin;
+    let adminType = applicationConfig.mode.admin.type;
+
+    if (admin) {
+      adminType = applicationConfig.mode.admin.type;
+      console.log(`[TIL] ${appUser.name} is ${adminType} admin`);
+    } else {
+      console.log(`[TIL] ${appUser.name} is a user`);
+    }
 
     // Enable admin features if user is an admin
-    if (isAdmin) {
+    if (admin) {
       // Find all elements with the 'admin-hidden' class
-      const adminHiddenElements = document.querySelectorAll(".admin-hidden");
+      const libraryAdminHiddenElements = document.querySelectorAll(
+        ".library-admin-hidden"
+      );
+      const integrationAdminHiddenElements = document.querySelectorAll(
+        ".integration-admin-hidden"
+      );
 
-      // Update each element to replace 'admin-hidden' with 'admin-visible'
-      adminHiddenElements.forEach((element) => {
-        element.classList.remove("admin-hidden");
-        element.classList.add("admin-visible");
-      });
+      if (adminType === "library") {
+        // Update each element to replace 'library-admin-hidden' with 'library-admin-visible'
+        libraryAdminHiddenElements.forEach((element) => {
+          element.classList.remove("library-admin-hidden");
+          element.classList.add("library-admin-visible");
+        });
+      }
+      if (adminType === "integration") {
+        // Update each element to replace 'integration-admin-hidden' with 'integration-admin-visible'
+        integrationAdminHiddenElements.forEach((element) => {
+          element.classList.remove("integration-admin-hidden");
+          element.classList.add("integration-admin-visible");
+        });
+        // Update each element to replace 'library-admin-hidden' with 'library-admin-visible'
+        libraryAdminHiddenElements.forEach((element) => {
+          element.classList.remove("library-admin-hidden");
+          element.classList.add("library-admin-visible");
+        });
+      }
 
       // Enable admin features
       await enableManagementToolsEventListeners();

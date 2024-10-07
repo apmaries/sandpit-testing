@@ -78,11 +78,19 @@ gux-button {
 /* End of DOM table rules */
 
 /* Management tools */
-.admin-hidden {
+.library-admin-hidden {
   display: none;
 }
 
-.admin-visible {
+.library-admin-visible {
+  display: block;
+}
+
+.integration-admin-hidden {
+  display: none;
+}
+
+.integration-admin-visible {
   display: block;
 }
 
