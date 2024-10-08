@@ -152,7 +152,7 @@ let applicationConfig = {
           format: "percentage",
         },
         survey_promoter_score: {
-          name: "Survey Promoter Score",
+          name: "Net Promoter Score",
           dataType: "integer",
           displayOrder: 18,
           hidden: false,

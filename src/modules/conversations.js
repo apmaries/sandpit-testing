@@ -157,19 +157,24 @@ export async function processConversations(conversationIds) {
     }
 
     // Iterate through surveys and average oSurveyTotalScore and surveyPromoterScore values
-    let surveyPromoterScore;
-    let oSurveyTotalScore;
-    if (conversationSurveys) {
-      let totalPromoterScore = 0;
+    let surveyPromoterScore = 0;
+    let oSurveyTotalScore = 0;
+
+    if (conversationSurveys && conversationSurveys.length > 0) {
       let totalSurveyScore = 0;
-      let promoterScoreCount = 0;
       let surveyScoreCount = 0;
 
+      let promoterCount = 0;
+      let detractorCount = 0;
+      let totalResponses = conversationSurveys.length;
+
       conversationSurveys.forEach((survey) => {
-        console.log(survey);
         if (survey.surveyPromoterScore !== undefined) {
-          totalPromoterScore += survey.surveyPromoterScore;
-          promoterScoreCount++;
+          if (survey.surveyPromoterScore >= 9) {
+            promoterCount++;
+          } else if (survey.surveyPromoterScore <= 6) {
+            detractorCount++;
+          }
         }
         if (survey.oSurveyTotalScore !== undefined) {
           totalSurveyScore += survey.oSurveyTotalScore;
@@ -178,7 +183,8 @@ export async function processConversations(conversationIds) {
       });
 
       surveyPromoterScore =
-        promoterScoreCount > 0 ? totalPromoterScore / promoterScoreCount : 0;
+        ((promoterCount - detractorCount) / (promoterCount + detractorCount)) *
+        100;
       oSurveyTotalScore =
         surveyScoreCount > 0 ? totalSurveyScore / surveyScoreCount : 0;
     }
@@ -196,14 +202,12 @@ export async function processConversations(conversationIds) {
         total_talk_time: totalTalkTime ? totalTalkTime : 0,
       },
       evaluation: {
-        evaluation_total_score: averageEvalScore ? averageEvalScore : 0,
-        evaluation_total_critical_score: averageEvalCriticalScore
-          ? averageEvalCriticalScore
-          : 0,
+        evaluation_total_score: averageEvalScore,
+        evaluation_total_critical_score: averageEvalCriticalScore,
       },
       survey: {
-        survey_promoter_score: surveyPromoterScore ? surveyPromoterScore : 0,
-        survey_total_score: oSurveyTotalScore ? oSurveyTotalScore : 0,
+        survey_promoter_score: surveyPromoterScore,
+        survey_total_score: oSurveyTotalScore,
       },
     };
 

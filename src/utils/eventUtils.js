@@ -16,11 +16,7 @@ import {
   openDatatableConfig,
   openDatatableRows,
 } from "./managementUtils.js";
-import {
-  hideTableColumn,
-  showTableColumn,
-  updateManagementToolsResponse,
-} from "../utils/domUtils.js";
+import { hideTableColumn, showTableColumn } from "../utils/domUtils.js";
 
 // Global variables
 const testMode = applicationConfig.mode.isTest;
@@ -68,15 +64,16 @@ export async function enableManagementToolsEventListeners() {
 
   // Tags handling
   const tagsInput = document.getElementById("autocomplete-tags-input");
+  const tagsList = document.getElementById("tags-list-div");
   const libraryRadios = document.querySelectorAll('input[name="action-radio"]');
 
-  // Disable tags if bad library is selected
+  // Disable tags if delete action is selected
   libraryRadios.forEach((radio) => {
     radio.addEventListener("change", (event) => {
       const value = event.target.value;
-      const tagsInput = document.getElementById("autocomplete-tags-input");
       if (value === "delete") {
         tagsInput.setAttribute("disabled", true);
+        tagsList.innerHTML = "";
       } else {
         tagsInput.removeAttribute("disabled");
       }

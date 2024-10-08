@@ -145,11 +145,11 @@
       "originatingDirection": "inbound",
       "surveys": [
         {
-          "eventTime": "2024-07-06T22:19:13.488Z",
+          "eventTime": "2024-10-01T22:19:08.959Z",
           "queueId": "c2d0a41d-a2b3-4534-9c24-50a25e528dd0",
           "surveyFormContextId": "a8cfe502-ea33-4ae9-ac96-8edf96164f53",
           "surveyId": "09bd9c35-22a5-430a-b423-cc0acff0b180",
-          "surveyStatus": "Sent",
+          "surveyStatus": "Expired",
           "surveyType": "Web",
           "userId": "06360840-3ff5-40a0-b65a-4b23f495e862"
         }
@@ -411,69 +411,47 @@
       "originatingDirection": "inbound",
       "evaluations": [
         {
-          "contextId": "36a66b16-5313-4562-b8c8-adfae0ab39af",
-          "evaluationId": "927cab3f-16b6-4d02-83af-92500078c462",
+          "contextId": "055d05d0-c2fb-4794-83dc-e277dfc7c2fd",
+          "evaluationId": "70dff552-6d76-4b1d-a3c0-21ce90cba181",
           "evaluationStatus": "Finished",
-          "evaluatorId": "58931ba8-ac90-42de-a274-45cafe335797",
-          "eventTime": "2024-09-11T18:29:19.265Z",
-          "formId": "a51eb15c-0f94-43aa-b581-766e2cc44fcc",
-          "formName": "Hemant_CS-Evaluation_Sample2",
-          "queueId": "837181ba-e35f-4245-b687-dea734007200",
+          "evaluatorId": "b5c0c3af-b7dc-4d33-986e-43ffec63f663",
+          "eventTime": "2024-09-18T08:33:48.484Z",
+          "formId": "63bb6c65-5568-468e-947a-552d0d4e1811",
+          "formName": "5 Star Call Form (KJW)",
+          "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
           "released": true,
-          "userId": "8dd44ce4-966d-431f-8359-d51afb1ced41",
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f",
           "oTotalCriticalScore": 100,
-          "oTotalScore": 97
+          "oTotalScore": 57
         },
         {
-          "contextId": "36a66b16-5313-4562-b8c8-adfae0ab39af",
-          "evaluationId": "66dd622f-ed4b-489a-8e99-1c74f416c688",
-          "evaluationStatus": "Finished",
-          "evaluatorId": "aabcffaa-fef8-4746-8363-61ab26788147",
-          "eventTime": "2024-09-18T10:13:14.547Z",
-          "formId": "a51eb15c-0f94-43aa-b581-766e2cc44fcc",
-          "formName": "Hemant_CS-Evaluation_Sample2",
-          "queueId": "837181ba-e35f-4245-b687-dea734007200",
-          "released": true,
-          "userId": "8dd44ce4-966d-431f-8359-d51afb1ced41",
-          "oTotalCriticalScore": 100,
-          "oTotalScore": 93
-        },
-        {
-          "contextId": "e57b3cd0-6e7b-4a70-add8-958cf0fecc29",
-          "evaluationId": "437180e1-983b-44df-8dca-9810ff1752f6",
-          "evaluationStatus": "Finished",
-          "evaluatorId": "aabcffaa-fef8-4746-8363-61ab26788147",
-          "eventTime": "2024-09-26T07:54:23.240Z",
-          "formId": "aee41766-5f66-4f2e-889a-214180ec7ac8",
-          "formName": "Hemant_CS-Evaluation_Sample",
-          "queueId": "837181ba-e35f-4245-b687-dea734007200",
-          "released": true,
-          "userId": "8dd44ce4-966d-431f-8359-d51afb1ced41",
-          "oTotalCriticalScore": 50,
-          "oTotalScore": 92
+          "assigneeApplicable": true,
+          "assigneeId": "1501b718-9485-4852-ab94-9f51508712fb",
+          "contextId": "d54b0598-9128-43bb-aec8-4a3b2aa1978e",
+          "evaluationId": "c33b4a44-42dc-41d1-8f68-6b606cf24ffc",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "1501b718-9485-4852-ab94-9f51508712fb",
+          "eventTime": "2024-09-23T23:01:00.806Z",
+          "formId": "3e83dc8b-909a-43cc-a026-9b63653d6158",
+          "formName": "Dunder Mifflin Sales Form",
+          "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f"
         }
       ],
       "surveys": [
         {
-          "eventTime": "2024-09-23T21:01:28.732Z",
-          "surveyFormContextId": "8ae15887-b55f-461e-8f3b-2a844926b495",
-          "surveyId": "d39202ac-be29-4317-8b3b-f4731dfab741",
-          "surveyStatus": "Error",
-          "surveyType": "Web"
-        },
+          "eventTime": "2024-09-17T08:31:28.452Z",
+          "queueId": "2489b6e9-f2b0-458a-b91f-786f7c37ad34",
+          "surveyFormContextId": "93fed91e-2c69-4dca-b3b0-3873b6be045d",
+          "surveyId": "b780510f-138a-481c-998c-179fc94d63d8",
+          "surveyStatus": "Sent",
+          "surveyType": "Web",
+          "userId": "da33d746-0bd5-414f-908f-b7d67b7c296f"
+        }
+      ],
+      "resolutions": [
         {
-          "eventTime": "2024-09-23T21:01:48.448Z",
-          "queueId": "43807b79-b4b4-4494-8520-2755ca7453da",
-          "surveyCompletedDate": "2024-09-23T21:01:06.848Z",
-          "surveyFormContextId": "57e8ddfb-582c-4bad-83a9-9c0c4f5c143b",
-          "surveyFormId": "3a4a2121-8a96-41c2-918d-d9e1fe8701c4",
-          "surveyFormName": "LS - WE01 - Customer Service Survey",
-          "surveyId": "ddef8de3-8f75-49eb-af39-bac0cf5062f0",
-          "surveyPromoterScore": 9,
-          "surveyStatus": "Finished",
-          "surveyType": "Voice",
-          "userId": "91806f01-088a-4974-adce-3cfc26373b38",
-          "oSurveyTotalScore": 95
+          "eventTime": "2024-09-26T08:11:13.612Z"
         }
       ],
       "participants": [
@@ -752,20 +730,20 @@
               "mediaEndpointStats": [
                 {
                   "codecs": ["audio/opus"],
-                  "eventTime": "2024-09-17T08:30:44.967Z",
-                  "maxLatencyMs": 30,
-                  "minMos": 4.882199685900358,
-                  "minRFactor": 92.43445587158203,
-                  "receivedPackets": 654
-                },
-                {
-                  "codecs": ["audio/opus"],
                   "discardedPackets": 13,
                   "eventTime": "2024-09-17T08:30:44.967Z",
                   "maxLatencyMs": 130,
                   "minMos": 4.714727406985859,
                   "minRFactor": 86.47090148925781,
                   "receivedPackets": 629
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-17T08:30:44.967Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882199685900358,
+                  "minRFactor": 92.43445587158203,
+                  "receivedPackets": 654
                 }
               ],
               "metrics": [
@@ -840,6 +818,1671 @@
                   "segmentStart": "2024-09-17T08:30:44.937Z",
                   "segmentType": "wrapup",
                   "wrapUpCode": "f5c5bcda-62ea-4268-8acb-8c2ec9d6dbf8"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "conversationEnd": "2024-09-26T11:31:14.208Z",
+      "conversationId": "f6f5d789-dcdf-486e-a825-69dbb3c4c953",
+      "conversationStart": "2024-09-26T11:26:45.005Z",
+      "divisionIds": ["c7cc47a4-a0e5-4fa1-b4c3-52c0a76e7ede"],
+      "mediaStatsMinConversationMos": 4.394532322902075,
+      "mediaStatsMinConversationRFactor": 92.21299743652344,
+      "originatingDirection": "inbound",
+      "evaluations": [
+        {
+          "contextId": "e57b3cd0-6e7b-4a70-add8-958cf0fecc29",
+          "evaluationId": "b809af9a-ef91-4d7a-9772-8240a6510f98",
+          "evaluationStatus": "Finished",
+          "evaluatorId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "eventTime": "2024-10-01T20:53:23.689Z",
+          "formId": "aee41766-5f66-4f2e-889a-214180ec7ac8",
+          "formName": "Hemant_CS-Evaluation_Sample",
+          "queueId": "837181ba-e35f-4245-b687-dea734007200",
+          "released": true,
+          "userId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "oTotalCriticalScore": 100,
+          "oTotalScore": 69
+        },
+        {
+          "contextId": "36a66b16-5313-4562-b8c8-adfae0ab39af",
+          "evaluationId": "68321f20-2c21-43ac-9f35-d09a1261d1f6",
+          "evaluationStatus": "Finished",
+          "evaluatorId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "eventTime": "2024-10-01T20:54:35.435Z",
+          "formId": "a51eb15c-0f94-43aa-b581-766e2cc44fcc",
+          "formName": "Hemant_CS-Evaluation_Sample2",
+          "queueId": "837181ba-e35f-4245-b687-dea734007200",
+          "released": true,
+          "userId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "oTotalCriticalScore": 100,
+          "oTotalScore": 100
+        },
+        {
+          "contextId": "36a66b16-5313-4562-b8c8-adfae0ab39af",
+          "evaluationId": "4a10585d-0c81-4e0c-91cd-81d09561838e",
+          "evaluationStatus": "Finished",
+          "evaluatorId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "eventTime": "2024-10-01T21:00:09.903Z",
+          "formId": "a51eb15c-0f94-43aa-b581-766e2cc44fcc",
+          "formName": "Hemant_CS-Evaluation_Sample2",
+          "queueId": "837181ba-e35f-4245-b687-dea734007200",
+          "released": true,
+          "userId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "oTotalCriticalScore": 100,
+          "oTotalScore": 100
+        }
+      ],
+      "participants": [
+        {
+          "externalContactId": "c8d8c17f-c64c-4a20-9dde-4c5a824f19eb",
+          "participantId": "42816a4e-a882-4fb4-a1dc-ca1d3953c46f",
+          "participantName": "Mobile Number, India",
+          "purpose": "customer",
+          "sessions": [
+            {
+              "ani": "tel:+919818162561",
+              "direction": "inbound",
+              "dnis": "tel:+61390086205",
+              "edgeId": "503f2ef6-ccb7-4767-abef-92cb10faedbd",
+              "mediaType": "voice",
+              "protocolCallId": "XBFYDVGXYJGVHNCQSGDCV6Z22M@81.201.83.44",
+              "provider": "Edge",
+              "recording": true,
+              "remoteNameDisplayable": "Mobile Number, India",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "aabcffaa-fef8-4746-8363-61ab26788147",
+              "sessionDnis": "tel:+61390086205",
+              "sessionId": "af585deb-f73e-3db2-91d3-1875fea06257",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:26:54.807Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882708683105202,
+                  "minRFactor": 92.4566879272461,
+                  "receivedPackets": 486
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:27:05.846Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882517585056521,
+                  "minRFactor": 92.44833374023438,
+                  "receivedPackets": 543
+                },
+                {
+                  "codecs": [
+                    "audio/opus",
+                    "audio/opus",
+                    "audio/opus",
+                    "audio/opus",
+                    "audio/opus"
+                  ],
+                  "eventTime": "2024-09-26T11:29:45.139Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882313243340866,
+                  "minRFactor": 92.43941497802734,
+                  "receivedPackets": 4588
+                },
+                {
+                  "codecs": ["audio/PCMU"],
+                  "eventTime": "2024-09-26T11:31:10.046Z",
+                  "maxLatencyMs": 45,
+                  "minMos": 4.394532322902075,
+                  "minRFactor": 92.46127319335938,
+                  "receivedPackets": 13199
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:31:10.046Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.88258105781936,
+                  "minRFactor": 92.45111083984375,
+                  "receivedPackets": 3420
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-26T11:26:45.289Z",
+                  "name": "nConnected",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:10.021Z",
+                  "name": "tConnected",
+                  "value": 264732
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-26T11:26:45.289Z",
+                  "segmentStart": "2024-09-26T11:26:45.005Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:31:10.021Z",
+                  "segmentStart": "2024-09-26T11:26:45.289Z",
+                  "segmentType": "interact"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "d74e6ee1-290f-4234-9123-8e86076add05",
+          "participantName": "HemantmohanIVR",
+          "purpose": "ivr",
+          "sessions": [
+            {
+              "ani": "tel:+919818162561",
+              "direction": "inbound",
+              "dnis": "tel:+61390086205",
+              "edgeId": "db49a920-cca8-4e62-8f58-ebede5196f8d",
+              "mediaType": "voice",
+              "peerId": "af585deb-f73e-3db2-91d3-1875fea06257",
+              "protocolCallId": "f507c366-edfe-4f62-94b6-a790a3389fbe",
+              "provider": "Edge",
+              "remote": "Mobile Number, India",
+              "remoteNameDisplayable": "Melbourne, Australia",
+              "sessionDnis": "tel:+61390086205",
+              "sessionId": "cca06f92-6633-3fa0-8c13-492d064ae3bb",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:26:54.884Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882342698263828,
+                  "minRFactor": 92.4406967163086,
+                  "receivedPackets": 486
+                }
+              ],
+              "flow": {
+                "endingLanguage": "en-us",
+                "entryReason": "tel:+61390086205",
+                "entryType": "dnis",
+                "exitReason": "TRANSFER",
+                "flowId": "56a012bf-a1e5-4520-a4fd-05bb00fe033d",
+                "flowName": "HemantmohanIVR",
+                "flowType": "INBOUNDCALL",
+                "flowVersion": "2.0",
+                "startingLanguage": "en-us",
+                "transferTargetAddress": "837181ba-e35f-4245-b687-dea734007200",
+                "transferTargetName": "Hemant_Mohan_Queue",
+                "transferType": "ACD"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-26T11:26:45.313Z",
+                  "name": "nFlow",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:26:54.779Z",
+                  "name": "tIvr",
+                  "value": 9723
+                },
+                {
+                  "emitDate": "2024-09-26T11:26:54.784Z",
+                  "name": "tFlow",
+                  "value": 9471
+                },
+                {
+                  "emitDate": "2024-09-26T11:26:54.784Z",
+                  "name": "tFlowExit",
+                  "value": 9471
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-26T11:26:45.056Z",
+                  "segmentStart": "2024-09-26T11:26:45.032Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "segmentEnd": "2024-09-26T11:26:54.779Z",
+                  "segmentStart": "2024-09-26T11:26:45.056Z",
+                  "segmentType": "ivr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "1214d545-8018-4e58-888b-47f98dc7f776",
+          "participantName": "Hemant_Mohan_Queue",
+          "purpose": "acd",
+          "sessions": [
+            {
+              "ani": "tel:+919818162561",
+              "destinationAddresses": [
+                "sip:hemant.mohan%40genesys.com@localhost"
+              ],
+              "direction": "inbound",
+              "dnis": "tel:+61390086205",
+              "edgeId": "db49a920-cca8-4e62-8f58-ebede5196f8d",
+              "flowInType": "ivr",
+              "mediaType": "voice",
+              "peerId": "af585deb-f73e-3db2-91d3-1875fea06257",
+              "protocolCallId": "401022ab-2d77-42f3-aa74-4bc74bccc95a",
+              "provider": "Edge",
+              "remote": "Mobile Number, India",
+              "remoteNameDisplayable": "Hemant_Mohan_Queue",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "aabcffaa-fef8-4746-8363-61ab26788147",
+              "sessionDnis": "tel:+61390086205",
+              "sessionId": "a095d6de-650e-3ca4-9b72-5eece32150dd",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:27:05.770Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882275105605433,
+                  "minRFactor": 92.437744140625,
+                  "receivedPackets": 543
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-26T11:26:54.879Z",
+                  "name": "nOffered",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:27:05.754Z",
+                  "name": "tAcd",
+                  "value": 10875
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:26:54.879Z",
+                  "segmentStart": "2024-09-26T11:26:54.833Z",
+                  "segmentType": "delay"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:27:05.754Z",
+                  "segmentStart": "2024-09-26T11:26:54.879Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [410]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "6eb3f5ea-a5c8-4f58-a2ee-6c6fba72490a",
+          "purpose": "agent",
+          "teamId": "8884a663-525b-4713-bdcd-c55fb0117d95",
+          "userId": "aabcffaa-fef8-4746-8363-61ab26788147",
+          "sessions": [
+            {
+              "ani": "tel:+919818162561",
+              "destinationAddresses": ["sip:hm4%40genesys.com@localhost"],
+              "direction": "inbound",
+              "dnis": "tel:+61390086205",
+              "edgeId": "db49a920-cca8-4e62-8f58-ebede5196f8d",
+              "mediaType": "voice",
+              "peerId": "af585deb-f73e-3db2-91d3-1875fea06257",
+              "protocolCallId": "af67a002-801e-4b8f-83d8-b481440eb844",
+              "provider": "Edge",
+              "remote": "Mobile Number, India",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "aabcffaa-fef8-4746-8363-61ab26788147",
+              "sessionDnis": "sip:665837895aed691b9f306fc0+genesys2.orgspan.com;tgrp=ad104073-f565-4da7-9426-02170e158c81;trunk-context=genesys2@localhost",
+              "sessionId": "b351bab9-d8ba-30b1-b6ae-d40c9793d8f7",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus", "audio/opus", "audio/opus"],
+                  "eventTime": "2024-09-26T11:29:45.145Z",
+                  "maxLatencyMs": 50,
+                  "minMos": 4.877079586105223,
+                  "minRFactor": 92.21299743652344,
+                  "receivedPackets": 3587
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-26T11:27:05.751Z",
+                  "name": "tAlert",
+                  "value": 10671
+                },
+                {
+                  "emitDate": "2024-09-26T11:27:05.751Z",
+                  "name": "tAnswered",
+                  "value": 10875
+                },
+                {
+                  "emitDate": "2024-09-26T11:27:25.606Z",
+                  "name": "tTalk",
+                  "value": 19855
+                },
+                {
+                  "emitDate": "2024-09-26T11:27:28.329Z",
+                  "name": "tHeld",
+                  "value": 2723
+                },
+                {
+                  "emitDate": "2024-09-26T11:28:19.916Z",
+                  "name": "tTalk",
+                  "value": 51587
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.071Z",
+                  "name": "tHeld",
+                  "value": 85155
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.113Z",
+                  "name": "nBlindTransferred",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.113Z",
+                  "name": "nTransferred",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.113Z",
+                  "name": "tHeldComplete",
+                  "value": 87878
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.113Z",
+                  "name": "tTalk",
+                  "value": 42
+                },
+                {
+                  "emitDate": "2024-09-26T11:29:45.113Z",
+                  "name": "tTalkComplete",
+                  "value": 71484
+                },
+                {
+                  "emitDate": "2024-09-26T11:30:13.577Z",
+                  "name": "tAcw",
+                  "value": 28464
+                },
+                {
+                  "emitDate": "2024-09-26T11:30:13.577Z",
+                  "name": "tHandle",
+                  "value": 187826
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:27:05.751Z",
+                  "segmentStart": "2024-09-26T11:26:55.080Z",
+                  "segmentType": "alert"
+                },
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:27:25.606Z",
+                  "segmentStart": "2024-09-26T11:27:05.751Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:27:28.329Z",
+                  "segmentStart": "2024-09-26T11:27:25.606Z",
+                  "segmentType": "hold"
+                },
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:28:19.916Z",
+                  "segmentStart": "2024-09-26T11:27:28.329Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:29:45.071Z",
+                  "segmentStart": "2024-09-26T11:28:19.916Z",
+                  "segmentType": "hold"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:29:45.113Z",
+                  "segmentStart": "2024-09-26T11:29:45.071Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:30:13.577Z",
+                  "segmentStart": "2024-09-26T11:29:45.113Z",
+                  "segmentType": "wrapup",
+                  "wrapUpCode": "634febab-66b0-443c-8059-b33b46f411d8"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "fda8e434-45df-4a50-ada2-91eea2481274",
+          "purpose": "agent",
+          "teamId": "8884a663-525b-4713-bdcd-c55fb0117d95",
+          "userId": "36e73600-c8eb-4f2c-9b58-d1c8a99d4d36",
+          "sessions": [
+            {
+              "ani": "tel:+919818162561",
+              "direction": "inbound",
+              "dnis": "tel:+61390086205",
+              "edgeId": "503f2ef6-ccb7-4767-abef-92cb10faedbd",
+              "mediaType": "voice",
+              "peerId": "af585deb-f73e-3db2-91d3-1875fea06257",
+              "protocolCallId": "d08aa9fb-768d-4636-8eb2-bd5de56b2f95",
+              "provider": "Edge",
+              "remote": "Mobile Number, India",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "aabcffaa-fef8-4746-8363-61ab26788147",
+              "sessionDnis": "sip:666b247f3119fb2b5a51f11c+genesys2.orgspan.com;tgrp=706a7461-98ec-4c54-bca8-672a4a5adbe0;trunk-context=genesys2@localhost",
+              "sessionId": "102a259a-412c-3a63-af85-bf1d60750cd3",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-26T11:31:10.045Z",
+                  "maxLatencyMs": 31,
+                  "minMos": 4.882285465425722,
+                  "minRFactor": 92.43820190429688,
+                  "receivedPackets": 469
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-26T11:29:52.582Z",
+                  "name": "tAlert",
+                  "value": 7470
+                },
+                {
+                  "emitDate": "2024-09-26T11:30:01.627Z",
+                  "name": "tTalk",
+                  "value": 9045
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:10.018Z",
+                  "name": "tHeld",
+                  "value": 68391
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:10.018Z",
+                  "name": "tHeldComplete",
+                  "value": 68391
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:10.018Z",
+                  "name": "tTalkComplete",
+                  "value": 9045
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:10.021Z",
+                  "name": "nError",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:14.208Z",
+                  "name": "tAcw",
+                  "value": 4190
+                },
+                {
+                  "emitDate": "2024-09-26T11:31:14.208Z",
+                  "name": "tHandle",
+                  "value": 81626
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:29:52.582Z",
+                  "segmentStart": "2024-09-26T11:29:45.112Z",
+                  "segmentType": "alert"
+                },
+                {
+                  "conference": false,
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:30:01.627Z",
+                  "segmentStart": "2024-09-26T11:29:52.582Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "client",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:31:10.018Z",
+                  "segmentStart": "2024-09-26T11:30:01.627Z",
+                  "segmentType": "hold"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "client",
+                  "errorCode": "error.ininedgecontrol.session.inactive",
+                  "queueId": "837181ba-e35f-4245-b687-dea734007200",
+                  "segmentEnd": "2024-09-26T11:31:14.208Z",
+                  "segmentStart": "2024-09-26T11:31:10.018Z",
+                  "segmentType": "wrapup",
+                  "wrapUpCode": "634febab-66b0-443c-8059-b33b46f411d8"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "conversationEnd": "2024-09-24T16:55:36.749Z",
+      "conversationId": "74dc6adb-e9fa-436f-a02e-8ad62e2d009f",
+      "conversationStart": "2024-09-24T16:53:34.873Z",
+      "divisionIds": ["b3ca891f-dbc8-4880-8017-ce1afcb73c82"],
+      "mediaStatsMinConversationMos": 4.36539470898024,
+      "mediaStatsMinConversationRFactor": 88.37955474853516,
+      "originatingDirection": "inbound",
+      "evaluations": [
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "562cc2f5-329f-4448-b842-057f5d1e811d",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "c9ac419f-1c0b-42fd-a803-35df7f11e953",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "562cc2f5-329f-4448-b842-057f5d1e811d",
+          "eventTime": "2024-09-24T16:55:37.047Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "8005dd58-0931-4cac-a0a9-659276b6f719",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "e34aa55a-6350-4266-bc70-a18309560593",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "8005dd58-0931-4cac-a0a9-659276b6f719",
+          "eventTime": "2024-09-24T16:55:37.120Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "0047c2bc-7f34-4f84-bb1a-1e2aadf890a0",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "eventTime": "2024-09-24T16:55:37.219Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "deleted": true,
+          "evaluationId": "e21470c4-1473-4aa4-931f-4157bd27d078",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "805b2ef6-ed4f-4da9-be7d-1514356a1ae9",
+          "eventTime": "2024-09-25T14:46:01.173Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "contextId": "a0c98e38-daa6-4b14-9d64-632413eb7152",
+          "deleted": true,
+          "evaluationId": "bb0f7344-6af9-4aa9-8412-7533517a2405",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "73ca6605-4f04-42e6-8c9e-8680c0a2475e",
+          "eventTime": "2024-09-30T20:22:13.698Z",
+          "formId": "bce2b212-1f31-4cc3-aa5f-81931c0195aa",
+          "formName": "LS Eval Form QM",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "calibrationId": "8788ee31-b34e-4704-8021-cfa7ade007b1",
+          "contextId": "cee2d466-06dd-4d5b-b355-2a731c8f8c14",
+          "evaluationId": "ee4849be-af6b-47af-a452-29d647748c26",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "0c980e43-adc0-411d-97a2-e181c074a77c",
+          "eventTime": "2024-09-30T20:23:09.628Z",
+          "formId": "3679758e-49b0-434b-82ba-ada362cc4318",
+          "formName": "_NG_Call_Evaluation_Form",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "calibrationId": "8788ee31-b34e-4704-8021-cfa7ade007b1",
+          "contextId": "cee2d466-06dd-4d5b-b355-2a731c8f8c14",
+          "evaluationId": "53d2e19d-51e2-4ed6-ad08-3126e1913d23",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "73ca6605-4f04-42e6-8c9e-8680c0a2475e",
+          "eventTime": "2024-09-30T20:23:09.788Z",
+          "formId": "3679758e-49b0-434b-82ba-ada362cc4318",
+          "formName": "_NG_Call_Evaluation_Form",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "contextId": "902c4fea-c911-4cfa-8fa9-53b9778481ed",
+          "deleted": true,
+          "evaluationId": "2b713ed7-d268-448c-a6e7-0a0c8c6d6d3f",
+          "evaluationStatus": "InProgress",
+          "evaluatorId": "be1c20dd-f6a5-457e-bba4-aaabe81e1ceb",
+          "eventTime": "2024-10-08T01:08:36.222Z",
+          "formId": "47450152-9978-45fb-b777-7d5b76453466",
+          "formName": "CCT Audit Form 3",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        }
+      ],
+      "surveys": [
+        {
+          "eventTime": "2024-09-24T16:56:12.825Z",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "surveyFormContextId": "1bc71f08-cb6e-4eb1-a7d3-dedf8f76d557",
+          "surveyId": "fd4a1dbd-dda4-4d13-aa0f-129ba1cb764d",
+          "surveyStatus": "Sent",
+          "surveyType": "Web",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        }
+      ],
+      "participants": [
+        {
+          "externalContactId": "145e53ed-13d1-4cba-a1c6-57a724004c4e",
+          "participantId": "9fec9c8a-ae5c-4ee2-bed2-425baf184c14",
+          "participantName": "Sunnyvale CA",
+          "purpose": "customer",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "protocolCallId": "426544990_133522675@67.231.1.110",
+              "provider": "Edge",
+              "recording": true,
+              "remoteNameDisplayable": "Sunnyvale CA",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "01e3c44b-28c6-47b3-adf1-42edde9e4f87",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-24T16:53:53.652Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882610054691878,
+                  "minRFactor": 92.45237731933594,
+                  "receivedPackets": 933
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-24T16:53:58.077Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882537628493409,
+                  "minRFactor": 92.44921112060547,
+                  "receivedPackets": 219
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 3,
+                  "eventTime": "2024-09-24T16:55:29.499Z",
+                  "maxLatencyMs": 45,
+                  "minMos": 4.875568511895334,
+                  "minRFactor": 92.14836883544922,
+                  "receivedPackets": 4565
+                },
+                {
+                  "codecs": ["audio/PCMU"],
+                  "discardedPackets": 31,
+                  "eventTime": "2024-09-24T16:55:29.499Z",
+                  "maxLatencyMs": 64,
+                  "minMos": 4.36539470898024,
+                  "minRFactor": 91.116943359375,
+                  "receivedPackets": 5725,
+                  "underrunPackets": 16
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-24T16:53:35.022Z",
+                  "name": "nConnected",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:29.453Z",
+                  "name": "tConnected",
+                  "value": 114431
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-24T16:53:35.022Z",
+                  "segmentStart": "2024-09-24T16:53:34.873Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "endpoint",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:55:29.453Z",
+                  "segmentStart": "2024-09-24T16:53:35.022Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [200]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "f18b8dd0-fa85-4549-9cc8-5434a3f34d97",
+          "participantName": "DEMO_Voice Survey",
+          "purpose": "ivr",
+          "sessions": [
+            {
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "01e3c44b-28c6-47b3-adf1-42edde9e4f87",
+              "protocolCallId": "c2c1bd5a-0b6f-4954-a559-f649ae4692c8",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "remoteNameDisplayable": "Half Moon Bay CA",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "c0ed6986-341a-4919-971c-00633959c4b1",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-24T16:53:53.652Z",
+                  "maxLatencyMs": 70,
+                  "minMos": 4.774785473376777,
+                  "minRFactor": 88.37955474853516,
+                  "receivedPackets": 934
+                }
+              ],
+              "flow": {
+                "endingLanguage": "en-us",
+                "entryReason": "tel:+16504593696",
+                "entryType": "dnis",
+                "exitReason": "TRANSFER",
+                "flowId": "88e35a40-fdd9-44f7-a9f8-c804aa6666e2",
+                "flowName": "DEMO_Voice Survey",
+                "flowType": "INBOUNDCALL",
+                "flowVersion": "7.0",
+                "startingLanguage": "en-us",
+                "transferTargetAddress": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                "transferTargetName": "RB_Inbound_Billing_Q",
+                "transferType": "ACD"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-24T16:53:35.755Z",
+                  "name": "nFlow",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-24T16:53:53.614Z",
+                  "name": "tIvr",
+                  "value": 18676
+                },
+                {
+                  "emitDate": "2024-09-24T16:53:53.623Z",
+                  "name": "tFlow",
+                  "value": 17868
+                },
+                {
+                  "emitDate": "2024-09-24T16:53:53.623Z",
+                  "name": "tFlowExit",
+                  "value": 17868
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-24T16:53:34.938Z",
+                  "segmentStart": "2024-09-24T16:53:34.904Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "segmentEnd": "2024-09-24T16:53:53.614Z",
+                  "segmentStart": "2024-09-24T16:53:34.938Z",
+                  "segmentType": "ivr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "552dc409-7eed-49bf-ad9e-662a6e116981",
+          "participantName": "RB_Inbound_Billing_Q",
+          "purpose": "acd",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "ani": "tel:+14083686863",
+              "destinationAddresses": [
+                "sip:RB_BillingTest%40genesystesttest.com@localhost"
+              ],
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "08fc4e9f-7ea2-4843-88fd-b88e99f1c949",
+              "flowInType": "ivr",
+              "mediaType": "voice",
+              "peerId": "01e3c44b-28c6-47b3-adf1-42edde9e4f87",
+              "protocolCallId": "71f912a8-af33-4837-861e-0c7ec14d904b",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "remoteNameDisplayable": "RB_Inbound_Billing_Q",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "bc727ffa-6bed-4bf5-adca-b2d533870ff7",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-24T16:53:58.110Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882550561703178,
+                  "minRFactor": 92.44977569580078,
+                  "receivedPackets": 218
+                }
+              ],
+              "flow": {
+                "flowId": "b9c6f3b7-2138-4d81-88a9-1bf372c7d5bb",
+                "flowName": "Bruno_QueueFlow",
+                "flowType": "INQUEUECALL",
+                "flowVersion": "13.0",
+                "startingLanguage": "en-us"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-24T16:53:53.685Z",
+                  "name": "nOffered",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-24T16:53:58.053Z",
+                  "name": "tAcd",
+                  "value": 4368
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:53:53.685Z",
+                  "segmentStart": "2024-09-24T16:53:53.652Z",
+                  "segmentType": "delay"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:53:58.053Z",
+                  "segmentStart": "2024-09-24T16:53:53.685Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [410]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "31cb1c4a-d08e-47ba-946b-4bcce7038535",
+          "purpose": "agent",
+          "teamId": "a286951e-f9e1-4ade-9ed5-ddaf9d4e93b6",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "agentAssistantId": "71aaa802-eb5e-4e29-8bf7-f5cd50a9149d",
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "01e3c44b-28c6-47b3-adf1-42edde9e4f87",
+              "protocolCallId": "342561db-2d93-4ef2-89f9-4b5c5e52530f",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "sip:60c0e9fbaddb311f7c89b4bd+genesys2.orgspan.com;tgrp=29e81de9-d4fb-4205-9920-c562f3c6229d;trunk-context=genesys2@localhost",
+              "sessionId": "9f3f99af-fc86-4a56-a539-ed767da93d55",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-24T16:55:29.500Z",
+                  "maxLatencyMs": 49,
+                  "minMos": 4.881937125836837,
+                  "minRFactor": 92.42300415039062,
+                  "receivedPackets": 4570
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 16,
+                  "eventTime": "2024-09-24T16:55:29.501Z",
+                  "maxLatencyMs": 53,
+                  "minMos": 4.856516130423834,
+                  "minRFactor": 91.35939025878906,
+                  "receivedPackets": 4567
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-24T16:53:58.044Z",
+                  "name": "tAlert",
+                  "value": 3869
+                },
+                {
+                  "emitDate": "2024-09-24T16:53:58.044Z",
+                  "name": "tAnswered",
+                  "value": 4368
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:29.458Z",
+                  "name": "nError",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:29.458Z",
+                  "name": "tTalk",
+                  "value": 91414
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:29.458Z",
+                  "name": "tTalkComplete",
+                  "value": 91414
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:36.749Z",
+                  "name": "tAcw",
+                  "value": 7291
+                },
+                {
+                  "emitDate": "2024-09-24T16:55:36.749Z",
+                  "name": "tHandle",
+                  "value": 98705
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:53:58.044Z",
+                  "segmentStart": "2024-09-24T16:53:54.175Z",
+                  "segmentType": "alert"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:55:29.458Z",
+                  "segmentStart": "2024-09-24T16:53:58.044Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "errorCode": "error.ininedgecontrol.session.inactive",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-24T16:55:36.749Z",
+                  "segmentStart": "2024-09-24T16:55:29.458Z",
+                  "segmentType": "wrapup",
+                  "sipResponseCodes": [200],
+                  "wrapUpCode": "a8f88e63-eedb-4540-ba02-05789cd006e0"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "conversationEnd": "2024-09-12T16:52:17.410Z",
+      "conversationId": "f8ad74e1-f3ae-4ed7-b7cf-21443bae80d4",
+      "conversationStart": "2024-09-12T16:50:46.280Z",
+      "divisionIds": ["b3ca891f-dbc8-4880-8017-ce1afcb73c82"],
+      "mediaStatsMinConversationMos": 4.355572779474305,
+      "mediaStatsMinConversationRFactor": 89.9760971069336,
+      "originatingDirection": "inbound",
+      "evaluations": [
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "8005dd58-0931-4cac-a0a9-659276b6f719",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "776aaa7c-804d-4912-b2cc-7030891d9bd1",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "8005dd58-0931-4cac-a0a9-659276b6f719",
+          "eventTime": "2024-09-12T16:52:19.088Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "562cc2f5-329f-4448-b842-057f5d1e811d",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "d5eac36e-aeb4-470e-a409-d08202c73c7f",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "562cc2f5-329f-4448-b842-057f5d1e811d",
+          "eventTime": "2024-09-12T16:52:19.105Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "40127e4e-8613-4633-be40-e3dc0c0d5b36",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "eventTime": "2024-09-12T16:52:19.176Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "assigneeId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "evaluationId": "3403abf6-81c8-47f7-b57b-2f9b32f6864d",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "dc2ae286-0762-4d7f-8b3d-a061118b4dc1",
+          "eventTime": "2024-09-13T07:01:14.839Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "deleted": true,
+          "evaluationId": "ac656c6a-fa60-4080-bb40-501d0e469dbb",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "805b2ef6-ed4f-4da9-be7d-1514356a1ae9",
+          "eventTime": "2024-09-25T14:48:13.628Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        },
+        {
+          "assigneeApplicable": true,
+          "contextId": "f8f16cb4-a1e6-43fe-8c5e-2db49c6c8776",
+          "deleted": true,
+          "evaluationId": "9a0d6c03-7725-414c-89d8-f6c7d563d88c",
+          "evaluationStatus": "Pending",
+          "evaluatorId": "805b2ef6-ed4f-4da9-be7d-1514356a1ae9",
+          "eventTime": "2024-09-25T14:48:13.675Z",
+          "formId": "6bd59a91-71f6-41fc-b616-9e49266d47c7",
+          "formName": "WEM DEMO - Agent Evaluation v4",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4"
+        }
+      ],
+      "surveys": [
+        {
+          "eventTime": "2024-09-12T16:52:19.684Z",
+          "surveyFormContextId": "1bc71f08-cb6e-4eb1-a7d3-dedf8f76d557",
+          "surveyId": "d1529e7c-a2ba-4ea3-bc25-06b178894b1b",
+          "surveyStatus": "Error",
+          "surveyType": "Web"
+        },
+        {
+          "eventTime": "2024-09-12T16:52:21.744Z",
+          "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+          "surveyCompletedDate": "2024-09-12T16:52:10.291Z",
+          "surveyFormContextId": "1bc71f08-cb6e-4eb1-a7d3-dedf8f76d557",
+          "surveyFormId": "859c7387-6ed8-4bd2-8480-472ec99194e5",
+          "surveyFormName": "WE01 DEMO - Customer Service Survey",
+          "surveyId": "cc34f7b2-35e2-44e5-ac00-5aed30a9eedb",
+          "surveyPromoterScore": 1,
+          "surveyStatus": "Finished",
+          "surveyType": "Voice",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4",
+          "oSurveyTotalScore": 80
+        }
+      ],
+      "participants": [
+        {
+          "externalContactId": "145e53ed-13d1-4cba-a1c6-57a724004c4e",
+          "participantId": "a8b447c1-d553-48b3-82cf-05641008e0f7",
+          "participantName": "Sunnyvale CA",
+          "purpose": "customer",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "08fc4e9f-7ea2-4843-88fd-b88e99f1c949",
+              "mediaType": "voice",
+              "protocolCallId": "206348934_132088569@67.231.5.110",
+              "provider": "Edge",
+              "recording": true,
+              "remoteNameDisplayable": "Sunnyvale CA",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:51:05.298Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882542615876667,
+                  "minRFactor": 92.44942474365234,
+                  "receivedPackets": 942
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:51:20.934Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882383249419131,
+                  "minRFactor": 92.44246673583984,
+                  "receivedPackets": 781
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 2,
+                  "eventTime": "2024-09-12T16:51:34.999Z",
+                  "maxLatencyMs": 40,
+                  "minMos": 4.860409482147721,
+                  "minRFactor": 91.51692962646484,
+                  "receivedPackets": 703
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:52:17.453Z",
+                  "maxLatencyMs": 37,
+                  "minMos": 4.882365813643293,
+                  "minRFactor": 92.44170379638672,
+                  "receivedPackets": 2117
+                },
+                {
+                  "codecs": ["audio/PCMU"],
+                  "eventTime": "2024-09-12T16:52:17.563Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.355572779474305,
+                  "minRFactor": 90.69156646728516,
+                  "receivedPackets": 4520
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:50:46.424Z",
+                  "name": "nConnected",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-12T16:52:17.410Z",
+                  "name": "tConnected",
+                  "value": 90986
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-12T16:50:46.424Z",
+                  "segmentStart": "2024-09-12T16:50:46.280Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "peer",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:52:17.410Z",
+                  "segmentStart": "2024-09-12T16:50:46.424Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [487]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "aab633de-c3ba-4b8f-a188-9f1544743bb6",
+          "participantName": "RBRUNO_DEMO",
+          "purpose": "ivr",
+          "sessions": [
+            {
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "protocolCallId": "366185e9-f878-4cbf-864f-c1e3ac00982a",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "remoteNameDisplayable": "Half Moon Bay CA",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "5f78577d-e8bb-4a9f-81ff-1313ef2e51de",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:51:05.308Z",
+                  "maxLatencyMs": 40,
+                  "minMos": 4.843603032581324,
+                  "minRFactor": 90.84906768798828,
+                  "receivedPackets": 940
+                }
+              ],
+              "flow": {
+                "endingLanguage": "en-us",
+                "entryReason": "tel:+16504593696",
+                "entryType": "dnis",
+                "exitReason": "TRANSFER",
+                "flowId": "f89681a8-480e-43fb-bdc1-83bf8d2ddb22",
+                "flowName": "RBRUNO_DEMO",
+                "flowType": "INBOUNDCALL",
+                "flowVersion": "13.0",
+                "startingLanguage": "en-us",
+                "transferTargetAddress": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                "transferTargetName": "RB_Inbound_Billing_Q",
+                "transferType": "ACD"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:50:46.571Z",
+                  "name": "nFlow",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:05.208Z",
+                  "name": "tIvr",
+                  "value": 18853
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:05.231Z",
+                  "name": "tFlow",
+                  "value": 18660
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:05.231Z",
+                  "name": "tFlowExit",
+                  "value": 18660
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-12T16:50:46.355Z",
+                  "segmentStart": "2024-09-12T16:50:46.321Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "segmentEnd": "2024-09-12T16:51:05.208Z",
+                  "segmentStart": "2024-09-12T16:50:46.355Z",
+                  "segmentType": "ivr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "7ec14d44-6f76-4197-9114-a7a768fe56fa",
+          "participantName": "RB_Inbound_Billing_Q",
+          "purpose": "acd",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "ani": "tel:+14083686863",
+              "destinationAddresses": [
+                "sip:RB_BillingTest%40genesystesttest.com@localhost"
+              ],
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "08fc4e9f-7ea2-4843-88fd-b88e99f1c949",
+              "flowInType": "ivr",
+              "mediaType": "voice",
+              "peerId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "protocolCallId": "33618793-1b4b-4092-b18d-e0f6975f624d",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "remoteNameDisplayable": "RB_Inbound_Billing_Q",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "17da170f-dadd-41d6-8d7b-109ce9c245ef",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:51:20.934Z",
+                  "maxLatencyMs": 30,
+                  "minMos": 4.882555732890802,
+                  "minRFactor": 92.45000457763672,
+                  "receivedPackets": 781
+                }
+              ],
+              "flow": {
+                "flowId": "b9c6f3b7-2138-4d81-88a9-1bf372c7d5bb",
+                "flowName": "Bruno_QueueFlow",
+                "flowType": "INQUEUECALL",
+                "flowVersion": "13.0",
+                "startingLanguage": "en-us"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:51:05.256Z",
+                  "name": "nOffered",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:20.887Z",
+                  "name": "tAcd",
+                  "value": 15631
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:51:05.256Z",
+                  "segmentStart": "2024-09-12T16:51:05.210Z",
+                  "segmentType": "delay"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "transfer",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:51:20.887Z",
+                  "segmentStart": "2024-09-12T16:51:05.256Z",
+                  "segmentType": "interact",
+                  "sipResponseCodes": [410]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "f7f19df3-e55e-4361-a9dc-da0ca58409f0",
+          "purpose": "agent",
+          "teamId": "a286951e-f9e1-4ade-9ed5-ddaf9d4e93b6",
+          "userId": "98578561-430d-4bce-9cee-fa61704581a4",
+          "sessions": [
+            {
+              "activeSkillIds": ["16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"],
+              "agentAssistantId": "71aaa802-eb5e-4e29-8bf7-f5cd50a9149d",
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "protocolCallId": "68568703-113d-4db2-8802-d93719c098d1",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "requestedRoutings": ["Standard"],
+              "selectedAgentId": "98578561-430d-4bce-9cee-fa61704581a4",
+              "sessionDnis": "sip:60c0e9fbaddb311f7c89b4bd+genesys2.orgspan.com;tgrp=29e81de9-d4fb-4205-9920-c562f3c6229d;trunk-context=genesys2@localhost",
+              "sessionId": "d511e920-a040-4b11-84ce-ee09c3178848",
+              "usedRouting": "Standard",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "discardedPackets": 2,
+                  "eventTime": "2024-09-12T16:51:35.062Z",
+                  "maxLatencyMs": 41,
+                  "minMos": 4.860022096252367,
+                  "minRFactor": 91.50117492675781,
+                  "receivedPackets": 703
+                },
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:51:35.064Z",
+                  "maxLatencyMs": 40,
+                  "minMos": 4.877038150090339,
+                  "minRFactor": 92.21121978759766,
+                  "receivedPackets": 709
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:51:20.885Z",
+                  "name": "tAlert",
+                  "value": 3899
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:20.885Z",
+                  "name": "tAnswered",
+                  "value": 15631
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:34.977Z",
+                  "name": "tTalk",
+                  "value": 14092
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:34.977Z",
+                  "name": "tTalkComplete",
+                  "value": 14092
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:44.977Z",
+                  "name": "tAcw",
+                  "value": 10000
+                },
+                {
+                  "emitDate": "2024-09-12T16:51:44.977Z",
+                  "name": "tHandle",
+                  "value": 24092
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:51:20.885Z",
+                  "segmentStart": "2024-09-12T16:51:16.986Z",
+                  "segmentType": "alert"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "client",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:51:34.977Z",
+                  "segmentStart": "2024-09-12T16:51:20.885Z",
+                  "segmentType": "interact"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "client",
+                  "queueId": "ccd45c6d-1e77-4719-85a9-17118fc6c8b2",
+                  "requestedRoutingSkillIds": [
+                    "16a41e5f-8ace-4a1c-9f70-b19e7b8a2ce0"
+                  ],
+                  "segmentEnd": "2024-09-12T16:51:44.977Z",
+                  "segmentStart": "2024-09-12T16:51:34.977Z",
+                  "segmentType": "wrapup",
+                  "wrapUpCode": "ININ-WRAP-UP-TIMEOUT"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "79a04864-5161-49f9-b98f-c72c295fdb7d",
+          "participantName": "d5b78903-1b07-4119-bbdc-7380595c7cfc",
+          "purpose": "ivr",
+          "sessions": [
+            {
+              "ani": "tel:+14083686863",
+              "direction": "inbound",
+              "dnis": "tel:+16504593696",
+              "edgeId": "96378ca8-a5d3-4cb7-bb00-fed471acaa28",
+              "mediaType": "voice",
+              "peerId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "protocolCallId": "622309d0-8d92-4980-9af5-b6f72623ce1d",
+              "provider": "Edge",
+              "remote": "Sunnyvale CA",
+              "remoteNameDisplayable": "d5b78903-1b07-4119-bbdc-7380595c7cfc",
+              "sessionDnis": "tel:+16504593696",
+              "sessionId": "f8cc5007-79f6-42f7-8644-db210cd2a051",
+              "mediaEndpointStats": [
+                {
+                  "codecs": ["audio/opus"],
+                  "eventTime": "2024-09-12T16:52:17.481Z",
+                  "maxLatencyMs": 50,
+                  "minMos": 4.82045987556687,
+                  "minRFactor": 89.9760971069336,
+                  "receivedPackets": 2116
+                }
+              ],
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:52:17.403Z",
+                  "name": "tIvr",
+                  "value": 42336
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-12T16:51:35.067Z",
+                  "segmentStart": "2024-09-12T16:51:35.028Z",
+                  "segmentType": "system"
+                },
+                {
+                  "conference": false,
+                  "disconnectType": "system",
+                  "segmentEnd": "2024-09-12T16:52:17.403Z",
+                  "segmentStart": "2024-09-12T16:51:35.067Z",
+                  "segmentType": "ivr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "participantId": "f0ac3091-c5ba-432f-8e99-08eccaf362ec",
+          "purpose": "voicesurveyflow",
+          "sessions": [
+            {
+              "direction": "inbound",
+              "mediaType": "voice",
+              "peerId": "ea770e56-2022-44cb-ade2-cabf23f5e936",
+              "provider": "PureCloud BotFlow",
+              "remote": "Sunnyvale CA",
+              "sessionId": "792a6d70-9b29-479e-bf1f-512e79faa792",
+              "flow": {
+                "endingLanguage": "en-us",
+                "entryReason": "d5b78903-1b07-4119-bbdc-7380595c7cfc",
+                "entryType": "flow",
+                "exitReason": "FLOW_DISCONNECT",
+                "flowId": "d5b78903-1b07-4119-bbdc-7380595c7cfc",
+                "flowName": "VSurvey v2",
+                "flowType": "VOICESURVEY",
+                "flowVersion": "3.0",
+                "startingLanguage": "en-us"
+              },
+              "metrics": [
+                {
+                  "emitDate": "2024-09-12T16:51:35.300Z",
+                  "name": "nFlow",
+                  "value": 1
+                },
+                {
+                  "emitDate": "2024-09-12T16:52:09.825Z",
+                  "name": "tFlow",
+                  "value": 34525
+                },
+                {
+                  "emitDate": "2024-09-12T16:52:09.825Z",
+                  "name": "tFlowDisconnect",
+                  "value": 34525
+                }
+              ],
+              "segments": [
+                {
+                  "conference": false,
+                  "segmentEnd": "2024-09-12T16:52:09.825Z",
+                  "segmentStart": "2024-09-12T16:51:35.300Z",
+                  "segmentType": "interact"
                 }
               ]
             }

@@ -204,16 +204,16 @@ function createTableRow(row, permitted, rowAlerts, checkboxes) {
           td.setAttribute("data-group-name", parameterGroup);
           td.setAttribute("data-column-name", parameterKey);
 
-          let columnValue = String(row[parameterKey]);
+          let columnValue = row[parameterKey] ? String(row[parameterKey]) : "-";
 
           if (keyFormat === "date" && columnValue !== "-") {
             columnValue = new Date(columnValue).toLocaleDateString();
           } else if (keyFormat === "datetime" && columnValue !== "-") {
             columnValue = new Date(columnValue).toLocaleString();
-          } else if (keyFormat === "seconds" && columnValue !== 0) {
+          } else if (keyFormat === "seconds" && columnValue !== "-") {
             columnValue = (columnValue / 1000).toFixed(1) + "s";
           } else if (keyFormat === "percentage") {
-            if ((columnValue = 0)) {
+            if (columnValue === 0 || columnValue === "-") {
               columnValue = "0.0%";
             } else if (columnValue > 1) {
               columnValue = (columnValue * 1).toFixed(1) + "%";
