@@ -186,7 +186,7 @@ async function runApp() {
     let rows = await getDatatableRows(false);
     await populateTablesAndHandleAlerts(rows, false);
   } catch (error) {
-    console.error("[TIL] An error occurred:", error, appl);
+    console.error("[TIL] An error occurred:", error);
   } finally {
     // Ensure management tools are displayed and initialized
     await enableManagementToolsEventListeners();
