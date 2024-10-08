@@ -231,7 +231,7 @@ gux-action-button[management-button="true"] {
   color: #fdfdfd;
   font-size: 1em !important;
   font-weight: bolder;
-  border-radius: 3px;
+  border-radius: 0 3px 3px 0;
   padding: 0px 5px;
   margin: 2px 15px 2px 0;
   display: flex;
@@ -242,7 +242,7 @@ gux-action-button[management-button="true"] {
 .tag::before {
   content: "";
   position: absolute;
-  left: -9px; /* Adjust as needed to position the triangle */
+  left: -10px; /* Adjust as needed to position the triangle */
   width: 0;
   height: 0;
   border-top: 10px solid transparent; /* Adjust the size of the triangle */
@@ -253,7 +253,7 @@ gux-action-button[management-button="true"] {
 .tag::after {
   content: "";
   position: absolute;
-  left: -2px; /* Adjust to position the circle inside the triangle */
+  left: -4px; /* Adjust to position the circle inside the triangle */
   top: 8px; /* Adjust to position the circle inside the triangle */
   width: 4px; /* Adjust the size of the circle */
   height: 4px; /* Adjust the size of the circle */
