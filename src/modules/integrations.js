@@ -40,9 +40,8 @@ export async function getIntegration() {
 }
 
 // Update integration config
-export async function updateIntegration() {
+export async function updateIntegration(integrationConfig) {
   console.log("[TIL] Updating integration config");
-  let integrationConfig = applicationConfig.integration;
   const newDatatableId = applicationConfig.datatable.datatable.id;
   console.log("[TIL] New datatable id", newDatatableId);
 

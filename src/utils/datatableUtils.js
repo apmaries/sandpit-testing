@@ -12,7 +12,7 @@ import {
   getDatatableRows,
   createDatatableRow,
 } from "../modules/architect.js";
-import { updateIntegration } from "../modules/integrations.js";
+import { getIntegration, updateIntegration } from "../modules/integrations.js";
 
 // Utility modules
 
@@ -256,6 +256,9 @@ export async function makeDatatable(validationResponse) {
   // Update application config with the new datatable info
   applicationConfig.datatable.datatable = newDatatableResponse;
 
+  // Get the integration
+  const integration = await getIntegration();
+
   // Update the integration URL with the new datatable ID
-  await updateIntegration();
+  await updateIntegration(integration);
 }

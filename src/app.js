@@ -8,7 +8,6 @@ import { applicationConfig } from "./core/configManager.js";
 import { initializeTestMode } from "./core/testManager.js";
 
 // Api modules
-import { getIntegration } from "./modules/integrations.js";
 import { getUser } from "./modules/users.js";
 import { getDatatableRows } from "./modules/architect.js";
 
@@ -187,7 +186,7 @@ async function runApp() {
     let rows = await getDatatableRows(false);
     await populateTablesAndHandleAlerts(rows, false);
   } catch (error) {
-    console.error("[TIL] An error occurred:", error);
+    console.error("[TIL] An error occurred:", error, appl);
   } finally {
     // Ensure management tools are displayed and initialized
     await enableManagementToolsEventListeners();
