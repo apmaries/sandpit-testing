@@ -114,7 +114,7 @@ let applicationConfig = {
         },
         evaluation_total_critical_score: {
           name: "Average Evaluation Critical Score",
-          dataType: "integer",
+          dataType: "number",
           displayOrder: 13,
           hidden: false,
           format: "percentage",

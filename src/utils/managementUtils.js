@@ -274,14 +274,24 @@ export async function refreshLibraries() {
       const conversationRow = conversations.find(
         (conv) => conv.conversation_id === row.key
       );
-      if (conversationRow) {
-        const flattenedConversation = flattenConversation(conversationRow);
-        flattenedConversation.library_type = row.library_type;
-        flattenedConversation.tags = row.tags;
-        console.debug("[TIL] Matched conversation", flattenedConversation);
-        response.refreshedConversations.push(flattenedConversation);
-      } else {
-        console.warn("[TIL] No matching conversation found for row!", row);
+      try {
+        if (conversationRow) {
+          const flattenedConversation = flattenConversation(conversationRow);
+          flattenedConversation.library_type = row.library_type;
+          flattenedConversation.tags = row.tags;
+          console.debug("[TIL] Matched conversation", flattenedConversation);
+          response.refreshedConversations.push(flattenedConversation);
+        } else {
+          console.warn("[TIL] No matching conversation found for row!", row);
+          row.error = "No matching conversation found";
+          response.errors.push(row);
+        }
+      } catch (error) {
+        console.error(
+          "[TIL] Error matching conversation to datatable row",
+          error
+        );
+        row.error = error.message || error;
         response.errors.push(row);
       }
     });

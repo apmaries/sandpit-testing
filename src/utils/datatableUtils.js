@@ -147,13 +147,7 @@ export async function validateDatatableSchema() {
   }
 
   if (response.errors.toRemove.length > 0 || response.errors.toAdd.length > 0) {
-    console.warn("[TIL] Schema validation failed with errors");
-    response.errors.toRemove.forEach((mismatch) =>
-      console.debug(`[TIL] Mismatched key:`, mismatch)
-    );
-    response.errors.toAdd.forEach((missing) =>
-      console.debug(`[TIL] Missing key:`, missing)
-    );
+    console.warn("[TIL] Schema validation failed with errors", response.errors);
 
     return response;
   }
@@ -181,7 +175,8 @@ export async function makeDatatable(validationResponse) {
   // Create the new datatable body
   let datatableName = "TIL Datatable";
   let newBody = {
-    name: `${datatableName} (new-${now})`,
+    name: `TIL Datatable (new-${now})`,
+    description: "Datatable for TIL application. Do not delete.",
     schema: schema.schema,
   };
 

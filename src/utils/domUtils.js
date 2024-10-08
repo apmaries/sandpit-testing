@@ -148,6 +148,7 @@ function processRow(row, adminAlerts) {
 // Helper function to create table row
 function createTableRow(row, permitted, rowAlerts, checkboxes) {
   let tr = document.createElement("tr");
+  console.debug("[TIL] Creating table row", row);
 
   Object.keys(applicationConfig.datatable.parameters).forEach(
     (parameterGroup) => {
@@ -157,6 +158,11 @@ function createTableRow(row, permitted, rowAlerts, checkboxes) {
         const parameter =
           applicationConfig.datatable.parameters[parameterGroup][parameterKey];
         const keyFormat = parameter.format;
+
+        // Skip parameter if hidden is true
+        if (parameter.hidden) {
+          return;
+        }
 
         if (parameterKey === "key") {
           let td = document.createElement("td");
@@ -190,12 +196,6 @@ function createTableRow(row, permitted, rowAlerts, checkboxes) {
 
           td.appendChild(container);
           tr.appendChild(td);
-        } else if (
-          parameterKey === "library_type" ||
-          parameterKey === "division_ids" ||
-          parameterKey === "queue_ids"
-        ) {
-          return;
         } else {
           const checkbox = Array.from(checkboxes).find(
             (cb) => cb.value === parameterGroup
@@ -210,13 +210,16 @@ function createTableRow(row, permitted, rowAlerts, checkboxes) {
             columnValue = new Date(columnValue).toLocaleDateString();
           } else if (keyFormat === "datetime" && columnValue !== "-") {
             columnValue = new Date(columnValue).toLocaleString();
-          } else if (keyFormat === "seconds" && columnValue !== "-") {
+          } else if (keyFormat === "seconds" && columnValue !== 0) {
             columnValue = (columnValue / 1000).toFixed(1) + "s";
-          } else if (keyFormat === "percentage" && columnValue !== "-") {
-            columnValue =
-              columnValue > 1
-                ? (columnValue * 1).toFixed(1) + "%"
-                : (columnValue * 100).toFixed(1) + "%";
+          } else if (keyFormat === "percentage") {
+            if ((columnValue = 0)) {
+              columnValue = "0.0%";
+            } else if (columnValue > 1) {
+              columnValue = (columnValue * 1).toFixed(1) + "%";
+            } else {
+              columnValue = (columnValue * 100).toFixed(1) + "%";
+            }
           }
 
           if (parameterKey === "tags") {

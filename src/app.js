@@ -151,15 +151,27 @@ async function runApp() {
     const adminType = applicationConfig.mode.admin.type;
 
     // Validate datatable schema
-    const validationResponse = await validateDatatableSchema();
-    if (!validationResponse.valid) {
-      console.log("[TIL] Datatable schema is invalid");
+    if (gc_datatable) {
+      const validationResponse = await validateDatatableSchema();
+      if (!validationResponse.valid) {
+        console.log("[TIL] Datatable schema is invalid");
+        if (admin && adminType === "integration") {
+          console.info("[TIL] Fixing datatable schema");
+          await makeDatatable(validationResponse);
+        } else {
+          console.warn(
+            "[TIL] User does not have permission to create datatable"
+          );
+          // Placeholder for handling datatable schema validation failure via notification
+        }
+      }
+    } else {
+      console.warn("[TIL] Datatable ID not found. Creating datatable");
       if (admin && adminType === "integration") {
-        console.log("[TIL] Creating new datatable");
-        await makeDatatable(validationResponse);
+        await makeDatatable();
       } else {
         console.warn("[TIL] User does not have permission to create datatable");
-        // Placeholder for handling datatable schema validation failure via notification
+        throw new Error("No datatable ID found in URL or session storage");
       }
     }
 
