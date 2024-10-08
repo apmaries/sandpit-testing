@@ -98,14 +98,14 @@ let applicationConfig = {
         },
       },
       evaluation: {
-        evluation_total_score: {
+        evaluation_total_score: {
           name: "Average Evaluation Score",
-          dataType: "integer",
+          dataType: "number",
           displayOrder: 11,
           hidden: false,
           format: "percentage",
         },
-        evluation_total_critical_score: {
+        evaluation_total_critical_score: {
           name: "Average Evaluation Critical Score",
           dataType: "integer",
           displayOrder: 12,

@@ -1,7 +1,7 @@
 {
   "end_date": "2024-07-03T22:19:07.781Z",
   "queue_names": "Treadstone_Queue1_c",
-  "evluation_total_critical_score": 100,
+  "evaluation_total_critical_score": 100,
   "sentiment_score": 0.46211715726000974,
   "survey_promoter_score": 10,
   "library_type": "good",
@@ -9,7 +9,7 @@
   "division_names": "Operation Treadstone",
   "archive_date": "-",
   "media_type": "message",
-  "evluation_total_score": 0,
+  "evaluation_total_score": 0,
   "delete_date": "2025-10-08T08:30:52.368Z",
   "survey_total_score": 97,
   "empathy_score": 100,

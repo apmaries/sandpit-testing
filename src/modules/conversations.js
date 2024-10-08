@@ -196,8 +196,8 @@ export async function processConversations(conversationIds) {
         total_talk_time: totalTalkTime ? totalTalkTime : 0,
       },
       evaluation: {
-        evluation_total_score: averageEvalScore ? averageEvalScore : 0,
-        evluation_total_critical_score: averageEvalCriticalScore
+        evaluation_total_score: averageEvalScore ? averageEvalScore : 0,
+        evaluation_total_critical_score: averageEvalCriticalScore
           ? averageEvalCriticalScore
           : 0,
       },

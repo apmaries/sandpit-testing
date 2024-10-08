@@ -109,18 +109,18 @@
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
-      "evluation_total_score": {
-        "title": "evluation_total_score",
+      "evaluation_total_score": {
+        "title": "evaluation_total_score",
         "type": "integer",
-        "$id": "/properties/evluation_total_score",
+        "$id": "/properties/evaluation_total_score",
         "displayOrder": 11,
         "maximum": 999999999999999,
         "minimum": -999999999999999
       },
-      "evluation_total_critical_score": {
-        "title": "evluation_total_critical_score",
+      "evaluation_total_critical_score": {
+        "title": "evaluation_total_critical_score",
         "type": "integer",
-        "$id": "/properties/evluation_total_critical_score",
+        "$id": "/properties/evaluation_total_critical_score",
         "displayOrder": 12,
         "maximum": 999999999999999,
         "minimum": -999999999999999
