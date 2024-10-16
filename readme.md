@@ -92,6 +92,7 @@ Single data table to store interaction details with a type field to flag with su
      - Delete changes status to deleted
      - Adding a soft deleted conversation changes status back to active
    - Add purge function to integration admin tools
+1. Update delete functionality
 
 ## Completed
 
@@ -120,3 +121,4 @@ Single data table to store interaction details with a type field to flag with su
 1. Update tag event listeners - some functions don't run
 1. Make tag formatting in tables better!
 1. Check if logged in user has permissions below permissions per division listed in table rows
+1. Update Promoter Score to Net Promoter Score

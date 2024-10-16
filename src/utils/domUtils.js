@@ -249,6 +249,8 @@ function createTableRow(row, permitted, rowAlerts, checkboxes) {
             td.classList.add("hidden-column");
           }
 
+          // Add row.key as tr id
+          tr.id = row.key;
           tr.appendChild(td);
         }
       });
@@ -500,17 +502,16 @@ export function removeDomTableRow(tableId, rowId) {
   let tbody = table.getElementsByTagName("tbody")[0];
   let rows = tbody.getElementsByTagName("tr");
 
-  for (let row of rows) {
-    let cells = row.getElementsByTagName("td");
-    for (let cell of cells) {
-      if (
-        cell.getAttribute("data-column-name") === "key" &&
-        cell.textContent === rowId
-      ) {
-        tbody.removeChild(row);
-        return;
+  try {
+    for (let row of rows) {
+      let trId = row.id;
+      if (trId === rowId) {
+        row.remove();
+        break;
       }
     }
+  } catch (error) {
+    console.error("Error removing table row:", error);
   }
 }
 
